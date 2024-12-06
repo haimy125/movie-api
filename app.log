@@ -1,0 +1,157 @@
+2024-12-07T00:16:52.899+07:00  INFO 78327 --- [MoviesBE] [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 1 deletion, 0 modifications)
+2024-12-07T00:16:52.930+07:00  INFO 78327 --- [MoviesBE] [Thread-15] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2024-12-07T00:16:52.932+07:00  INFO 78327 --- [MoviesBE] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2024-12-07T00:16:52.934+07:00  INFO 78327 --- [MoviesBE] [Thread-15] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-12-07T00:16:52.938+07:00  INFO 78327 --- [MoviesBE] [Thread-15] com.zaxxer.hikari.HikariDataSource       : HikariCP - Shutdown initiated...
+2024-12-07T00:16:52.946+07:00  INFO 78327 --- [MoviesBE] [Thread-15] com.zaxxer.hikari.HikariDataSource       : HikariCP - Shutdown completed.
+2024-12-07T00:16:53.028+07:00  INFO 78327 --- [MoviesBE] [restartedMain] com.movie.MoviesBeApplication            : Starting MoviesBeApplication using Java 21.0.5 with PID 78327 (/Users/myphan/IdeaProjects/MoviesBE/target/classes started by myphan in /Users/myphan/IdeaProjects/MoviesBE)
+2024-12-07T00:16:53.028+07:00  INFO 78327 --- [MoviesBE] [restartedMain] com.movie.MoviesBeApplication            : No active profile set, falling back to 1 default profile: "default"
+2024-12-07T00:16:53.138+07:00  INFO 78327 --- [MoviesBE] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-12-07T00:16:53.151+07:00  INFO 78327 --- [MoviesBE] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 13 ms. Found 17 JPA repository interfaces.
+2024-12-07T00:16:53.213+07:00  INFO 78327 --- [MoviesBE] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 1412 (http)
+2024-12-07T00:16:53.214+07:00  INFO 78327 --- [MoviesBE] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-12-07T00:16:53.214+07:00  INFO 78327 --- [MoviesBE] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.33]
+2024-12-07T00:16:53.222+07:00  INFO 78327 --- [MoviesBE] [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-12-07T00:16:53.222+07:00  INFO 78327 --- [MoviesBE] [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 193 ms
+2024-12-07T00:16:53.238+07:00  INFO 78327 --- [MoviesBE] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariCP - Starting...
+2024-12-07T00:16:53.266+07:00  INFO 78327 --- [MoviesBE] [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariCP - Added connection com.mysql.cj.jdbc.ConnectionImpl@55a6729d
+2024-12-07T00:16:53.266+07:00  INFO 78327 --- [MoviesBE] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariCP - Start completed.
+2024-12-07T00:16:53.271+07:00  INFO 78327 --- [MoviesBE] [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-12-07T00:16:53.272+07:00  INFO 78327 --- [MoviesBE] [restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2024-12-07T00:16:53.277+07:00  INFO 78327 --- [MoviesBE] [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-12-07T00:16:53.278+07:00  INFO 78327 --- [MoviesBE] [restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariCP)']
+	Database driver: undefined/unknown
+	Database version: 8.0.40
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2024-12-07T00:16:53.360+07:00  INFO 78327 --- [MoviesBE] [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-12-07T00:16:53.360+07:00  INFO 78327 --- [MoviesBE] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-12-07T00:16:53.441+07:00  WARN 78327 --- [MoviesBE] [restartedMain] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'loginController': Unsatisfied dependency expressed through field 'login_Service': No qualifying bean of type 'com.movie.service.login.LoginService' available: expected at least 1 bean which qualifies as autowire candidate. Dependency annotations: {@org.springframework.beans.factory.annotation.Autowired(required=true)}
+2024-12-07T00:16:53.441+07:00  INFO 78327 --- [MoviesBE] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-12-07T00:16:53.441+07:00  INFO 78327 --- [MoviesBE] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariCP - Shutdown initiated...
+2024-12-07T00:16:53.442+07:00  INFO 78327 --- [MoviesBE] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariCP - Shutdown completed.
+2024-12-07T00:16:53.442+07:00  INFO 78327 --- [MoviesBE] [restartedMain] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2024-12-07T00:16:53.445+07:00  INFO 78327 --- [MoviesBE] [restartedMain] .s.b.a.l.ConditionEvaluationReportLogger : 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2024-12-07T00:16:53.455+07:00 ERROR 78327 --- [MoviesBE] [restartedMain] o.s.b.d.LoggingFailureAnalysisReporter   : 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Field login_Service in com.movie.controller.api.login.LoginController required a bean of type 'com.movie.service.login.LoginService' that could not be found.
+
+The injection point has the following annotations:
+	- @org.springframework.beans.factory.annotation.Autowired(required=true)
+
+
+Action:
+
+Consider defining a bean of type 'com.movie.service.login.LoginService' in your configuration.
+
+2024-12-07T04:23:05.269+07:00  INFO 84213 --- [MoviesBE] [restartedMain] com.movie.MoviesBeApplication            : Starting MoviesBeApplication using Java 21.0.5 with PID 84213 (/Users/myphan/IdeaProjects/MoviesBE/target/classes started by myphan in /Users/myphan/IdeaProjects/MoviesBE)
+2024-12-07T04:23:05.270+07:00  INFO 84213 --- [MoviesBE] [restartedMain] com.movie.MoviesBeApplication            : No active profile set, falling back to 1 default profile: "default"
+2024-12-07T04:23:05.289+07:00  INFO 84213 --- [MoviesBE] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2024-12-07T04:23:05.290+07:00  INFO 84213 --- [MoviesBE] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2024-12-07T04:23:05.567+07:00  INFO 84213 --- [MoviesBE] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-12-07T04:23:05.599+07:00  INFO 84213 --- [MoviesBE] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 28 ms. Found 17 JPA repository interfaces.
+2024-12-07T04:23:05.798+07:00  INFO 84213 --- [MoviesBE] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 1412 (http)
+2024-12-07T04:23:05.803+07:00  INFO 84213 --- [MoviesBE] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-12-07T04:23:05.804+07:00  INFO 84213 --- [MoviesBE] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.33]
+2024-12-07T04:23:05.822+07:00  INFO 84213 --- [MoviesBE] [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-12-07T04:23:05.822+07:00  INFO 84213 --- [MoviesBE] [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 532 ms
+2024-12-07T04:23:05.863+07:00  INFO 84213 --- [MoviesBE] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariCP - Starting...
+2024-12-07T04:23:06.040+07:00  INFO 84213 --- [MoviesBE] [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariCP - Added connection com.mysql.cj.jdbc.ConnectionImpl@4cf48073
+2024-12-07T04:23:06.041+07:00  INFO 84213 --- [MoviesBE] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariCP - Start completed.
+2024-12-07T04:23:06.063+07:00  INFO 84213 --- [MoviesBE] [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-12-07T04:23:06.088+07:00  INFO 84213 --- [MoviesBE] [restartedMain] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.2.Final
+2024-12-07T04:23:06.100+07:00  INFO 84213 --- [MoviesBE] [restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2024-12-07T04:23:06.188+07:00  INFO 84213 --- [MoviesBE] [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-12-07T04:23:06.245+07:00  INFO 84213 --- [MoviesBE] [restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariCP)']
+	Database driver: undefined/unknown
+	Database version: 8.0.40
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2024-12-07T04:23:06.612+07:00  INFO 84213 --- [MoviesBE] [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-12-07T04:23:06.613+07:00  INFO 84213 --- [MoviesBE] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-12-07T04:23:06.942+07:00  INFO 84213 --- [MoviesBE] [restartedMain] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2024-12-07T04:23:07.319+07:00  WARN 84213 --- [MoviesBE] [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-12-07T04:23:07.407+07:00  WARN 84213 --- [MoviesBE] [restartedMain] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: bc245727-23c3-4385-a934-256ed3730187
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2024-12-07T04:23:07.413+07:00  INFO 84213 --- [MoviesBE] [restartedMain] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2024-12-07T04:23:07.514+07:00  INFO 84213 --- [MoviesBE] [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2024-12-07T04:23:07.536+07:00  INFO 84213 --- [MoviesBE] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 1412 (http) with context path '/'
+2024-12-07T04:23:07.540+07:00  INFO 84213 --- [MoviesBE] [restartedMain] com.movie.MoviesBeApplication            : Started MoviesBeApplication in 2.423 seconds (process running for 2.776)
+2024-12-07T04:23:15.766+07:00  INFO 84213 --- [MoviesBE] [http-nio-1412-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-12-07T04:23:15.766+07:00  INFO 84213 --- [MoviesBE] [http-nio-1412-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2024-12-07T04:23:15.772+07:00  INFO 84213 --- [MoviesBE] [http-nio-1412-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 6 ms
+2024-12-07T04:23:16.221+07:00  WARN 84213 --- [MoviesBE] [http-nio-1412-exec-2] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Error: 1364, SQLState: HY000
+2024-12-07T04:23:16.221+07:00 ERROR 84213 --- [MoviesBE] [http-nio-1412-exec-2] o.h.engine.jdbc.spi.SqlExceptionHelper   : Field 'id' doesn't have a default value
+2024-12-07T04:24:06.775+07:00  WARN 84213 --- [MoviesBE] [http-nio-1412-exec-5] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Error: 1364, SQLState: HY000
+2024-12-07T04:24:06.775+07:00 ERROR 84213 --- [MoviesBE] [http-nio-1412-exec-5] o.h.engine.jdbc.spi.SqlExceptionHelper   : Field 'id' doesn't have a default value
+2024-12-07T04:27:01.047+07:00  INFO 84213 --- [MoviesBE] [SpringApplicationShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2024-12-07T04:27:01.055+07:00  INFO 84213 --- [MoviesBE] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2024-12-07T04:27:01.062+07:00  INFO 84213 --- [MoviesBE] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-12-07T04:27:01.069+07:00  INFO 84213 --- [MoviesBE] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariCP - Shutdown initiated...
+2024-12-07T04:27:01.076+07:00  INFO 84213 --- [MoviesBE] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariCP - Shutdown completed.
+2024-12-07T04:33:37.939+07:00  INFO 84481 --- [MoviesBE] [restartedMain] com.movie.MoviesBeApplication            : Starting MoviesBeApplication using Java 21.0.5 with PID 84481 (/Users/myphan/IdeaProjects/MoviesBE/target/classes started by myphan in /Users/myphan/IdeaProjects/MoviesBE)
+2024-12-07T04:33:37.941+07:00  INFO 84481 --- [MoviesBE] [restartedMain] com.movie.MoviesBeApplication            : No active profile set, falling back to 1 default profile: "default"
+2024-12-07T04:33:37.959+07:00  INFO 84481 --- [MoviesBE] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2024-12-07T04:33:37.960+07:00  INFO 84481 --- [MoviesBE] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2024-12-07T04:33:38.212+07:00  INFO 84481 --- [MoviesBE] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-12-07T04:33:38.243+07:00  INFO 84481 --- [MoviesBE] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 28 ms. Found 17 JPA repository interfaces.
+2024-12-07T04:33:38.448+07:00  INFO 84481 --- [MoviesBE] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 1412 (http)
+2024-12-07T04:33:38.453+07:00  INFO 84481 --- [MoviesBE] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-12-07T04:33:38.454+07:00  INFO 84481 --- [MoviesBE] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.33]
+2024-12-07T04:33:38.471+07:00  INFO 84481 --- [MoviesBE] [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-12-07T04:33:38.471+07:00  INFO 84481 --- [MoviesBE] [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 511 ms
+2024-12-07T04:33:38.528+07:00  INFO 84481 --- [MoviesBE] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariCP - Starting...
+2024-12-07T04:33:38.664+07:00  INFO 84481 --- [MoviesBE] [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariCP - Added connection com.mysql.cj.jdbc.ConnectionImpl@33cca286
+2024-12-07T04:33:38.664+07:00  INFO 84481 --- [MoviesBE] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariCP - Start completed.
+2024-12-07T04:33:38.686+07:00  INFO 84481 --- [MoviesBE] [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-12-07T04:33:38.706+07:00  INFO 84481 --- [MoviesBE] [restartedMain] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.2.Final
+2024-12-07T04:33:38.716+07:00  INFO 84481 --- [MoviesBE] [restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2024-12-07T04:33:38.805+07:00  INFO 84481 --- [MoviesBE] [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-12-07T04:33:38.843+07:00  INFO 84481 --- [MoviesBE] [restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariCP)']
+	Database driver: undefined/unknown
+	Database version: 8.0.40
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2024-12-07T04:33:39.213+07:00  INFO 84481 --- [MoviesBE] [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-12-07T04:33:39.213+07:00  INFO 84481 --- [MoviesBE] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-12-07T04:33:39.543+07:00  INFO 84481 --- [MoviesBE] [restartedMain] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2024-12-07T04:33:39.917+07:00  WARN 84481 --- [MoviesBE] [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-12-07T04:33:40.001+07:00  WARN 84481 --- [MoviesBE] [restartedMain] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: d5fae90b-1b3c-4c47-a879-7d1281ff7384
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2024-12-07T04:33:40.006+07:00  INFO 84481 --- [MoviesBE] [restartedMain] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2024-12-07T04:33:40.115+07:00  INFO 84481 --- [MoviesBE] [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2024-12-07T04:33:40.134+07:00  INFO 84481 --- [MoviesBE] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 1412 (http) with context path '/'
+2024-12-07T04:33:40.139+07:00  INFO 84481 --- [MoviesBE] [restartedMain] com.movie.MoviesBeApplication            : Started MoviesBeApplication in 2.349 seconds (process running for 2.615)
+2024-12-07T04:35:07.143+07:00  INFO 84481 --- [MoviesBE] [http-nio-1412-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-12-07T04:35:07.144+07:00  INFO 84481 --- [MoviesBE] [http-nio-1412-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2024-12-07T04:35:07.148+07:00  INFO 84481 --- [MoviesBE] [http-nio-1412-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 4 ms
+2024-12-07T04:46:36.682+07:00  INFO 84481 --- [MoviesBE] [SpringApplicationShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2024-12-07T04:46:36.685+07:00  INFO 84481 --- [MoviesBE] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2024-12-07T04:46:36.691+07:00  INFO 84481 --- [MoviesBE] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-12-07T04:46:36.695+07:00  INFO 84481 --- [MoviesBE] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariCP - Shutdown initiated...
+2024-12-07T04:46:36.697+07:00  INFO 84481 --- [MoviesBE] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariCP - Shutdown completed.
