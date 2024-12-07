@@ -77,7 +77,7 @@ public class CategoryServiceImpl implements CategoryService {
                 throw new RuntimeException(" Bạn chưa nhập dữ liệu!");
             if (category.getName() == null)
                 throw new RuntimeException("Chọn tên loại phim!");
-            Category categoryEntity = categoryRepository.findById(category.getId()).get();
+            Category categoryEntity = categoryRepository.findById(Long.valueOf(category.getId())).get();
             modelMapper.map(category, categoryEntity);
             Category categorySave = categoryRepository.save(categoryEntity);
             CategoryDTO categoryDTO = modelMapper.map(categorySave, CategoryDTO.class);
