@@ -92,7 +92,7 @@ public class LoginController {
 
             // Gán vai trò mặc định cho người dùng
             RoleDTO role = new RoleDTO();
-            role.setId(2L); // ID cho vai trò mặc định (ví dụ: ROLE_USER)
+            role.setId(String.valueOf(2L)); // ID cho vai trò mặc định (ví dụ: ROLE_USER)
             user.setRole(role);
 
             // Đọc ảnh đại diện mặc định

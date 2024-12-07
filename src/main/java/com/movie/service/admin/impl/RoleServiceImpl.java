@@ -95,7 +95,7 @@ public class RoleServiceImpl implements RoleService {
             // kiểm tra dữ liệu nhập vào có trống hay không
             if (role == null) throw new RuntimeException("Dữ liệu nhập vào không thể để chống!");
             // tìm kiếm quyền hạn theo id
-            Role Role = roleRepository.findById(role.getId()).orElseThrow(() -> new RuntimeException("Không có quyền này!"));
+            Role Role = roleRepository.findById(Long.valueOf(role.getId())).orElseThrow(() -> new RuntimeException("Không có quyền này!"));
             modelMapper.map(role, Role);
             Role role_EP = roleRepository.save(Role);
             RoleDTO RoleDTO = modelMapper.map(role_EP, RoleDTO.class);

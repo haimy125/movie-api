@@ -53,7 +53,7 @@ public class CommentMovieServiceImpl implements CommentMovieService {
             if (comment == null)
                 throw new RuntimeException("Không tìm thấy người dùng");
             User user = userRepository.findById(Long.valueOf(comment.getUserAdd().getId())).orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng"));
-            Movie movie = movieRepository.findById(comment.getMovie().getId()).orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng"));
+            Movie movie = movieRepository.findById(Long.valueOf(comment.getMovie().getId())).orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng"));
             CommentMovie comment_Movie = modelMapper.map(comment, CommentMovie.class);
             comment_Movie.setUserAdd(user);
             comment_Movie.setMovie(movie);

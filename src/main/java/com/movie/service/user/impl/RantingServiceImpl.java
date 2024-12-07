@@ -65,7 +65,7 @@ public class RantingServiceImpl implements RatingService {
         if (ratings == null)
             throw new RuntimeException("Bạn chưa đánh giá phim");
         User user = userRepository.findById(Long.valueOf(ratings.getUser().getId())).orElseThrow(() -> new RuntimeException("Không có người dùng có id này"));
-        Movie movie = movieRepository.findById(ratings.getMovie().getId()).orElseThrow(() -> new RuntimeException("Không có phim có id này"));
+        Movie movie = movieRepository.findById(Long.valueOf(ratings.getMovie().getId())).orElseThrow(() -> new RuntimeException("Không có phim có id này"));
         UserRating ratingsEntity = new UserRating();
         ratingsEntity.setUser(user);
         ratingsEntity.setMovie(movie);

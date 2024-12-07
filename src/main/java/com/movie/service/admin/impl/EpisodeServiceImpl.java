@@ -60,7 +60,7 @@ public class EpisodeServiceImpl implements EpisodeService {
             throw new RuntimeException("Không có bộ phim nào");
         for (Episode episode : episode_entity) {
             EpisodeDTO dto = new EpisodeDTO();
-            dto.setId(episode.getId());
+            dto.setId(String.valueOf(episode.getId()));
             dto.setName(episode.getName());
             dto.setViews(episode.getViews());
             dto.setLikes(episode.getLikes());
@@ -85,7 +85,7 @@ public class EpisodeServiceImpl implements EpisodeService {
             throw new RuntimeException("Không có bộ phim nào");
         for (Episode episode : episode_entity) {
             EpisodeDTO dto = new EpisodeDTO();
-            dto.setId(episode.getId());
+            dto.setId(String.valueOf(episode.getId()));
             dto.setName(episode.getName());
             dto.setViews(episode.getViews());
             dto.setLikes(episode.getLikes());
@@ -111,7 +111,7 @@ public class EpisodeServiceImpl implements EpisodeService {
             MovieDTO movie = modelMapper.map(episode.getMovie(), MovieDTO.class);
             movie.setImageUrl(null);
             EpisodeDTO dto = new EpisodeDTO();
-            dto.setId(episode.getId());
+            dto.setId(String.valueOf(episode.getId()));
             dto.setName(episode.getName());
             dto.setViews(episode.getViews());
             dto.setLikes(episode.getLikes());
@@ -137,7 +137,7 @@ public class EpisodeServiceImpl implements EpisodeService {
             movie.setImageUrl(null);
             episode.setViews(episode.getViews() + 1);
             EpisodeDTO dto = new EpisodeDTO();
-            dto.setId(episode.getId());
+            dto.setId(String.valueOf(episode.getId()));
             dto.setName(episode.getName());
             dto.setViews(episode.getViews());
             dto.setLikes(episode.getLikes());
@@ -169,7 +169,7 @@ public class EpisodeServiceImpl implements EpisodeService {
                 episodeDTO.setViews(0L);
             if (episodeDTO.getLikes() == null)
                 episodeDTO.setLikes(0L);
-            Movie movie = movieRepository.findById(episodeDTO.getMovie().getId()).orElseThrow(() -> new RuntimeException("Không tìm thấy phim nào có id là " + episodeDTO.getMovie().getId()));
+            Movie movie = movieRepository.findById(Long.valueOf(episodeDTO.getMovie().getId())).orElseThrow(() -> new RuntimeException("Không tìm thấy phim nào có id là " + episodeDTO.getMovie().getId()));
             User useradd = userRepository.findById(Long.valueOf(episodeDTO.getUserAdd().getId())).orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng nào có id là " + episodeDTO.getUserAdd().getId()));
             User userupdate = userRepository.findById(Long.valueOf(episodeDTO.getUserUpdate().getId())).orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng nào có id là " + episodeDTO.getUserUpdate().getId()));
             Episode episode = modelMapper.map(episodeDTO, Episode.class);
@@ -201,7 +201,7 @@ public class EpisodeServiceImpl implements EpisodeService {
                 episodeDTO.setViews(0L);
             if (episodeDTO.getLikes() == null)
                 episodeDTO.setLikes(0L);
-            Episode episode = episodeRepository.findById(episodeDTO.getId()).orElseThrow(() -> new RuntimeException("Không tìm thấy tập phim nào có id là " + episodeDTO.getId()));
+            Episode episode = episodeRepository.findById(Long.valueOf(episodeDTO.getId())).orElseThrow(() -> new RuntimeException("Không tìm thấy tập phim nào có id là " + episodeDTO.getId()));
 
             User userupdate = userRepository.findById(Long.valueOf(episodeDTO.getUserUpdate().getId())).orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng nào có id là " + episodeDTO.getUserUpdate().getId()));
             episode.setName(episodeDTO.getName());

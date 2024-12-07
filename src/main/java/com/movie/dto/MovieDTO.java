@@ -9,7 +9,7 @@ import java.sql.Date;
 @Getter
 @Setter
 public class MovieDTO {
-    private Long id;
+    private String id;
     private String vnName;
     private String cnName;
     private String description;

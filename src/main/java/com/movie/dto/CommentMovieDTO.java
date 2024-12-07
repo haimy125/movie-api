@@ -9,7 +9,7 @@ import java.sql.Date;
 @Setter
 public class CommentMovieDTO {
 
-    private Long id;
+    private String id;
 
     private String content;
 

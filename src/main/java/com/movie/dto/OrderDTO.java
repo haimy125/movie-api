@@ -8,7 +8,7 @@ import java.sql.Date;
 @Getter
 @Setter
 public class OrderDTO {
-    private Long id;
+    private String id;
     private Long point;
     private UserDTO user;
     private MovieDTO movie;

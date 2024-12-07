@@ -50,10 +50,10 @@ public class UserFollowServiceImpl implements UserFollowService {
         if (userFollowDTO == null)
             throw new RuntimeException("Không tìm thấy người dùng");
         User user = userRepository.findById(Long.valueOf(userFollowDTO.getUser().getId())).orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng"));
-        Movie movie = movieRepository.findById(userFollowDTO.getMovie().getId()).orElseThrow(() -> new RuntimeException("Không tìm thấy ngollectors"));
+        Movie movie = movieRepository.findById(Long.valueOf(userFollowDTO.getMovie().getId())).orElseThrow(() -> new RuntimeException("Không tìm thấy ngollectors"));
         List<UserFollow> check = userFollowRepository.findByUserAndMovie(user, movie);
         if (check.size() > 0)
-            throw new RuntimeException("Bạn Đã theo dõi phim này");
+            throw new RuntimeException("Bạn đã theo dõi phim này");
         UserFollow userFollowEntity = modelMapper.map(userFollowDTO, UserFollow.class);
         userFollowEntity.setUser(user);
         userFollowEntity.setMovie(movie);

@@ -36,7 +36,7 @@ public class UserFollowController {
             UserDTO user = new UserDTO();
             user.setId(String.valueOf(userid));
             MovieDTO movie = new MovieDTO();
-            movie.setId(movieid);
+            movie.setId(String.valueOf(movieid));
             UserFollowDTO dto = new UserFollowDTO();
             dto.setUser(user);
             dto.setMovie(movie);

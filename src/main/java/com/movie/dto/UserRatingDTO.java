@@ -6,7 +6,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class UserRatingDTO {
-    private Long id;
+    private String id;
     private UserDTO user;
     private MovieDTO movie;
     private Long rating;

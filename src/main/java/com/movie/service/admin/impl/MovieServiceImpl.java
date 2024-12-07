@@ -261,7 +261,7 @@ public class MovieServiceImpl implements MovieService {
             for (String idStr : scheduleIds) {
                 Long id = Long.valueOf(idStr.trim()); // Chuyển đổi và loại bỏ khoảng trắng
                 Schedule schedule = new Schedule();
-                schedule.setId(id);
+                schedule.setId(String.valueOf(id));
                 scheduleEntities.add(schedule);
             }
 
@@ -286,7 +286,7 @@ public class MovieServiceImpl implements MovieService {
             }
             // Xử lý thêm lịch đăng liên quan
             for (Schedule schedule : scheduleEntities) {
-                Schedule scheduleitem = scheduleRepository.findById(schedule.getId()).orElseThrow(() -> new RuntimeException("Không tìm thấy thể loại"));
+                Schedule scheduleitem = scheduleRepository.findById(Long.valueOf(schedule.getId())).orElseThrow(() -> new RuntimeException("Không tìm thấy thể loại"));
                 ScheduleMovie scheduleMovieEntity = new ScheduleMovie();
                 scheduleMovieEntity.setSchedule(scheduleitem);
                 scheduleMovieEntity.setMovie(movieEntity);
@@ -304,7 +304,7 @@ public class MovieServiceImpl implements MovieService {
     public MovieDTO update(MovieDTO movieDTO, MultipartFile file, String categorylist, String scheduleList) throws IOException {
         try {
             if (movieDTO == null) throw new RuntimeException("Bạn chưa nhập dữ liệu!");
-            Movie movie = movieRepository.findById(movieDTO.getId()).orElseThrow(() -> new RuntimeException("Không tìm thấy bộ phim"));
+            Movie movie = movieRepository.findById(Long.valueOf(movieDTO.getId())).orElseThrow(() -> new RuntimeException("Không tìm thấy bộ phim"));
             User User = userRepository.findById(Long.valueOf(movieDTO.getUserUpdate().getId())).orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng"));
             if (file == null) movieDTO.setImageUrl(movie.getImageUrl().getBytes());
 
@@ -325,7 +325,7 @@ public class MovieServiceImpl implements MovieService {
             for (String idStr : scheduleIds) {
                 Long id = Long.valueOf(idStr.trim()); // Chuyển đổi và loại bỏ khoảng trắng
                 Schedule schedule = new Schedule();
-                schedule.setId(id);
+                schedule.setId(String.valueOf(id));
                 scheduleEntities.add(schedule);
             }
             movie.setId(movieDTO.getId());
@@ -359,7 +359,7 @@ public class MovieServiceImpl implements MovieService {
                 scheduleMovieRepository.delete(item);
             }
             for (Schedule item : scheduleEntities) {
-                Schedule schedule = scheduleRepository.findById(item.getId()).orElseThrow(() -> new RuntimeException("Không tìm thấy lịch chiếu"));
+                Schedule schedule = scheduleRepository.findById(Long.valueOf(item.getId())).orElseThrow(() -> new RuntimeException("Không tìm thấy lịch chiếu"));
                 ScheduleMovie scheduleMovieEntity = new ScheduleMovie();
                 scheduleMovieEntity.setSchedule(schedule);
                 scheduleMovieEntity.setMovie(movie_update);

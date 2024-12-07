@@ -75,7 +75,7 @@ public class LoginServiceImpl implements LoginService {
                 user.setFullname(user.getUsername());
 
             // kiểm tra quyền theo id
-            Role role = roleRepository.findById(user.getRole().getId()).orElseThrow(() -> new RuntimeException("Không có quyền này!"));
+            Role role = roleRepository.findById(Long.valueOf(user.getRole().getId())).orElseThrow(() -> new RuntimeException("Không có quyền này!"));
 
             // Mapping DTO sang Entity
             User userEntity = modelMapper.map(user, User.class);

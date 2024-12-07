@@ -89,15 +89,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO create(UserDTO user) {
+    public UserDTO create(UserDTO userDTO) {
         try {
-            if (user == null)
+            if (userDTO == null)
                 throw new RuntimeException("Bạn chưa nhập dữ liệu!");
-            User User = modelMapper.map(user, User.class);
-            Role Role = roleRepository.findById(user.getRole().getId()).orElseThrow(() -> new RuntimeException("Không có quyền này!"));
-            User.setRole(Role);
-            userRepository.save(User);
-            UserDTO UserDTO = modelMapper.map(User, UserDTO.class);
+            User user = modelMapper.map(userDTO, User.class);
+            Role role = roleRepository.findById(Long.valueOf(userDTO.getRole().getId())).orElseThrow(() -> new RuntimeException("Không có quyền này!"));
+            user.setRole(role);
+            userRepository.save(user);
+            UserDTO UserDTO = modelMapper.map(user, UserDTO.class);
             return UserDTO;
         } catch (Exception e) {
             throw new RuntimeException("Có lỗi xảy ra");
@@ -105,18 +105,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO update(UserDTO user) {
+    public UserDTO update(UserDTO userDTO) {
         try {
-            if (user == null)
+            if (userDTO == null)
                 throw new RuntimeException("Bạn chưa nhập dữ liệu!");
-            User User = userRepository.findById(Long.valueOf(user.getId())).orElseThrow(() -> new RuntimeException("Không có người dùng này!"));
-            Role Role = roleRepository.findById(user.getRole().getId()).orElseThrow(() -> new RuntimeException("Không có quyền này!"));
-            User.setRole(Role);
-            User.setUsername(user.getUsername());
-            User.setPassword(user.getPassword());
+            User user = userRepository.findById(Long.valueOf(userDTO.getId())).orElseThrow(() -> new RuntimeException("Không có người dùng này!"));
+            Role role = roleRepository.findById(Long.valueOf(userDTO.getRole().getId())).orElseThrow(() -> new RuntimeException("Không có quyền này!"));
+            user.setRole(role);
+            user.setUsername(userDTO.getUsername());
+            user.setPassword(userDTO.getPassword());
 
-            userRepository.save(User);
-            UserDTO UserDTO = modelMapper.map(User, UserDTO.class);
+            userRepository.save(user);
+            UserDTO UserDTO = modelMapper.map(user, UserDTO.class);
             return UserDTO;
         } catch (Exception e) {
             throw new RuntimeException("Có lỗi xảy ra");

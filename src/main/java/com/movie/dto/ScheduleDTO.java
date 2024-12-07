@@ -7,7 +7,7 @@ import java.util.Date;
 @Getter
 @Setter
 public class ScheduleDTO {
-    private Long id;
+    private String id;
     private String name;
     private String description;
     private Date timeAdd;

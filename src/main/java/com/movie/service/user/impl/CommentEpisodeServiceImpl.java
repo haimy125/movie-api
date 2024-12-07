@@ -46,7 +46,7 @@ public class CommentEpisodeServiceImpl implements CommentEpisodeService {
         // chuyển đổi sang DTO
         for (CommentEpisode item : list) {
             CommentEpisodeDTO commentMovieDto = new CommentEpisodeDTO();
-            commentMovieDto.setId(item.getId());
+            commentMovieDto.setId(String.valueOf(item.getId()));
             commentMovieDto.setContent(item.getContent());
             commentMovieDto.setEpisode(modelMapper.map(item.getEpisode(), EpisodeDTO.class)); // chuyển đổi sang DTO (modelmapper) item.getEpisode());
             commentMovieDto.setUserAdd(modelMapper.map(item.getUserAdd(), UserDTO.class)); // chuyển đổi sang DTO (modelmapper) item.getUser_add());
@@ -61,7 +61,7 @@ public class CommentEpisodeServiceImpl implements CommentEpisodeService {
             if (comment == null)
                 throw new RuntimeException("Bạn chưa nhập bình luận");
             User user = userRepository.findById(Long.valueOf(comment.getUserAdd().getId())).orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng"));
-            Episode episodeEnitty = episodeRepository.findById(comment.getEpisode().getId()).orElseThrow(() -> new RuntimeException("Không tìm thấy bộ phim"));
+            Episode episodeEnitty = episodeRepository.findById(Long.valueOf(comment.getEpisode().getId())).orElseThrow(() -> new RuntimeException("Không tìm thấy bộ phim"));
             CommentEpisode comment_Movie = modelMapper.map(comment, CommentEpisode.class);
             comment_Movie.setUserAdd(user);
             comment_Movie.setEpisode(episodeEnitty);

@@ -83,7 +83,7 @@ public class OrderServiceImpl implements OrderService {
     public void buyMovie(OrderDTO orderDTO) {
 
         if (orderDTO == null) throw new RuntimeException("Không có đơn hàng nào");
-        Movie movie = movieRepository.findById(orderDTO.getMovie().getId()).orElseThrow(() -> new RuntimeException("Không tìm thấy phim"));
+        Movie movie = movieRepository.findById(Long.valueOf(orderDTO.getMovie().getId())).orElseThrow(() -> new RuntimeException("Không tìm thấy phim"));
         User user = userRepository.findById(Long.valueOf(orderDTO.getUser().getId())).orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng"));
         if (user.getPoint() <= movie.getPrice().longValueExact())
             throw new RuntimeException("Xu còn lại của bạn không đủ vui lòng nạp thêm!");

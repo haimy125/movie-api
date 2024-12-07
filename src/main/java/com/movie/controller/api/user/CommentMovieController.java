@@ -35,7 +35,7 @@ public class CommentMovieController {
             UserDTO user = new UserDTO();
             user.setId(String.valueOf(userid));
             MovieDTO movie = new MovieDTO();
-            movie.setId(movieid);
+            movie.setId(String.valueOf(movieid));
             CommentMovieDTO commentMovieDto = new CommentMovieDTO();
             commentMovieDto.setMovie(movie);
             commentMovieDto.setUserAdd(user);

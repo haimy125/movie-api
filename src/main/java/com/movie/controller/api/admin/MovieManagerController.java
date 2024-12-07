@@ -82,7 +82,7 @@ public class MovieManagerController {
             user_dto.setId(String.valueOf(user_add));
             //Tạo movie
             MovieDTO movie_dto = new MovieDTO();
-            movie_dto.setId(id);
+            movie_dto.setId(String.valueOf(id));
             movie_dto.setCnName(cn_name);
             movie_dto.setVnName(vn_name);
             movie_dto.setDescription(description);

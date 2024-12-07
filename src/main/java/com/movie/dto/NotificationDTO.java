@@ -8,7 +8,7 @@ import java.sql.Date;
 @Getter
 @Setter
 public class NotificationDTO {
-    private Long id;
+    private String id;
     private String content;
     private Date timeAdd;
     private Date timeupDate;

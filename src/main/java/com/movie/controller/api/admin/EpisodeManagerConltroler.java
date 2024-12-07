@@ -63,7 +63,7 @@ public class EpisodeManagerConltroler {
             UserDTO user_dto = new UserDTO();
             user_dto.setId(String.valueOf(useradd));
             MovieDTO movie_dto = new MovieDTO();
-            movie_dto.setId(movie);
+            movie_dto.setId(String.valueOf(movie));
             //Tạo tâp phim
             EpisodeDTO episodeDTO = new EpisodeDTO();
             episodeDTO.setName(name);
@@ -91,10 +91,10 @@ public class EpisodeManagerConltroler {
             UserDTO user_dto = new UserDTO();
             user_dto.setId(String.valueOf(useradd));
             MovieDTO movie_dto = new MovieDTO();
-            movie_dto.setId(movie);
+            movie_dto.setId(String.valueOf(movie));
             //Tạo tâp phim
             EpisodeDTO episodeDTO = new EpisodeDTO();
-            episodeDTO.setId(id);
+            episodeDTO.setId(String.valueOf(id));
             episodeDTO.setName(name);
             episodeDTO.setDescription(description);
             episodeDTO.setViews(views);

@@ -35,7 +35,7 @@ public class CommentEpisodeController {
             UserDTO user = new UserDTO();
             user.setId(String.valueOf(userid));
             EpisodeDTO episodeDto = new EpisodeDTO();
-            episodeDto.setId(epid);
+            episodeDto.setId(String.valueOf(epid));
             CommentEpisodeDTO commentMovieDto = new CommentEpisodeDTO();
             commentMovieDto.setEpisode(episodeDto);
             commentMovieDto.setUserAdd(user);

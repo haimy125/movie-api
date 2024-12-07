@@ -6,7 +6,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ScheduleMovieDTO {
-    private Long id;
+    private String id;
     private MovieDTO movie;
     private ScheduleDTO schedule;
 }

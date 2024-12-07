@@ -8,7 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class UserFollowDTO {
-    private Long id;
+    private String id;
     private UserDTO user;
 
     @ManyToOne

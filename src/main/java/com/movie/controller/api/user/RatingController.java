@@ -21,7 +21,7 @@ public class RatingController {
             UserDTO user = new UserDTO();
             user.setId(String.valueOf(userid));
             MovieDTO movie = new MovieDTO();
-            movie.setId(movieid);
+            movie.setId(String.valueOf(movieid));
             UserRatingDTO ratings = new UserRatingDTO();
             ratings.setUser(user);
             ratings.setMovie(movie);
