@@ -273,9 +273,7 @@ public class MovieServiceImpl implements MovieService {
 
             movieEntity.setUserAdd(userEntity);
             movieEntity.setUserUpdate(userEntity);
-            movieEntity.setTimeUpdate(currentDate);
             movieEntity.setImageUrl(Arrays.toString(file.getBytes()));
-            movieEntity.setTimeAdd(currentDate);
             movieEntity = movieRepository.save(movieEntity);
 
             // Xử lý các thể loại liên quan
@@ -335,7 +333,6 @@ public class MovieServiceImpl implements MovieService {
             movie.setCnName(movieDTO.getCnName());
             movie.setImageUrl(Arrays.toString(movieDTO.getImageUrl()));
             movie.setTimeAdd(movie.getTimeAdd());
-            movie.setTimeUpdate(Date.valueOf(LocalDate.now()));
             movie.setUserAdd(movie.getUserAdd());
             movie.setUserUpdate(User);
             movie.setNewMovie(movieDTO.getNewMovie());

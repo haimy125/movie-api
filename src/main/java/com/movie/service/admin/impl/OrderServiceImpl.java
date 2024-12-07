@@ -102,7 +102,6 @@ public class OrderServiceImpl implements OrderService {
         Notification notification = new Notification();
         notification.setUser(user);
         notification.setTimeAdd(Date.valueOf(LocalDate.now()));
-        notification.setTimeUpdate(Date.valueOf(LocalDate.now()));
         notification.setContent("Đã mua phim: " + movie.getVnName() + " hết " + orders.getPoint() + " xu \n số dư hiện tại là: " + user.getPoint() + " xu.");
         notification.setStatus(false);
         notificationRepository.save(notification);

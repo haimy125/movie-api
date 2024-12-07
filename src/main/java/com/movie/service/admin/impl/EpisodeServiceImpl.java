@@ -67,8 +67,6 @@ public class EpisodeServiceImpl implements EpisodeService {
             dto.setMovie(modelMapper.map(episode.getMovie(), MovieDTO.class));
             dto.setUserAdd(modelMapper.map(episode.getUserAdd(), UserDTO.class));
             dto.setUserUpdate(modelMapper.map(episode.getUserUpdate(), UserDTO.class));
-            dto.setTimeAdd(episode.getTimeAdd());
-            dto.setTimeUpdate(episode.getTimeUpdate());
             dto.setDescription(episode.getDescription());
             dto.setFileEpisodes(null);
             dto.setSubtitles(null);
@@ -94,8 +92,6 @@ public class EpisodeServiceImpl implements EpisodeService {
             dto.setMovie(modelMapper.map(episode.getMovie(), MovieDTO.class));
             dto.setUserAdd(modelMapper.map(episode.getUserAdd(), UserDTO.class));
             dto.setUserUpdate(modelMapper.map(episode.getUserUpdate(), UserDTO.class));
-            dto.setTimeAdd(episode.getTimeAdd());
-            dto.setTimeUpdate(episode.getTimeUpdate());
             dto.setFileEpisodes(null);
             dto.setSubtitles(null);
             totalviews = episode.getViews() + totalviews;
@@ -123,8 +119,6 @@ public class EpisodeServiceImpl implements EpisodeService {
             dto.setUserAdd(modelMapper.map(episode.getUserAdd(), UserDTO.class));
             dto.setUserUpdate(modelMapper.map(episode.getUserUpdate(), UserDTO.class));
             dto.setDescription(episode.getDescription());
-            dto.setTimeAdd(episode.getTimeAdd());
-            dto.setTimeUpdate(episode.getTimeUpdate());
             dto.setFileEpisodes(episode.getFileEpisodes());
             dto.setSubtitles(episode.getSubtitles());
             dto.setViews(episode.getViews());
@@ -150,8 +144,6 @@ public class EpisodeServiceImpl implements EpisodeService {
             dto.setMovie(movie);
             dto.setUserAdd(modelMapper.map(episode.getUserAdd(), UserDTO.class));
             dto.setUserUpdate(modelMapper.map(episode.getUserUpdate(), UserDTO.class));
-            dto.setTimeAdd(episode.getTimeAdd());
-            dto.setTimeUpdate(episode.getTimeUpdate());
             dto.setDescription(episode.getDescription());
             dto.setFileEpisodes(null);
             dto.setSubtitles(null);
@@ -184,8 +176,6 @@ public class EpisodeServiceImpl implements EpisodeService {
             episode.setMovie(movie);
             episode.setUserAdd(useradd);
             episode.setUserUpdate(userupdate);
-            episode.setTimeAdd(Date.valueOf(LocalDate.now()));
-            episode.setTimeUpdate(Date.valueOf(LocalDate.now()));
             episode.setFileEpisodes(file.getBytes());
             if (subtitles != null)
                 episode.setSubtitles(subtitles.getBytes());
@@ -221,7 +211,6 @@ public class EpisodeServiceImpl implements EpisodeService {
             episode.setUserAdd(episode.getUserAdd());
             episode.setUserUpdate(userupdate);
             episode.setTimeAdd(episode.getTimeAdd());
-            episode.setTimeUpdate(Date.valueOf(LocalDate.now()));
             if (file == null)
                 episode.setFileEpisodes(episode.getFileEpisodes());
             else

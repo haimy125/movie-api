@@ -58,16 +58,12 @@ public class DataInitializer {
                     if (i == 6) {
                         schedule.setName("Chủ nhật");
                         schedule.setDescription("Tạo mặc định!");
-                        schedule.setTimeAdd(Date.valueOf(LocalDate.now()));
-                        schedule.setTimeUpdate(Date.valueOf(LocalDate.now()));
                         schedule.setUserAdd(user);
                         schedule.setUserUpdate(user);
                         scheduleRepository.save(schedule);
                     } else {
                         schedule.setName("Thứ " + date);
                         schedule.setDescription("Tạo mặc định!");
-                        schedule.setTimeAdd(Date.valueOf(LocalDate.now()));
-                        schedule.setTimeUpdate(Date.valueOf(LocalDate.now()));
                         schedule.setUserAdd(user);
                         schedule.setUserUpdate(user);
                         scheduleRepository.save(schedule);

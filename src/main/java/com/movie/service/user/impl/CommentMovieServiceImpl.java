@@ -57,7 +57,6 @@ public class CommentMovieServiceImpl implements CommentMovieService {
             CommentMovie comment_Movie = modelMapper.map(comment, CommentMovie.class);
             comment_Movie.setUserAdd(user);
             comment_Movie.setMovie(movie);
-            comment_Movie.setTimeAdd(Date.valueOf(LocalDate.now()));
             comment_Movie.setContent(comment.getContent());
             comment_MovieRepository.save(comment_Movie);
             return comment;

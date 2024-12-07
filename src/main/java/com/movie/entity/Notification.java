@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "notifications")
@@ -28,7 +29,13 @@ public class Notification {
     private Date timeAdd;
 
     @Column(name = "time_update")
-    private Date timeUpdate;
+    @Temporal(TemporalType.TIMESTAMP)
+    private LocalDateTime timeUpdate;
+
+    @PreUpdate
+    private void updateTimeUpdate() {
+        this.timeUpdate = LocalDateTime.now();
+    }
 
     @Column(name = "status")
     private Boolean status;

@@ -50,7 +50,6 @@ public class CommentEpisodeServiceImpl implements CommentEpisodeService {
             commentMovieDto.setContent(item.getContent());
             commentMovieDto.setEpisode(modelMapper.map(item.getEpisode(), EpisodeDTO.class)); // chuyển đổi sang DTO (modelmapper) item.getEpisode());
             commentMovieDto.setUserAdd(modelMapper.map(item.getUserAdd(), UserDTO.class)); // chuyển đổi sang DTO (modelmapper) item.getUser_add());
-            commentMovieDto.setTimeAdd(item.getTimeAdd());
             UserDTOS.add(commentMovieDto);
         }
         return UserDTOS;
@@ -66,7 +65,6 @@ public class CommentEpisodeServiceImpl implements CommentEpisodeService {
             CommentEpisode comment_Movie = modelMapper.map(comment, CommentEpisode.class);
             comment_Movie.setUserAdd(user);
             comment_Movie.setEpisode(episodeEnitty);
-            comment_Movie.setTimeAdd(Date.valueOf(LocalDate.now()));
             comment_Movie.setContent(comment.getContent());
             comment_EpisodeRepository.save(comment_Movie);
             return comment;
