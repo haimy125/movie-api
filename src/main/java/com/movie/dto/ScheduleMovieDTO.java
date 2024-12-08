@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 public class ScheduleMovieDTO {
 
-    private String id;
+    private Long id;
 
     @NotNull(message = "Phim không được để trống")
     @Valid

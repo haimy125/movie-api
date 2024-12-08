@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 public class CategoryDTO {
 
-    private String id;
+    private Long id;
 
     @NotBlank(message = "Tên danh mục không được để trống")
     @Size(max = 255, message = "Tên danh mục không được vượt quá 255 ký tự")

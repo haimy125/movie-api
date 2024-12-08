@@ -11,7 +11,7 @@ import java.sql.Date;
 @Setter
 public class OrderDTO {
 
-    private String id;
+    private Long id;
 
     @NotNull(message = "Điểm tích lũy không được để trống")
     @Min(value = 0, message = "Điểm tích lũy phải lớn hơn hoặc bằng 0")

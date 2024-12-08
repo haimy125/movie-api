@@ -19,9 +19,9 @@ public class RatingController {
     public ResponseEntity<?> save(@RequestParam("userid") Long userid, @RequestParam("movieid") Long movieid, @RequestParam("rating") Long rating) {
         try {
             UserDTO user = new UserDTO();
-            user.setId(String.valueOf(userid));
+            user.setId(userid);
             MovieDTO movie = new MovieDTO();
-            movie.setId(String.valueOf(movieid));
+            movie.setId(movieid);
             UserRatingDTO ratings = new UserRatingDTO();
             ratings.setUser(user);
             ratings.setMovie(movie);

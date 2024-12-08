@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 public class CategoryMovieDTO {
 
-    private String id;
+    private Long id;
 
     @NotNull(message = "Danh mục không được để trống")
     @Valid

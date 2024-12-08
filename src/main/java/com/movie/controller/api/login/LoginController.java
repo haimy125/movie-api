@@ -30,18 +30,17 @@ import java.util.stream.Collectors;
 public class LoginController {
 
     @Autowired
-    private LoginService login_Service;
+    private LoginService loginService;
 
     @Autowired
     private NotificationService notificationService;
 
-    // Đăng nhập tai khoản
+    // Đăng nhập tài khoản
     @PostMapping("/login")
     public ResponseEntity<?> login(String username, String password) {
         try {
-
             //Đăng nhập
-            UserDTO user = login_Service.login(username, password);
+            UserDTO user = loginService.login(username, password);
             user.setPassword(null);
 
             //Tạo token
@@ -92,7 +91,7 @@ public class LoginController {
 
             // Gán vai trò mặc định cho người dùng
             RoleDTO role = new RoleDTO();
-            role.setId(String.valueOf(2L)); // ID cho vai trò mặc định (ví dụ: ROLE_USER)
+            role.setId(2L); // ID cho vai trò mặc định (ví dụ: ROLE_USER)
             user.setRole(role);
 
             // Đọc ảnh đại diện mặc định
@@ -101,7 +100,7 @@ public class LoginController {
             user.setAvatar(defaultAvatar);
 
             // Gọi dịch vụ đăng ký người dùng
-            UserDTO registeredUser = login_Service.registerUser(user);
+            UserDTO registeredUser = loginService.registerUser(user);
             registeredUser.setPassword(null); // Xóa mật khẩu khỏi phản hồi
 
             // Tạo token để sử dụng sau khi đăng ký
@@ -146,7 +145,7 @@ public class LoginController {
     @GetMapping("/checktoken")
     public ResponseEntity<?> checkToken(@RequestParam("token") String token) {
         try {
-            UserDTO user = login_Service.checkUserByToken(token);
+            UserDTO user = loginService.checkUserByToken(token);
             user.setPassword(null);
             user.setAvatar(null);
 
@@ -159,7 +158,7 @@ public class LoginController {
     @PostMapping("/avatar/{id}")
     public ResponseEntity<?> avatar(@PathVariable Long id, @RequestParam("avatar") MultipartFile avatar) {
         try {
-            login_Service.uploadAvatar(id, avatar);
+            loginService.uploadAvatar(id, avatar);
             return ResponseEntity.ok("Thay đổi ảnh thành công");
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -169,7 +168,7 @@ public class LoginController {
     @PostMapping("/changepassword/{id}")
     public ResponseEntity<?> avatar(@PathVariable Long id, @RequestParam("password") String password, @RequestParam("newpassword") String newpassword, @RequestParam("confirmpassword") String confirmpassword) {
         try {
-            UserDTO user_dto = login_Service.changePassword(id, password, newpassword, confirmpassword);
+            UserDTO user_dto = loginService.changePassword(id, password, newpassword, confirmpassword);
             return ResponseEntity.ok("Thay đổi mk thành công");
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -179,7 +178,7 @@ public class LoginController {
     @PostMapping("/updateinfo/{id}")
     public ResponseEntity<?> updateinfo(@PathVariable String id, @RequestParam("fullname") String fullname, @RequestParam("email") String email) {
         try {
-            login_Service.updateInfo(Long.valueOf(id), fullname, email);
+            loginService.updateInfo(Long.valueOf(id), fullname, email);
             return ResponseEntity.ok("Thay đổi thông tin thành công");
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -189,7 +188,7 @@ public class LoginController {
     @GetMapping("/user/profile")
     public ResponseEntity<?> userProfile(@RequestParam("id") String id) {
         try {
-            UserDTO user = login_Service.userProfile(Long.valueOf(id));
+            UserDTO user = loginService.userProfile(Long.valueOf(id));
             user.setPassword(null);
             return ResponseEntity.ok(user);
         } catch (Exception e) {
@@ -199,7 +198,7 @@ public class LoginController {
 
     @GetMapping("/view/{id}")
     public ResponseEntity<byte[]> viewFile(@PathVariable Long id) {
-        UserDTO fileDTO = login_Service.userByid(id);
+        UserDTO fileDTO = loginService.userByid(id);
         if (fileDTO != null && fileDTO.getAvatar() != null) {
             return ResponseEntity.ok()
                     .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + fileDTO.getId() + "\"")
@@ -226,7 +225,7 @@ public class LoginController {
     public ResponseEntity<?> changepassword(@RequestParam("id") Long id, @RequestParam("newPassword") String newPassword
             , @RequestParam("confirmPassword") String confirmPassword) {
         try {
-            UserDTO user = login_Service.forgetPassword(id, newPassword, confirmPassword);
+            UserDTO user = loginService.forgetPassword(id, newPassword, confirmPassword);
             return ResponseEntity.ok(user);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -236,7 +235,7 @@ public class LoginController {
     @GetMapping("/find/user")
     public ResponseEntity<?> findUser(@RequestParam("username") String username, @RequestParam("email") String email) {
         try {
-            UserDTO user = login_Service.checkUser(username, email);
+            UserDTO user = loginService.checkUser(username, email);
             return ResponseEntity.ok(user);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);

@@ -34,9 +34,9 @@ public class UserFollowController {
     public ResponseEntity<?> addFollow(@RequestParam("userid") Long userid, @RequestParam("movieid") Long movieid) {
         try {
             UserDTO user = new UserDTO();
-            user.setId(String.valueOf(userid));
+            user.setId(userid);
             MovieDTO movie = new MovieDTO();
-            movie.setId(String.valueOf(movieid));
+            movie.setId(movieid);
             UserFollowDTO dto = new UserFollowDTO();
             dto.setUser(user);
             dto.setMovie(movie);

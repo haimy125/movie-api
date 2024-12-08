@@ -12,7 +12,7 @@ import java.sql.Date;
 @Setter
 public class MovieDTO {
 
-    private String id;
+    private Long id;
 
     @NotBlank(message = "Tên tiếng Việt không được để trống")
     @Size(max = 255, message = "Tên tiếng Việt không được vượt quá 255 ký tự")

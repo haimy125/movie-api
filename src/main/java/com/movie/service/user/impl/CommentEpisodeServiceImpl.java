@@ -15,8 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.sql.Date;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,7 +44,7 @@ public class CommentEpisodeServiceImpl implements CommentEpisodeService {
         // chuyển đổi sang DTO
         for (CommentEpisode item : list) {
             CommentEpisodeDTO commentMovieDto = new CommentEpisodeDTO();
-            commentMovieDto.setId(String.valueOf(item.getId()));
+            commentMovieDto.setId(item.getId());
             commentMovieDto.setContent(item.getContent());
             commentMovieDto.setEpisode(modelMapper.map(item.getEpisode(), EpisodeDTO.class)); // chuyển đổi sang DTO (modelmapper) item.getEpisode());
             commentMovieDto.setUserAdd(modelMapper.map(item.getUserAdd(), UserDTO.class)); // chuyển đổi sang DTO (modelmapper) item.getUser_add());

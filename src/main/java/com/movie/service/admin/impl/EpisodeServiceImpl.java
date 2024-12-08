@@ -14,11 +14,10 @@ import io.jsonwebtoken.io.IOException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.sql.Date;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,7 +59,7 @@ public class EpisodeServiceImpl implements EpisodeService {
             throw new RuntimeException("Không có bộ phim nào");
         for (Episode episode : episode_entity) {
             EpisodeDTO dto = new EpisodeDTO();
-            dto.setId(String.valueOf(episode.getId()));
+            dto.setId(episode.getId());
             dto.setName(episode.getName());
             dto.setViews(episode.getViews());
             dto.setLikes(episode.getLikes());
@@ -77,6 +76,12 @@ public class EpisodeServiceImpl implements EpisodeService {
 
     @Override
     public List<EpisodeDTO> getByMovie(Long movie_id) {
+
+        if (movie_id == null) {
+            // Xử lý nếu id là null
+            throw new RuntimeException("Id không hợp lệ!");
+        }
+
         List<EpisodeDTO> result = new ArrayList<>();
         Movie movie = movieRepository.findById(movie_id).orElseThrow(() -> new RuntimeException("Không tìm thấy phim nào có id là " + movie_id));
         List<Episode> episode_entity = episodeRepository.findByMovie(movie);
@@ -85,7 +90,7 @@ public class EpisodeServiceImpl implements EpisodeService {
             throw new RuntimeException("Không có bộ phim nào");
         for (Episode episode : episode_entity) {
             EpisodeDTO dto = new EpisodeDTO();
-            dto.setId(String.valueOf(episode.getId()));
+            dto.setId(episode.getId());
             dto.setName(episode.getName());
             dto.setViews(episode.getViews());
             dto.setLikes(episode.getLikes());
@@ -111,7 +116,7 @@ public class EpisodeServiceImpl implements EpisodeService {
             MovieDTO movie = modelMapper.map(episode.getMovie(), MovieDTO.class);
             movie.setImageUrl(null);
             EpisodeDTO dto = new EpisodeDTO();
-            dto.setId(String.valueOf(episode.getId()));
+            dto.setId(episode.getId());
             dto.setName(episode.getName());
             dto.setViews(episode.getViews());
             dto.setLikes(episode.getLikes());
@@ -137,7 +142,7 @@ public class EpisodeServiceImpl implements EpisodeService {
             movie.setImageUrl(null);
             episode.setViews(episode.getViews() + 1);
             EpisodeDTO dto = new EpisodeDTO();
-            dto.setId(String.valueOf(episode.getId()));
+            dto.setId(episode.getId());
             dto.setName(episode.getName());
             dto.setViews(episode.getViews());
             dto.setLikes(episode.getLikes());

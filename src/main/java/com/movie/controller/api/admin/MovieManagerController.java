@@ -48,7 +48,7 @@ public class MovieManagerController {
 
             //Tạo user
             UserDTO user_dto = new UserDTO();
-            user_dto.setId(String.valueOf(user_add));
+            user_dto.setId(user_add);
             //Tạo movie
             MovieDTO movie_dto = new MovieDTO();
             movie_dto.setCnName(cn_name);
@@ -79,10 +79,10 @@ public class MovieManagerController {
 
             //Tạo user
             UserDTO user_dto = new UserDTO();
-            user_dto.setId(String.valueOf(user_add));
+            user_dto.setId(user_add);
             //Tạo movie
             MovieDTO movie_dto = new MovieDTO();
-            movie_dto.setId(String.valueOf(id));
+            movie_dto.setId(id);
             movie_dto.setCnName(cn_name);
             movie_dto.setVnName(vn_name);
             movie_dto.setDescription(description);

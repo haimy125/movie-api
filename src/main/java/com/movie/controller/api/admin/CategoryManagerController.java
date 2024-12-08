@@ -3,13 +3,19 @@ package com.movie.controller.api.admin;
 import com.movie.controller.output.Category_OutPut;
 import com.movie.dto.CategoryDTO;
 import com.movie.service.admin.CategoryService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/admin/category")
@@ -50,8 +56,19 @@ public class CategoryManagerController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<?> create(@RequestBody CategoryDTO categoryDTO) {
+    public ResponseEntity<?> create(@Valid @RequestBody CategoryDTO categoryDTO, BindingResult result) {
         try {
+            // Xử lý lỗi validation từ DTO
+            if (result.hasErrors()) {
+                Map<String, String> errors = result.getFieldErrors().stream()
+                        .collect(Collectors.toMap(
+                                FieldError::getField,
+                                FieldError::getDefaultMessage
+                        ));
+                return ResponseEntity.badRequest().body(errors);
+            }
+
+
             CategoryDTO category = categoryService.save(categoryDTO);
             return new ResponseEntity<>(category, HttpStatus.OK);
         } catch (Exception e) {
@@ -60,9 +77,19 @@ public class CategoryManagerController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody CategoryDTO categoryDTO) {
+    public ResponseEntity<?> update(@PathVariable Long id, @Valid @RequestBody CategoryDTO categoryDTO, BindingResult result) {
         try {
-            categoryDTO.setId(String.valueOf(id));
+            // Xử lý lỗi validation từ DTO
+            if (result.hasErrors()) {
+                Map<String, String> errors = result.getFieldErrors().stream()
+                        .collect(Collectors.toMap(
+                                FieldError::getField,
+                                FieldError::getDefaultMessage
+                        ));
+                return ResponseEntity.badRequest().body(errors);
+            }
+
+            categoryDTO.setId(id);
             CategoryDTO category = categoryService.update(categoryDTO);
             return new ResponseEntity<>(category, HttpStatus.OK);
         } catch (Exception e) {

@@ -14,7 +14,7 @@ import java.sql.Date;
 @Setter
 public class NotificationDTO {
 
-    private String id;
+    private Long id;
 
     @NotBlank(message = "Nội dung thông báo không được để trống")
     @Size(max = 500, message = "Nội dung thông báo không được vượt quá 500 ký tự")

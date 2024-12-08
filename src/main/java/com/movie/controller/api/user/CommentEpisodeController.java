@@ -33,9 +33,9 @@ public class CommentEpisodeController {
     public ResponseEntity<?> addComment(@RequestParam("epid") Long epid, @RequestParam("userid") Long userid, @RequestParam("content") String content) {
         try {
             UserDTO user = new UserDTO();
-            user.setId(String.valueOf(userid));
+            user.setId(userid);
             EpisodeDTO episodeDto = new EpisodeDTO();
-            episodeDto.setId(String.valueOf(epid));
+            episodeDto.setId(epid);
             CommentEpisodeDTO commentMovieDto = new CommentEpisodeDTO();
             commentMovieDto.setEpisode(episodeDto);
             commentMovieDto.setUserAdd(user);

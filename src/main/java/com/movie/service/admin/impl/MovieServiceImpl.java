@@ -251,7 +251,7 @@ public class MovieServiceImpl implements MovieService {
             for (String idStr : categoryIds) {
 //                Long id = Long.valueOf(idStr.trim()); // Chuyển đổi và loại bỏ khoảng trắng
                 Category category = new Category();
-                category.setId(idStr);
+                category.setId(Long.valueOf(idStr));
                 categoryEntities.add(category);
             }
             // Xử lý danh sách thể loại
@@ -261,7 +261,7 @@ public class MovieServiceImpl implements MovieService {
             for (String idStr : scheduleIds) {
                 Long id = Long.valueOf(idStr.trim()); // Chuyển đổi và loại bỏ khoảng trắng
                 Schedule schedule = new Schedule();
-                schedule.setId(String.valueOf(id));
+                schedule.setId(id);
                 scheduleEntities.add(schedule);
             }
 
@@ -316,7 +316,7 @@ public class MovieServiceImpl implements MovieService {
             for (String idStr : categoryIds) {
 //                Long id = Long.valueOf(idStr.trim()); // Chuyển đổi và loại bỏ khoảng trắng
                 Category category = new Category();
-                category.setId(idStr);
+                category.setId(Long.valueOf(idStr));
                 list.add(category);
             }
             List<String> scheduleIds = Arrays.asList(scheduleList.split(","));
@@ -325,7 +325,7 @@ public class MovieServiceImpl implements MovieService {
             for (String idStr : scheduleIds) {
                 Long id = Long.valueOf(idStr.trim()); // Chuyển đổi và loại bỏ khoảng trắng
                 Schedule schedule = new Schedule();
-                schedule.setId(String.valueOf(id));
+                schedule.setId(id);
                 scheduleEntities.add(schedule);
             }
             movie.setId(movieDTO.getId());

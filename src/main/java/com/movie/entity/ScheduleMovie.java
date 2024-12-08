@@ -17,7 +17,7 @@ public class ScheduleMovie {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private String id;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "movie_id")

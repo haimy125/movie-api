@@ -14,7 +14,7 @@ import java.sql.Date;
 @Setter
 public class CommentEpisodeDTO {
 
-    private String id;
+    private Long id;
 
     @NotBlank(message = "Nội dung bình luận không được để trống")
     @Size(max = 500, message = "Nội dung bình luận không được vượt quá 500 ký tự")

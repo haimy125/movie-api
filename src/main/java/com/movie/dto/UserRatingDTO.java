@@ -11,7 +11,7 @@ import lombok.Setter;
 @Setter
 public class UserRatingDTO {
 
-    private String id;
+    private Long id;
 
     @NotNull(message = "Người dùng không được để trống")
     @Valid

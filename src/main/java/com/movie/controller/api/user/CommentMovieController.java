@@ -33,9 +33,9 @@ public class CommentMovieController {
     public ResponseEntity<?> addComment(@RequestParam("movieid") Long movieid, @RequestParam("userid") Long userid, @RequestParam("content") String content) {
         try {
             UserDTO user = new UserDTO();
-            user.setId(String.valueOf(userid));
+            user.setId(userid);
             MovieDTO movie = new MovieDTO();
-            movie.setId(String.valueOf(movieid));
+            movie.setId(movieid);
             CommentMovieDTO commentMovieDto = new CommentMovieDTO();
             commentMovieDto.setMovie(movie);
             commentMovieDto.setUserAdd(user);

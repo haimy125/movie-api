@@ -1,7 +1,5 @@
 package com.movie.dto;
 
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -11,7 +9,7 @@ import lombok.Setter;
 @Setter
 public class UserFollowDTO {
 
-    private String id;
+    private Long id;
 
     @NotNull(message = "Người dùng không được để trống")
     @Valid

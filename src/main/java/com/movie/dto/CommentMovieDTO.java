@@ -14,7 +14,7 @@ import java.sql.Date;
 @Setter
 public class CommentMovieDTO {
 
-    private String id;
+    private Long id;
 
     @NotBlank(message = "Nội dung bình luận không được để trống")
     @Size(max = 5000, message = "Nội dung bình luận không được vượt quá 5000 ký tự")

@@ -13,7 +13,7 @@ import java.util.Date;
 @Setter
 public class ScheduleDTO {
 
-    private String id;
+    private Long id;
 
     @NotBlank(message = "Tên lịch trình không được để trống")
     @Size(max = 255, message = "Tên lịch trình không được vượt quá 255 ký tự")

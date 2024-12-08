@@ -11,7 +11,7 @@ import java.sql.Date;
 @Setter
 public class EpisodeDTO {
 
-    private String id;
+    private Long id;
 
     @NotBlank(message = "Tên tập phim không được để trống")
     @Size(max = 255, message = "Tên tập phim không được vượt quá 255 ký tự")
