@@ -114,8 +114,8 @@ public class LoginServiceImpl implements LoginService {
             String hashPassword = BCrypt.hashpw(newPassword, BCrypt.gensalt());
             user.setPassword(hashPassword);
             User user_EP = userRepository.save(user);
-            UserDTO UserDTO = modelMapper.map(user_EP, UserDTO.class);
-            return UserDTO;
+            UserDTO userDTO = modelMapper.map(user_EP, UserDTO.class);
+            return userDTO;
         } catch (Exception e) {
             throw new RuntimeException("Có lỗi không xác định khi đổi mật khẩu");
         }
@@ -170,6 +170,7 @@ public class LoginServiceImpl implements LoginService {
     @Override
     public UserDTO checkUserByToken(String token) {
         if (token != null) {
+
             // kiểm tra xác định token
             boolean isTokenValid = TokenUtil.validateToken(token);
 
@@ -180,8 +181,8 @@ public class LoginServiceImpl implements LoginService {
             User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("Không có người dùng này!"));
 
             if (user != null) {
-                UserDTO UserDTO = modelMapper.map(user, UserDTO.class);
-                return UserDTO;
+                UserDTO userDTO = modelMapper.map(user, UserDTO.class);
+                return userDTO;
             }
         }
         throw new RuntimeException("Bạn đã hết phiên đăng nhập!");
@@ -191,17 +192,17 @@ public class LoginServiceImpl implements LoginService {
     public UserDTO userProfile(Long id) {
         try {
             User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("Không có người dùng này!"));
-            UserDTO UserDTO = new UserDTO();
-            UserDTO.setId(user.getId());
-            UserDTO.setUsername(user.getUsername());
-            UserDTO.setEmail(user.getEmail());
-            UserDTO.setPoint(user.getPoint());
-            UserDTO.setFullname(user.getFullname());
-            UserDTO.setAvatar(null);
-            UserDTO.setTimeAdd(user.getTimeAdd());
-            UserDTO.setActive(user.getActive());
-            UserDTO.setStatus(user.getStatus());
-            return UserDTO;
+            UserDTO userDTO = new UserDTO();
+            userDTO.setId(user.getId());
+            userDTO.setUsername(user.getUsername());
+            userDTO.setEmail(user.getEmail());
+            userDTO.setPoint(user.getPoint());
+            userDTO.setFullname(user.getFullname());
+            userDTO.setAvatar(user.getAvatar());
+            userDTO.setTimeAdd(user.getTimeAdd());
+            userDTO.setActive(user.getActive());
+            userDTO.setStatus(user.getStatus());
+            return userDTO;
         } catch (Exception e) {
             throw new RuntimeException("Có lỗi không xác định");
         }

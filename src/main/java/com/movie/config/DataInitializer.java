@@ -10,8 +10,6 @@ import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 
-import java.sql.Date;
-import java.time.LocalDate;
 
 @Configuration
 public class DataInitializer {

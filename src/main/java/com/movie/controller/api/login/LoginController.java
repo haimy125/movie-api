@@ -43,9 +43,10 @@ public class LoginController {
             UserDTO user = loginService.login(username, password);
             user.setPassword(null);
 
-            //Tạo token
-            long expirationMillis = 3600000;
+            // Tạo token với thời gian sống 30 ngày
+            long expirationMillis = 30L * 24 * 60 * 60 * 1000; // 30 ngày tính bằng milliseconds
             String mainToken = TokenUtil.generateToken(user.getId() + "", expirationMillis);
+
             Map<String, Object> response = new HashMap<>();
 
             // Tạo cookie
@@ -165,11 +166,33 @@ public class LoginController {
         }
     }
 
+//    @PostMapping("/changepassword/{id}")
+//    public ResponseEntity<?> avatar(@PathVariable Long id, @RequestParam("password") String password, @RequestParam("newpassword") String newpassword, @RequestParam("confirmpassword") String confirmpassword) {
+//        try {
+//            UserDTO user_dto = loginService.changePassword(id, password, newpassword, confirmpassword);
+//            return ResponseEntity.ok("Thay đổi mk thành công");
+//        } catch (Exception e) {
+//            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+//        }
+//    }
+
     @PostMapping("/changepassword/{id}")
-    public ResponseEntity<?> avatar(@PathVariable Long id, @RequestParam("password") String password, @RequestParam("newpassword") String newpassword, @RequestParam("confirmpassword") String confirmpassword) {
+    public ResponseEntity<?> changePassword(
+            @PathVariable Long id,
+            @RequestParam("password") String currentPassword,
+            @RequestParam("newpassword") String newPassword,
+            @RequestParam("confirmpassword") String confirmPassword) {
         try {
-            UserDTO user_dto = loginService.changePassword(id, password, newpassword, confirmpassword);
-            return ResponseEntity.ok("Thay đổi mk thành công");
+            if (!newPassword.equals(confirmPassword)) {
+                return ResponseEntity.badRequest().body("Mật khẩu mới và xác nhận mật khẩu không khớp.");
+            }
+
+            UserDTO userDTO = loginService.changePassword(id, currentPassword, newPassword, confirmPassword);
+            Map<String, Object> response = new HashMap<>();
+            response.put("message", "Thay đổi mật khẩu thành công.");
+            response.put("user", userDTO);
+
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
@@ -189,7 +212,7 @@ public class LoginController {
     public ResponseEntity<?> userProfile(@RequestParam("id") String id) {
         try {
             UserDTO user = loginService.userProfile(Long.valueOf(id));
-            user.setPassword(null);
+            user.setPassword(null); // bảo vệ pass khi trả về từ api
             return ResponseEntity.ok(user);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);

@@ -8,31 +8,30 @@ import io.jsonwebtoken.security.Keys;
 
 import java.security.Key;
 import java.util.Date;
-
 /**
- * Utility class for handling JWT tokens.
- * Provides methods to generate, parse, and validate tokens.
+ * Lớp tiện ích dùng để xử lý các token JWT.
+ * Cung cấp các phương thức để tạo, phân tích và xác thực token.
  */
 public class TokenUtil {
 
     /**
-     * Secret key used for signing JWT tokens.
+     * Khóa bí mật được sử dụng để ký các token JWT.
      */
     private static final Key SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
     /**
-     * Generates a JWT token with the given user ID and expiration time.
+     * Tạo một token JWT với ID người dùng và thời gian hết hạn.
      *
-     * @param userid           The user ID to include in the token's payload.
-     * @param expirationMillis The token's validity duration in milliseconds.
-     * @return A signed JWT token as a {@code String}.
+     * @param userid           ID của người dùng sẽ được thêm vào payload của token.
+     * @param expirationMillis Thời gian hiệu lực của token tính bằng mili giây.
+     * @return Token JWT đã được ký dưới dạng {@code String}.
      */
     public static String generateToken(String userid, long expirationMillis) {
         Date now = new Date();
         Date expirationDate = new Date(now.getTime() + expirationMillis);
-        String Data = userid;
+        String data = userid;
         return Jwts.builder()
-                .setSubject(Data)
+                .setSubject(data)
                 .setIssuedAt(now)
                 .setExpiration(expirationDate)
                 .signWith(SECRET_KEY, SignatureAlgorithm.HS256)
@@ -40,10 +39,10 @@ public class TokenUtil {
     }
 
     /**
-     * Extracts the user ID from a given JWT token.
+     * Trích xuất ID người dùng từ một token JWT.
      *
-     * @param token The JWT token from which the user ID should be extracted.
-     * @return The user ID embedded in the token.
+     * @param token Token JWT cần trích xuất ID người dùng.
+     * @return ID người dùng được nhúng trong token.
      */
     public static String getUserIdFromToken(String token) {
         return Jwts.parserBuilder()
@@ -55,10 +54,10 @@ public class TokenUtil {
     }
 
     /**
-     * Validates a JWT token by checking its signature and expiration time.
+     * Xác thực một token JWT bằng cách kiểm tra chữ ký và thời gian hết hạn.
      *
-     * @param token The JWT token to validate.
-     * @return {@code true} if the token is valid; {@code false} otherwise.
+     * @param token Token JWT cần xác thực.
+     * @return {@code true} nếu token hợp lệ; {@code false} nếu không hợp lệ.
      */
     public static boolean validateToken(String token) {
         try {
