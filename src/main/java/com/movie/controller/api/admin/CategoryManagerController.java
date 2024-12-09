@@ -68,7 +68,6 @@ public class CategoryManagerController {
                 return ResponseEntity.badRequest().body(errors);
             }
 
-
             CategoryDTO category = categoryService.save(categoryDTO);
             return new ResponseEntity<>(category, HttpStatus.OK);
         } catch (Exception e) {

@@ -81,8 +81,8 @@ public class UserServiceImpl implements UserService {
             // tìm kiếm người dùng theo id
             User User = userRepository.findById(id).orElseThrow(() -> new RuntimeException("Không có người dùng này!"));
             // chuyển đổi sang DTO
-            UserDTO UserDTO = modelMapper.map(User, UserDTO.class);
-            return UserDTO;
+            UserDTO userDTO = modelMapper.map(User, UserDTO.class);
+            return userDTO;
         } catch (Exception e) {
             throw new RuntimeException("Không tìm thấy người dùng");
         }
@@ -97,8 +97,8 @@ public class UserServiceImpl implements UserService {
             Role role = roleRepository.findById(Long.valueOf(userDTO.getRole().getId())).orElseThrow(() -> new RuntimeException("Không có quyền này!"));
             user.setRole(role);
             userRepository.save(user);
-            UserDTO UserDTO = modelMapper.map(user, UserDTO.class);
-            return UserDTO;
+            UserDTO userDTO1 = modelMapper.map(user, UserDTO.class);
+            return userDTO1;
         } catch (Exception e) {
             throw new RuntimeException("Có lỗi xảy ra");
         }
@@ -127,12 +127,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO updateRole(Long id, Long roleid) {
         try {
-            User User = userRepository.findById(id).orElseThrow(() -> new RuntimeException("Không có người dùng này!"));
-            Role Role = roleRepository.findById(roleid).orElseThrow(() -> new RuntimeException("Không có quyền này!"));
-            User.setRole(Role);
-            userRepository.save(User);
-            UserDTO UserDTO = modelMapper.map(User, UserDTO.class);
-            return UserDTO;
+            User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("Không có người dùng này!"));
+            Role role = roleRepository.findById(roleid).orElseThrow(() -> new RuntimeException("Không có quyền này!"));
+            user.setRole(role);
+            userRepository.save(user);
+            UserDTO userDTO = modelMapper.map(user, UserDTO.class);
+            return userDTO;
         } catch (Exception e) {
             throw new RuntimeException("Có lỗi xảy ra");
         }
@@ -152,8 +152,8 @@ public class UserServiceImpl implements UserService {
             notificationEntity.setContent("Đã nạp " + point + " xu \n số dư hiện tại là: " + User.getPoint() + " xu.");
             notificationEntity.setStatus(true);
             notificationRepository.save(notificationEntity);
-            UserDTO UserDTO = modelMapper.map(User, UserDTO.class);
-            return UserDTO;
+            UserDTO userDTO = modelMapper.map(User, UserDTO.class);
+            return userDTO;
         } catch (Exception e) {
             throw new RuntimeException("Có lỗi xảy ra");
         }
