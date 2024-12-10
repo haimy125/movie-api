@@ -313,11 +313,12 @@ public class MovieServiceImpl implements MovieService {
             List<Category> list = new ArrayList<>();
 
             for (String idStr : categoryIds) {
-//                Long id = Long.valueOf(idStr.trim()); // Chuyển đổi và loại bỏ khoảng trắng
+                Long id = Long.valueOf(idStr.trim()); // Chuyển đổi và loại bỏ khoảng trắng
                 Category category = new Category();
-                category.setId(Long.valueOf(idStr));
+                category.setId(Long.valueOf(id));
                 list.add(category);
             }
+
             List<String> scheduleIds = Arrays.asList(scheduleList.split(","));
             List<Schedule> scheduleEntities = new ArrayList<>();
 

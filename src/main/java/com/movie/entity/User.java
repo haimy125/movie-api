@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -54,7 +56,13 @@ public class User {
     @JoinColumn(name = "role_id", foreignKey = @ForeignKey(name = "FK_Users_Role"))
     private Role role;
 
-    // Phương thức tự động gán thời gian trước khi lưu
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<UserFollow> userFollows = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Order> orders;
+
     @PrePersist
     protected void onCreate() {
         this.timeAdd = LocalDateTime.now();

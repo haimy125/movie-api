@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "episodes_movies")
@@ -22,7 +24,7 @@ public class Episode {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     private String name;
 
     @Column(name = "description")
@@ -32,14 +34,12 @@ public class Episode {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Ho_Chi_Minh")
     private LocalDateTime timeAdd;
 
-    // Phương thức tự động gán thời gian trước khi lưu
     @PrePersist
     protected void onCreate() {
         this.timeAdd = LocalDateTime.now();
     }
 
     @Column(name = "time_update")
-    @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime timeUpdate;
 
     @PreUpdate
@@ -47,17 +47,17 @@ public class Episode {
         this.timeUpdate = LocalDateTime.now();
     }
 
-    @Column(name = "file_episodes")
+    @Column(name = "file_episodes", length = 10485760) // Tối đa 10MB
     private byte[] fileEpisodes;
 
-    @Column(name = "subtitles")
+    @Column(name = "subtitles", length = 10485760) // Tối đa 10MB
     private byte[] subtitles;
 
-    @Column(name = "views")
-    private Long views;
+    @Column(name = "views", nullable = false)
+    private Long views = 0L;
 
-    @Column(name = "likes")
-    private Long likes;
+    @Column(name = "likes", nullable = false)
+    private Long likes = 0L;
 
     @ManyToOne
     @JoinColumn(name = "user_add")
@@ -68,7 +68,20 @@ public class Episode {
     private User userUpdate;
 
     @ManyToOne
-    @JoinColumn(name = "movie_id")
+    @JoinColumn(name = "movie_id", nullable = false)
     private Movie movie;
 
+    @OneToMany(mappedBy = "episode", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CommentEpisode> comments = new ArrayList<>();
+
+    // Utility methods
+    public void addComment(CommentEpisode comment) {
+        comments.add(comment);
+        comment.setEpisode(this);
+    }
+
+    public void removeComment(CommentEpisode comment) {
+        comments.remove(comment);
+        comment.setEpisode(null);
+    }
 }

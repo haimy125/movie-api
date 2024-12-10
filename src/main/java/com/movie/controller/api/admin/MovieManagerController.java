@@ -123,38 +123,59 @@ public class MovieManagerController {
 //        } catch (Exception e) {
 //            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 //        }
-//    }
-
+    //    }
     @PutMapping("/update/{id}")
-    public ResponseEntity<String> update(@PathVariable("id") Long id, @RequestParam("vn_name") String vn_name, @RequestParam("cn_name") String cn_name, @RequestParam("description") String description, @RequestParam("user_add") Long user_add, @RequestParam("author") String author, @RequestParam("categorylist") String categorylist, @RequestParam("episode_number") Long episode_number, @RequestParam("status") String status, @RequestParam("new_movie") Boolean new_movie, @RequestParam("hot_movie") Boolean hot_movie, @RequestParam("vip_movie") Boolean vip_movie, @RequestParam("price") BigDecimal price, @RequestParam(value = "image", required = false) MultipartFile file, @RequestParam("year") Long year, @RequestParam("schedulelist") String schedulelist) {
+    public ResponseEntity<String> update(
+            @PathVariable("id") Long id,
+            @RequestParam("new_movie") Boolean newMovie, // Kiểu Boolean
+            @RequestParam("hot_movie") Boolean hotMovie, // Kiểu Boolean
+            @RequestParam("vip_movie") Boolean vipMovie, // Kiểu Boolean
+            // Các tham số khác giữ nguyên
+            @RequestParam("vn_name") String vnName,
+            @RequestParam("cn_name") String cnName,
+            @RequestParam("description") String description,
+            @RequestParam("user_add") Long userAdd,
+            @RequestParam("author") String author,
+            @RequestParam("categorylist") String categoryList,
+            @RequestParam("episode_number") Long episodeNumber,
+            @RequestParam("status") String status,
+            @RequestParam(value = "price", required = false) BigDecimal price,
+            @RequestParam(value = "image", required = false) MultipartFile file,
+            @RequestParam("year") Long year,
+            @RequestParam("schedulelist") String scheduleList
+    ) {
         try {
+            // Tạo user
+            UserDTO userDto = new UserDTO();
+            userDto.setId(userAdd);
 
-            //Tạo user
-            UserDTO user_dto = new UserDTO();
-            user_dto.setId(user_add);
-            //Tạo movie
-            MovieDTO movie_dto = new MovieDTO();
-            movie_dto.setId(id);
-            movie_dto.setCnName(cn_name);
-            movie_dto.setVnName(vn_name);
-            movie_dto.setDescription(description);
-            movie_dto.setUserAdd(user_dto);
-            movie_dto.setUserUpdate(user_dto);
-            movie_dto.setAuthor(author);
-            movie_dto.setEpisodeNumber(episode_number);
-            movie_dto.setStatus(status);
-            movie_dto.setNewMovie(new_movie);
-            movie_dto.setHotMovie(hot_movie);
-            movie_dto.setVipMovie(vip_movie);
-            movie_dto.setPrice(price);
-            movie_dto.setYear(year);
-            movieService.update(movie_dto, file, categorylist, schedulelist);
+            // Tạo movie
+            MovieDTO movieDto = new MovieDTO();
+            movieDto.setId(id);
+            movieDto.setNewMovie(newMovie);
+            movieDto.setHotMovie(hotMovie);
+            movieDto.setVipMovie(vipMovie);
 
-            return new ResponseEntity<>("Thêm mới thành công!", HttpStatus.OK);
+            // Các trường khác
+            movieDto.setCnName(cnName);
+            movieDto.setVnName(vnName);
+            movieDto.setDescription(description);
+            movieDto.setUserAdd(userDto);
+            movieDto.setUserUpdate(userDto);
+            movieDto.setAuthor(author);
+            movieDto.setEpisodeNumber(episodeNumber);
+            movieDto.setStatus(status);
+            movieDto.setPrice(price);
+            movieDto.setYear(year);
+
+            // Gọi service
+            movieService.update(movieDto, file, categoryList, scheduleList);
+
+            return new ResponseEntity<>("Cập nhật thành công!", HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            e.printStackTrace();
+            return new ResponseEntity<>("Lỗi: " + e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-
     }
 
     @GetMapping("/getbyid/{id}")

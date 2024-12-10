@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "CategoryMovies")
+@Table(name = "category_movies")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -20,10 +20,10 @@ public class CategoryMovie {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "category_id")
+    @JoinColumn(name = "category_id", referencedColumnName = "id", nullable = false)
     private Category category;
 
     @ManyToOne
-    @JoinColumn(name = "movie_id")
+    @JoinColumn(name = "movie_id", referencedColumnName = "id", nullable = false)
     private Movie movie;
 }

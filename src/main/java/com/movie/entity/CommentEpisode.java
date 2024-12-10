@@ -7,7 +7,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.sql.Date;
 import java.time.LocalDateTime;
 
 @Entity
@@ -37,11 +36,10 @@ public class CommentEpisode {
     }
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private User userAdd;
 
     @ManyToOne
-    @JoinColumn(name = "episode_id")
+    @JoinColumn(name = "episode_id", referencedColumnName = "id", nullable = false)
     private Episode episode;
-
 }
