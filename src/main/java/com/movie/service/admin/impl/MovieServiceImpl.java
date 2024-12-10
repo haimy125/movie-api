@@ -268,7 +268,6 @@ public class MovieServiceImpl implements MovieService {
             // Tạo đối tượng Movie
             movieDTO.setNewMovie(true); // Bạn có thể điều chỉnh điều này theo nhu cầu thực tế
             Movie movieEntity = modelMapper.map(movieDTO, Movie.class);
-            Date currentDate = Date.valueOf(LocalDate.now());
             User userEntity = userRepository.findById(Long.valueOf(movieEntity.getUserAdd().getId())).orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng"));
 
             movieEntity.setUserAdd(userEntity);
@@ -371,7 +370,6 @@ public class MovieServiceImpl implements MovieService {
         } catch (Exception e) {
             throw new RuntimeException("Có lỗi khi chỉnh sửa bộ phim!");
         }
-
     }
 
     @Override

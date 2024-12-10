@@ -1,5 +1,6 @@
 package com.movie.controller.api.admin;
 
+import com.movie.config.TokenUtil;
 import com.movie.controller.output.Movie_output;
 import com.movie.dto.MovieDTO;
 import com.movie.dto.UserDTO;
@@ -32,7 +33,7 @@ public class MovieManagerController {
     }
 
     @GetMapping("/getbyname")
-    public Movie_output getAll(@RequestParam("name") String name, @RequestParam("page") int page, @RequestParam("limit") int limit) {
+    public Movie_output getByName(@RequestParam("name") String name, @RequestParam("page") int page, @RequestParam("limit") int limit) {
         Movie_output result = new Movie_output();
         result.setPage(page);
         Pageable pageable = PageRequest.of(page - 1, limit);
@@ -41,15 +42,34 @@ public class MovieManagerController {
         return result;
     }
 
-
     @PostMapping("/create")
-    public ResponseEntity<String> create(@RequestParam("vn_name") String vn_name, @RequestParam("cn_name") String cn_name, @RequestParam("description") String description, @RequestParam("user_add") Long user_add, @RequestParam("author") String author, @RequestParam("categorylist") String categorylist, @RequestParam("episode_number") Long episode_number, @RequestParam("status") String status, @RequestParam("new_movie") Boolean new_movie, @RequestParam("hot_movie") Boolean hot_movie, @RequestParam("vip_movie") Boolean vip_movie, @RequestParam("price") BigDecimal price, @RequestParam("image") MultipartFile file, @RequestParam("year") Long year, @RequestParam("schedulelist") String schedulelist) {
+    public ResponseEntity<String> create(
+            @RequestParam("vn_name") String vn_name,
+            @RequestParam("cn_name") String cn_name,
+            @RequestParam("description") String description,
+            @RequestHeader("Authorization") String token, // Nhận token từ header Authorization
+            @RequestParam("author") String author,
+            @RequestParam("categorylist") String categorylist,
+            @RequestParam("episode_number") Long episode_number,
+            @RequestParam("status") String status,
+            @RequestParam("new_movie") Boolean new_movie,
+            @RequestParam("hot_movie") Boolean hot_movie,
+            @RequestParam("vip_movie") Boolean vip_movie,
+            @RequestParam("price") BigDecimal price,
+            @RequestParam("image") MultipartFile file,
+            @RequestParam("year") Long year,
+            @RequestParam("schedulelist") String schedulelist
+    ) {
         try {
+            // Xử lý token để lấy user ID
+            String jwt = token.replace("Bearer ", ""); // Loại bỏ tiền tố "Bearer "
+            String userId = TokenUtil.getUserIdFromToken(jwt); // Hàm giải mã token lấy user ID
 
-            //Tạo user
+            // Tạo user
             UserDTO user_dto = new UserDTO();
-            user_dto.setId(user_add);
-            //Tạo movie
+            user_dto.setId(Long.valueOf(userId));
+
+            // Tạo movie
             MovieDTO movie_dto = new MovieDTO();
             movie_dto.setCnName(cn_name);
             movie_dto.setVnName(vn_name);
@@ -65,13 +85,45 @@ public class MovieManagerController {
             movie_dto.setPrice(price);
             movie_dto.setTotalViews(0L);
             movie_dto.setYear(year);
+
+            // Gọi service để tạo movie
             movieService.create(movie_dto, file, categorylist, schedulelist);
+
             return new ResponseEntity<>("Thêm mới thành công!", HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-
     }
+
+//    @PostMapping("/create")
+//    public ResponseEntity<String> create(@RequestParam("vn_name") String vn_name, @RequestParam("cn_name") String cn_name, @RequestParam("description") String description, @RequestParam("user_add") Long user_add, @RequestParam("author") String author, @RequestParam("categorylist") String categorylist, @RequestParam("episode_number") Long episode_number, @RequestParam("status") String status, @RequestParam("new_movie") Boolean new_movie, @RequestParam("hot_movie") Boolean hot_movie, @RequestParam("vip_movie") Boolean vip_movie, @RequestParam("price") BigDecimal price, @RequestParam("image") MultipartFile file, @RequestParam("year") Long year, @RequestParam("schedulelist") String schedulelist) {
+//        try {
+//
+//            //Tạo user
+//            UserDTO user_dto = new UserDTO();
+//            user_dto.setId(user_add);
+//            //Tạo movie
+//            MovieDTO movie_dto = new MovieDTO();
+//            movie_dto.setCnName(cn_name);
+//            movie_dto.setVnName(vn_name);
+//            movie_dto.setDescription(description);
+//            movie_dto.setUserAdd(user_dto);
+//            movie_dto.setUserUpdate(user_dto);
+//            movie_dto.setAuthor(author);
+//            movie_dto.setEpisodeNumber(episode_number);
+//            movie_dto.setStatus(status);
+//            movie_dto.setNewMovie(new_movie);
+//            movie_dto.setHotMovie(hot_movie);
+//            movie_dto.setVipMovie(vip_movie);
+//            movie_dto.setPrice(price);
+//            movie_dto.setTotalViews(0L);
+//            movie_dto.setYear(year);
+//            movieService.create(movie_dto, file, categorylist, schedulelist);
+//            return new ResponseEntity<>("Thêm mới thành công!", HttpStatus.OK);
+//        } catch (Exception e) {
+//            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+//        }
+//    }
 
     @PutMapping("/update/{id}")
     public ResponseEntity<String> update(@PathVariable("id") Long id, @RequestParam("vn_name") String vn_name, @RequestParam("cn_name") String cn_name, @RequestParam("description") String description, @RequestParam("user_add") Long user_add, @RequestParam("author") String author, @RequestParam("categorylist") String categorylist, @RequestParam("episode_number") Long episode_number, @RequestParam("status") String status, @RequestParam("new_movie") Boolean new_movie, @RequestParam("hot_movie") Boolean hot_movie, @RequestParam("vip_movie") Boolean vip_movie, @RequestParam("price") BigDecimal price, @RequestParam(value = "image", required = false) MultipartFile file, @RequestParam("year") Long year, @RequestParam("schedulelist") String schedulelist) {
@@ -106,7 +158,7 @@ public class MovieManagerController {
     }
 
     @GetMapping("/getbyid/{id}")
-    public ResponseEntity<?> getByid(@PathVariable Long id) {
+    public ResponseEntity<?> getById(@PathVariable Long id) {
         try {
             MovieDTO movieDTO = movieService.getByMovieId(id);
             return new ResponseEntity<>(movieDTO, HttpStatus.OK);

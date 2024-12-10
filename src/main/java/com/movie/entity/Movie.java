@@ -9,6 +9,7 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "movies")
@@ -91,4 +92,7 @@ public class Movie {
     @ManyToOne
     @JoinColumn(name = "user_update")
     private User userUpdate;
+
+    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL)
+    private List<ScheduleMovie> scheduleMovies;
 }

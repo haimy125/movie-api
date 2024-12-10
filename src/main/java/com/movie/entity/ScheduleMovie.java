@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "Schedules")
+@Table(name = "schedule_movies")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -20,10 +20,10 @@ public class ScheduleMovie {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "movie_id")
+    @JoinColumn(name = "movie_id", referencedColumnName = "id", nullable = false) // Cột khóa ngoại movie_id trong bảng schedule_movies
     private Movie movie;
 
     @ManyToOne
-    @JoinColumn(name = "schedule_id")
+    @JoinColumn(name = "schedule_id", referencedColumnName = "id", nullable = false) // Cột khóa ngoại schedule_id trong bảng schedule_movies
     private Schedule schedule;
 }

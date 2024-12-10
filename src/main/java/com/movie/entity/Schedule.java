@@ -9,6 +9,7 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "schedules")
@@ -55,4 +56,8 @@ public class Schedule {
     @ManyToOne
     @JoinColumn(name = "user_update_id")
     private User userUpdate;
+
+    @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL)
+    private List<ScheduleMovie> scheduleMovies;
+
 }
