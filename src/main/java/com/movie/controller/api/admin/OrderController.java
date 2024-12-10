@@ -1,6 +1,6 @@
 package com.movie.controller.api.admin;
 
-import com.movie.controller.output.Orders_OutPut;
+import com.movie.response.OrdersResponse;
 import com.movie.service.admin.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -18,8 +18,8 @@ public class OrderController {
     private OrderService orderService;
 
     @GetMapping("/all")
-    public Orders_OutPut getAll(@RequestParam("page") int page, @RequestParam("limit") int limit) {
-        Orders_OutPut result = new Orders_OutPut();
+    public OrdersResponse getAll(@RequestParam("page") int page, @RequestParam("limit") int limit) {
+        OrdersResponse result = new OrdersResponse();
         result.setPage(page);
         Pageable pageable = PageRequest.of(page - 1, limit);
         result.setListResult(orderService.getAll(pageable));
@@ -28,8 +28,8 @@ public class OrderController {
     }
 
     @GetMapping("/getbyuser")
-    public Orders_OutPut getbyuser(@RequestParam("userid") Long userid,@RequestParam("page") int page, @RequestParam("limit") int limit) {
-        Orders_OutPut result = new Orders_OutPut();
+    public OrdersResponse getbyuser(@RequestParam("userid") Long userid, @RequestParam("page") int page, @RequestParam("limit") int limit) {
+        OrdersResponse result = new OrdersResponse();
         result.setPage(page);
         Pageable pageable = PageRequest.of(page - 1, limit);
         result.setListResult(orderService.getOrderByUserId(userid,pageable));

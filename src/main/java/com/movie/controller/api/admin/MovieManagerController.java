@@ -1,7 +1,7 @@
 package com.movie.controller.api.admin;
 
 import com.movie.config.TokenUtil;
-import com.movie.controller.output.Movie_output;
+import com.movie.response.MovieResponse;
 import com.movie.dto.MovieDTO;
 import com.movie.dto.UserDTO;
 import com.movie.service.admin.MovieService;
@@ -23,8 +23,8 @@ public class MovieManagerController {
     private MovieService movieService;
 
     @GetMapping("/all")
-    public Movie_output getAll(@RequestParam("page") int page, @RequestParam("limit") int limit) {
-        Movie_output result = new Movie_output();
+    public MovieResponse getAll(@RequestParam("page") int page, @RequestParam("limit") int limit) {
+        MovieResponse result = new MovieResponse();
         result.setPage(page);
         Pageable pageable = PageRequest.of(page - 1, limit);
         result.setListResult(movieService.getAll(pageable));
@@ -33,8 +33,8 @@ public class MovieManagerController {
     }
 
     @GetMapping("/getbyname")
-    public Movie_output getByName(@RequestParam("name") String name, @RequestParam("page") int page, @RequestParam("limit") int limit) {
-        Movie_output result = new Movie_output();
+    public MovieResponse getByName(@RequestParam("name") String name, @RequestParam("page") int page, @RequestParam("limit") int limit) {
+        MovieResponse result = new MovieResponse();
         result.setPage(page);
         Pageable pageable = PageRequest.of(page - 1, limit);
         result.setListResult(movieService.getByVn_name(name, pageable));

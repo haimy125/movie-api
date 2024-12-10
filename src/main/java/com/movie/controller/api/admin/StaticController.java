@@ -1,8 +1,8 @@
 package com.movie.controller.api.admin;
 
-import com.movie.controller.output.MonthlyRevenue;
-import com.movie.controller.output.Static_OutPut;
-import com.movie.controller.output.Static_movie_Output;
+import com.movie.response.MonthlyRevenue;
+import com.movie.response.StaticResponse;
+import com.movie.response.StaticMovieResponse;
 import com.movie.service.admin.OrderService;
 import com.movie.service.admin.StaticService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +23,8 @@ public class StaticController {
     private OrderService orderService;
 
     @GetMapping("/gettongso")
-    public Static_OutPut gettongso() {
-        Static_OutPut result = new Static_OutPut();
+    public StaticResponse gettongso() {
+        StaticResponse result = new StaticResponse();
         result.setTongSoUser(staticService.tongSoUser());
         result.setTongSoCategory(staticService.tongSoCategory());
         result.setTongSoMovie(staticService.tongSoMovie());
@@ -32,8 +32,8 @@ public class StaticController {
     }
 
     @GetMapping("/getphimvip")
-    public Static_movie_Output gettongsovip() {
-        Static_movie_Output result = new Static_movie_Output();
+    public StaticMovieResponse gettongsovip() {
+        StaticMovieResponse result = new StaticMovieResponse();
         result.setTongSoNoVipMovie(staticService.tongSoNoVipmovie());
         result.setTongSoVipMovie(staticService.tongSoVipmovie());
         return result;

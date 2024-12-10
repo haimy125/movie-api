@@ -1,6 +1,6 @@
 package com.movie.service.admin.impl;
 
-import com.movie.controller.output.MonthlyRevenue;
+import com.movie.response.MonthlyRevenue;
 import com.movie.dto.OrderDTO;
 import com.movie.entity.Movie;
 import com.movie.entity.Notification;

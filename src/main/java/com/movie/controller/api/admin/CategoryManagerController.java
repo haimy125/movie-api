@@ -1,6 +1,6 @@
 package com.movie.controller.api.admin;
 
-import com.movie.controller.output.Category_OutPut;
+import com.movie.response.CategoryResponse;
 import com.movie.dto.CategoryDTO;
 import com.movie.service.admin.CategoryService;
 import jakarta.validation.Valid;
@@ -26,8 +26,8 @@ public class CategoryManagerController {
 
     // Api hiển thị tất cả
     @GetMapping("/all")
-    public Category_OutPut getAll(@RequestParam("page") int page, @RequestParam("limit") int limit) {
-        Category_OutPut result = new Category_OutPut();
+    public CategoryResponse getAll(@RequestParam("page") int page, @RequestParam("limit") int limit) {
+        CategoryResponse result = new CategoryResponse();
         result.setPage(page); //  đưa ra tố trang hiển tại
         Pageable pageable = PageRequest.of(page - 1, limit); // khởi tạo phân trang
         result.setListResult(categoryService.getAll(pageable)); // gán dữ liệu
@@ -36,8 +36,8 @@ public class CategoryManagerController {
     }
 
     @GetMapping("/getbyname")
-    public Category_OutPut getByName(@RequestParam("name") String name, @RequestParam("page") int page, @RequestParam("limit") int limit) {
-        Category_OutPut result = new Category_OutPut();
+    public CategoryResponse getByName(@RequestParam("name") String name, @RequestParam("page") int page, @RequestParam("limit") int limit) {
+        CategoryResponse result = new CategoryResponse();
         result.setPage(page);
         Pageable pageable = PageRequest.of(page - 1, limit);
         result.setListResult(categoryService.getByName(name, pageable));

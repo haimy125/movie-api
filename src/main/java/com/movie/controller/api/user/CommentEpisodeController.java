@@ -1,6 +1,6 @@
 package com.movie.controller.api.user;
 
-import com.movie.controller.output.Comment_Episode_Output;
+import com.movie.response.CommentEpisodeResponse;
 import com.movie.dto.CommentEpisodeDTO;
 import com.movie.dto.EpisodeDTO;
 import com.movie.dto.UserDTO;
@@ -20,8 +20,8 @@ public class CommentEpisodeController {
     private CommentEpisodeService comment_Episode_Service;
 
     @GetMapping("/byep/{id}")
-    public Comment_Episode_Output getAll(@PathVariable Long id, @RequestParam("page") int page, @RequestParam("limit") int limit) {
-        Comment_Episode_Output result = new Comment_Episode_Output();
+    public CommentEpisodeResponse getAll(@PathVariable Long id, @RequestParam("page") int page, @RequestParam("limit") int limit) {
+        CommentEpisodeResponse result = new CommentEpisodeResponse();
         result.setPage(page);
         Pageable pageable = PageRequest.of(page - 1, limit);
         result.setListResult(comment_Episode_Service.getByEpisode(id, pageable));

@@ -1,6 +1,6 @@
 package com.movie.service.admin;
 
-import com.movie.controller.output.MonthlyRevenue;
+import com.movie.response.MonthlyRevenue;
 import com.movie.dto.OrderDTO;
 import org.springframework.data.domain.Pageable;
 

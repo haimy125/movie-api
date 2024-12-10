@@ -1,6 +1,6 @@
 package com.movie.controller.api.admin;
 
-import com.movie.controller.output.Episode_Output;
+import com.movie.response.EpisodeResponse;
 import com.movie.dto.EpisodeDTO;
 import com.movie.dto.MovieDTO;
 import com.movie.dto.UserDTO;
@@ -24,8 +24,8 @@ public class EpisodeManagerConltroler {
     private EpisodeService episodeService;
 
     @GetMapping("/getBymovie/{id}")
-    public Episode_Output getAll(@PathVariable Long id, @RequestParam("page") int page, @RequestParam("limit") int limit) {
-        Episode_Output result = new Episode_Output();
+    public EpisodeResponse getAll(@PathVariable Long id, @RequestParam("page") int page, @RequestParam("limit") int limit) {
+        EpisodeResponse result = new EpisodeResponse();
         result.setPage(page);
         Pageable pageable = PageRequest.of(page - 1, limit);
         result.setListResult(episodeService.getByMovie(id, pageable));
@@ -34,8 +34,8 @@ public class EpisodeManagerConltroler {
     }
 
     @GetMapping("/getBymovie/all/{id}")
-    public Episode_Output getbymovie(@PathVariable Long id) {
-        Episode_Output result = new Episode_Output();
+    public EpisodeResponse getbymovie(@PathVariable Long id) {
+        EpisodeResponse result = new EpisodeResponse();
         result.setPage(1);
         result.setListResult(episodeService.getByMovie(id));
         result.setTotalPage((int) Math.ceil((double) (episodeService.totalItem()) / 10));

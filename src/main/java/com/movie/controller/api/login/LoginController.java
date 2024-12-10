@@ -1,7 +1,7 @@
 package com.movie.controller.api.login;
 
 import com.movie.config.TokenUtil;
-import com.movie.controller.output.Notification_OutPut;
+import com.movie.response.NotificationResponse;
 import com.movie.dto.RoleDTO;
 import com.movie.dto.UserDTO;
 import com.movie.service.login.LoginService;
@@ -236,8 +236,8 @@ public class LoginController {
     }
 
     @GetMapping("/notificaion/user/{id}")
-    public Notification_OutPut getAll(@PathVariable Long id, @RequestParam("page") int page, @RequestParam("limit") int limit) {
-        Notification_OutPut result = new Notification_OutPut();
+    public NotificationResponse getAll(@PathVariable Long id, @RequestParam("page") int page, @RequestParam("limit") int limit) {
+        NotificationResponse result = new NotificationResponse();
         result.setPage(page);
         Pageable pageable = PageRequest.of(page - 1, limit);
         result.setListResult(notificationService.getByUser(id, pageable));

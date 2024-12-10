@@ -1,6 +1,6 @@
 package com.movie.controller.api.user;
 
-import com.movie.controller.output.Movie_output;
+import com.movie.response.MovieResponse;
 import com.movie.dto.MovieDTO;
 import com.movie.dto.OrderDTO;
 import com.movie.dto.UserDTO;
@@ -28,8 +28,8 @@ public class MovieController {
     private OrderService orderService;
 
     @GetMapping("/all")
-    public Movie_output getAll(@RequestParam("page") int page, @RequestParam("limit") int limit) {
-        Movie_output result = new Movie_output();
+    public MovieResponse getAll(@RequestParam("page") int page, @RequestParam("limit") int limit) {
+        MovieResponse result = new MovieResponse();
         result.setPage(page);
         Pageable pageable = PageRequest.of(page - 1, limit);
         result.setListResult(movieService.getAll(pageable));
@@ -38,8 +38,8 @@ public class MovieController {
     }
 
     @GetMapping("/getbyname")
-    public Movie_output getbyname(@RequestParam("name") String name, @RequestParam("page") int page, @RequestParam("limit") int limit) {
-        Movie_output result = new Movie_output();
+    public MovieResponse getbyname(@RequestParam("name") String name, @RequestParam("page") int page, @RequestParam("limit") int limit) {
+        MovieResponse result = new MovieResponse();
         result.setPage(page);
         Pageable pageable = PageRequest.of(page - 1, limit);
         result.setListResult(movieService.getByVn_name(name, pageable));
@@ -48,8 +48,8 @@ public class MovieController {
     }
 
     @GetMapping("/getbycategory")
-    public Movie_output getbycategory(@RequestParam("categoryid") Long categoryid, @RequestParam("page") int page, @RequestParam("limit") int limit) {
-        Movie_output result = new Movie_output();
+    public MovieResponse getbycategory(@RequestParam("categoryid") Long categoryid, @RequestParam("page") int page, @RequestParam("limit") int limit) {
+        MovieResponse result = new MovieResponse();
         result.setPage(page);
         Pageable pageable = PageRequest.of(page - 1, limit);
         result.setListResult(movie_UserService.getByCategoryid(categoryid, pageable));
@@ -58,13 +58,13 @@ public class MovieController {
     }
 
     @GetMapping("/list")
-    public Movie_output getListMovie(@RequestParam(value = "category", required = false) Long category,
-                                     @RequestParam(value = "year", required = false) Long year,
-                                     @RequestParam(value = "sortBy", required = false) String sortBy,
-                                     @RequestParam(value = "vip", required = false) Boolean vip,
-                                     @RequestParam("page") int page,
-                                     @RequestParam("limit") int limit) {
-        Movie_output result = new Movie_output();
+    public MovieResponse getListMovie(@RequestParam(value = "category", required = false) Long category,
+                                      @RequestParam(value = "year", required = false) Long year,
+                                      @RequestParam(value = "sortBy", required = false) String sortBy,
+                                      @RequestParam(value = "vip", required = false) Boolean vip,
+                                      @RequestParam("page") int page,
+                                      @RequestParam("limit") int limit) {
+        MovieResponse result = new MovieResponse();
         result.setPage(page);
         Pageable pageable = PageRequest.of(page - 1, limit);
         result.setListResult(movie_UserService.getListMovie(category, year, vip, sortBy, pageable));

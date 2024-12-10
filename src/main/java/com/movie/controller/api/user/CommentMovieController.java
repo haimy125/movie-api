@@ -1,6 +1,6 @@
 package com.movie.controller.api.user;
 
-import com.movie.controller.output.Comment_movie_output;
+import com.movie.response.CommentMovieResponse;
 import com.movie.dto.CommentMovieDTO;
 import com.movie.dto.MovieDTO;
 import com.movie.dto.UserDTO;
@@ -20,8 +20,8 @@ public class CommentMovieController {
     private CommentMovieService commentMovieService;
 
     @GetMapping("/bymovie/{id}")
-    public Comment_movie_output getAll(@PathVariable Long id, @RequestParam("page") int page, @RequestParam("limit") int limit) {
-        Comment_movie_output result = new Comment_movie_output();
+    public CommentMovieResponse getAll(@PathVariable Long id, @RequestParam("page") int page, @RequestParam("limit") int limit) {
+        CommentMovieResponse result = new CommentMovieResponse();
         result.setPage(page);
         Pageable pageable = PageRequest.of(page - 1, limit);
         result.setListResult(commentMovieService.getByMovie(id, pageable));

@@ -1,7 +1,6 @@
 package com.movie.controller.api.admin;
 
-import com.movie.controller.output.User_OutPut;
-import com.movie.dto.CategoryDTO;
+import com.movie.response.UserResponse;
 import com.movie.dto.UserDTO;
 import com.movie.service.admin.UserService;
 import jakarta.validation.Valid;
@@ -26,8 +25,8 @@ public class UserManagerController {
     private UserService userService;
 
     @GetMapping("/all")
-    public User_OutPut getAll(@RequestParam("page") int page, @RequestParam("limit") int limit) {
-        User_OutPut result = new User_OutPut();
+    public UserResponse getAll(@RequestParam("page") int page, @RequestParam("limit") int limit) {
+        UserResponse result = new UserResponse();
         result.setPage(page);
         Pageable pageable = PageRequest.of(page - 1, limit);
         result.setListResult(userService.getAll(pageable));
@@ -36,8 +35,8 @@ public class UserManagerController {
     }
 
     @GetMapping("/getbyname")
-    public User_OutPut getByName(@RequestParam("name") String name, @RequestParam("page") int page, @RequestParam("limit") int limit) {
-        User_OutPut result = new User_OutPut();
+    public UserResponse getByName(@RequestParam("name") String name, @RequestParam("page") int page, @RequestParam("limit") int limit) {
+        UserResponse result = new UserResponse();
         result.setPage(page);
         Pageable pageable = PageRequest.of(page - 1, limit);
         result.setListResult(userService.getByName(name, pageable));
@@ -46,8 +45,8 @@ public class UserManagerController {
     }
 
     @GetMapping("/getbyrole")
-    public User_OutPut getbyrole(@RequestParam("roleid") Long roleid, @RequestParam("page") int page, @RequestParam("limit") int limit) {
-        User_OutPut result = new User_OutPut();
+    public UserResponse getbyrole(@RequestParam("roleid") Long roleid, @RequestParam("page") int page, @RequestParam("limit") int limit) {
+        UserResponse result = new UserResponse();
         result.setPage(page);
         Pageable pageable = PageRequest.of(page - 1, limit);
         result.setListResult(userService.getByRole(roleid, pageable));

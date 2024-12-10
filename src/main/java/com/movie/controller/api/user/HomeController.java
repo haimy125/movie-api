@@ -1,6 +1,6 @@
 package com.movie.controller.api.user;
 
-import com.movie.controller.output.Movie_output;
+import com.movie.response.MovieResponse;
 import com.movie.dto.MovieDTO;
 import com.movie.service.user.HomeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +21,8 @@ public class HomeController {
     private HomeService home_service;
 
     @GetMapping("/new")
-    public Movie_output getNewMovies(@RequestParam("page") int page, @RequestParam("limit") int limit) {
-        Movie_output result = new Movie_output();
+    public MovieResponse getNewMovies(@RequestParam("page") int page, @RequestParam("limit") int limit) {
+        MovieResponse result = new MovieResponse();
         result.setPage(page);
         Pageable pageable = PageRequest.of(page - 1, limit);
         result.setListResult(home_service.getNewMovies(pageable));
@@ -31,8 +31,8 @@ public class HomeController {
     }
 
     @GetMapping("/hot")
-    public Movie_output getHotMovies(@RequestParam("page") int page, @RequestParam("limit") int limit) {
-        Movie_output result = new Movie_output();
+    public MovieResponse getHotMovies(@RequestParam("page") int page, @RequestParam("limit") int limit) {
+        MovieResponse result = new MovieResponse();
         result.setPage(page);
         Pageable pageable = PageRequest.of(page - 1, limit);
         result.setListResult(home_service.getHotMovies(pageable));

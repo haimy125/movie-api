@@ -1,6 +1,6 @@
 package com.movie.controller.api.user;
 
-import com.movie.controller.output.User_Follow_Output;
+import com.movie.response.UserFollowResponse;
 import com.movie.dto.MovieDTO;
 import com.movie.dto.UserDTO;
 import com.movie.dto.UserFollowDTO;
@@ -21,8 +21,8 @@ public class UserFollowController {
     private UserFollowService userFollowService;
 
     @GetMapping("/getbyuser/{id}")
-    public User_Follow_Output getAll(@PathVariable Long id, @RequestParam("page") int page, @RequestParam("limit") int limit) {
-        User_Follow_Output result = new User_Follow_Output();
+    public UserFollowResponse getAll(@PathVariable Long id, @RequestParam("page") int page, @RequestParam("limit") int limit) {
+        UserFollowResponse result = new UserFollowResponse();
         result.setPage(page);
         Pageable pageable = PageRequest.of(page - 1, limit);
         result.setListResult(userFollowService.findByUser(id, pageable));
