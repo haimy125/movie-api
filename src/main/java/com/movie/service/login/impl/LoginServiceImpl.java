@@ -48,7 +48,6 @@ public class LoginServiceImpl implements LoginService {
             throw new RuntimeException("Tài khoản không tồn tại!");
         } catch (Exception e) {
             throw new RuntimeException("Có lỗi không xác định khi đăng nhập");
-
         }
     }
 

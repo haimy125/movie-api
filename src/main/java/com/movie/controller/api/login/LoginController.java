@@ -1,21 +1,14 @@
 package com.movie.controller.api.login;
 
 import com.movie.config.TokenUtil;
-import com.movie.response.NotificationResponse;
 import com.movie.dto.RoleDTO;
 import com.movie.dto.UserDTO;
+import com.movie.exceptions.InvalidCredentialsException;
+import com.movie.request.LoginRequest;
+import com.movie.response.NotificationResponse;
 import com.movie.service.login.LoginService;
 import com.movie.service.user.NotificationService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.*;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -24,6 +17,14 @@ import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.*;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/login")
@@ -35,114 +36,75 @@ public class LoginController {
     @Autowired
     private NotificationService notificationService;
 
-    // Đăng nhập tài khoản
     @PostMapping("/login")
-    public ResponseEntity<?> login(String username, String password) {
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
         try {
-
-            //Đăng nhập
-            UserDTO user = loginService.login(username, password);
+            UserDTO user = loginService.login(loginRequest.getUsername(), loginRequest.getPassword());
             user.setPassword(null);
 
-            // Tạo token với thời gian sống 30 ngày
-            long expirationMillis = 30L * 24 * 60 * 60 * 1000; // 30 ngày tính bằng milliseconds
-            String mainToken = TokenUtil.generateToken(user.getId() + "", expirationMillis);
+            long expirationMillis = 30L * 24 * 60 * 60 * 1000;
+            String mainToken = TokenUtil.generateToken(String.valueOf(user.getId()), expirationMillis);
+            String refreshToken = TokenUtil.generateRefreshToken(String.valueOf(user.getId()), expirationMillis * 2);
 
-            Map<String, Object> response = new HashMap<>();
-
-            // Tạo cookie
-            ResponseCookie cookie = ResponseCookie.from("token", mainToken)
-                    .httpOnly(false)
-                    .maxAge(Duration.ofSeconds(3600))
-                    .sameSite("Strict")
-                    .secure(true)
-                    .path("/")
-                    .build();
-
-            // Tạo header
+            ResponseCookie cookie = createCookie(mainToken, expirationMillis);
             HttpHeaders headers = new HttpHeaders();
             headers.add(HttpHeaders.SET_COOKIE, cookie.toString());
+
+            Map<String, Object> response = new HashMap<>();
             response.put("token", mainToken);
+            response.put("refreshToken", refreshToken);
             response.put("user", user);
 
-            // Trả về token
-            return ResponseEntity.ok()
-                    .headers(headers)
-                    .body(response);
+            return ResponseEntity.ok().headers(headers).body(response);
 
+        } catch (InvalidCredentialsException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password.");
         } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred during login.");
         }
     }
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody UserDTO user, BindingResult result) {
         try {
-            // Xử lý lỗi validation từ DTO
             if (result.hasErrors()) {
                 Map<String, String> errors = result.getFieldErrors().stream()
-                        .collect(Collectors.toMap(
-                                FieldError::getField,
-                                FieldError::getDefaultMessage
-                        ));
+                        .collect(Collectors.toMap(FieldError::getField, FieldError::getDefaultMessage));
                 return ResponseEntity.badRequest().body(errors);
             }
 
-            // Thiết lập các giá trị mặc định
             user.setPoint(0L);
+            user.setRole(getDefaultRole());
+            user.setAvatar(loadDefaultAvatar());
 
-            // Gán vai trò mặc định cho người dùng
-            RoleDTO role = new RoleDTO();
-            role.setId(2L); // ID cho vai trò mặc định (ví dụ: ROLE_USER)
-            user.setRole(role);
-
-            // Đọc ảnh đại diện mặc định
-            Path defaultAvatarPath = Paths.get("src/main/resources/static/images/default_avatar.png");
-            byte[] defaultAvatar = Files.readAllBytes(defaultAvatarPath);
-            user.setAvatar(defaultAvatar);
-
-            // Gọi dịch vụ đăng ký người dùng
             UserDTO registeredUser = loginService.registerUser(user);
-            registeredUser.setPassword(null); // Xóa mật khẩu khỏi phản hồi
+            registeredUser.setPassword(null);
 
-            // Tạo token để sử dụng sau khi đăng ký
-            long expirationMillis = 3600000; // 1 giờ
-            String token = TokenUtil.generateToken(String.valueOf(registeredUser.getId()), expirationMillis);
-
-            // Tạo cookie chứa token
-            ResponseCookie cookie = ResponseCookie.from("token", token)
-                    .httpOnly(false)
-                    .maxAge(Duration.ofMillis(expirationMillis))
-                    .sameSite("Strict")
-                    .secure(true)
-                    .path("/")
-                    .domain("localhost")
-                    .build();
-
-            // Chuẩn bị phản hồi
-            Map<String, Object> response = new HashMap<>();
-            response.put("token", token);
-            response.put("user", registeredUser);
+            long expirationMillis =  3600000; // 1 hour
+            String token = generateToken(registeredUser.getId(), expirationMillis);
+            ResponseCookie cookie = createCookie(token, expirationMillis);
 
             HttpHeaders headers = new HttpHeaders();
             headers.add(HttpHeaders.SET_COOKIE, cookie.toString());
 
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("token", token);
+            response.put("user", registeredUser);
+
             return ResponseEntity.ok().headers(headers).body(response);
 
+
         } catch (IOException e) {
-            // Lỗi đọc file avatar mặc định
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Không thể đọc file ảnh mặc định. Vui lòng kiểm tra cấu hình máy chủ.");
+                    .body("Cannot read default avatar file. Please check server configuration.");
         } catch (RuntimeException e) {
-            // Lỗi phát sinh từ logic xử lý (ví dụ: trùng tên đăng nhập)
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
-            // Lỗi khác không xác định
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Đã xảy ra lỗi không xác định. Vui lòng thử lại sau.");
+                    .body("An unknown error occurred during registration. Please try again later.");
         }
     }
-
 
     @GetMapping("/checktoken")
     public ResponseEntity<?> checkToken(@RequestParam("token") String token) {
@@ -150,8 +112,8 @@ public class LoginController {
             UserDTO user = loginService.checkUserByToken(token);
             user.setPassword(null);
             user.setAvatar(null);
-
             return ResponseEntity.ok(user);
+
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
@@ -161,21 +123,11 @@ public class LoginController {
     public ResponseEntity<?> avatar(@PathVariable Long id, @RequestParam("avatar") MultipartFile avatar) {
         try {
             loginService.uploadAvatar(id, avatar);
-            return ResponseEntity.ok("Thay đổi ảnh thành công");
+            return ResponseEntity.ok("Thay đổi ảnh thành công");
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
-
-//    @PostMapping("/changepassword/{id}")
-//    public ResponseEntity<?> avatar(@PathVariable Long id, @RequestParam("password") String password, @RequestParam("newpassword") String newpassword, @RequestParam("confirmpassword") String confirmpassword) {
-//        try {
-//            UserDTO user_dto = loginService.changePassword(id, password, newpassword, confirmpassword);
-//            return ResponseEntity.ok("Thay đổi mk thành công");
-//        } catch (Exception e) {
-//            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-//        }
-//    }
 
     @PostMapping("/changepassword/{id}")
     public ResponseEntity<?> changePassword(
@@ -199,11 +151,12 @@ public class LoginController {
         }
     }
 
+
     @PostMapping("/updateinfo/{id}")
     public ResponseEntity<?> updateinfo(@PathVariable String id, @RequestParam("fullname") String fullname, @RequestParam("email") String email) {
         try {
             loginService.updateInfo(Long.valueOf(id), fullname, email);
-            return ResponseEntity.ok("Thay đổi thông tin thành công");
+            return ResponseEntity.ok("Thay đổi thông tin thành công");
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
@@ -235,6 +188,7 @@ public class LoginController {
         }
     }
 
+
     @GetMapping("/notificaion/user/{id}")
     public NotificationResponse getAll(@PathVariable Long id, @RequestParam("page") int page, @RequestParam("limit") int limit) {
         NotificationResponse result = new NotificationResponse();
@@ -244,7 +198,6 @@ public class LoginController {
         result.setTotalPage((int) Math.ceil((double) (notificationService.totalItems()) / limit));
         return result;
     }
-
     @PostMapping("/changepassword/user")
     public ResponseEntity<?> changepassword(@RequestParam("id") Long id, @RequestParam("newPassword") String newPassword
             , @RequestParam("confirmPassword") String confirmPassword) {
@@ -264,5 +217,33 @@ public class LoginController {
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
+    }
+
+    private RoleDTO getDefaultRole() {
+        RoleDTO role = new RoleDTO();
+        role.setId(2L); // Default role ID (e.g., ROLE_USER)
+        return role;
+    }
+
+    private byte[] loadDefaultAvatar() throws IOException {
+        Path defaultAvatarPath = Paths.get("src/main/resources/static/images/Default_Avatar.png");
+        try{
+            return Files.readAllBytes(defaultAvatarPath);
+        }catch (IOException e){
+            throw new IOException("Cannot read default avatar file",e);
+        }
+    }
+
+    private String generateToken(Long userId, long expirationMillis) {
+        return TokenUtil.generateToken(String.valueOf(userId), expirationMillis);
+    }
+    private ResponseCookie createCookie(String token, long expirationMillis) {
+        return ResponseCookie.from("token", token)
+                .httpOnly(true)
+                .maxAge(Duration.ofMillis(expirationMillis))
+                .sameSite("Strict")
+                .secure(true)
+                .path("/")
+                .build();
     }
 }

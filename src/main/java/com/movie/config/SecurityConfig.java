@@ -18,6 +18,10 @@ import java.util.List;
 @Configuration
 public class SecurityConfig {
 
+    private static final String FRONTEND_URL = "http://localhost:3000";
+    private static final List<String> ALLOWED_METHODS = List.of("GET", "POST", "PUT", "DELETE", "OPTIONS");
+    private static final List<String> ALLOWED_HEADERS = List.of("Origin", "Content-Type", "Accept", "Authorization");
+
     /**
      * Định nghĩa chuỗi bộ lọc bảo mật cho ứng dụng.
      *
@@ -32,11 +36,11 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable()) // Tắt CSRF nếu không cần
+                .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .anyRequest().permitAll() // Cho phép tất cả các request
+                        .anyRequest().permitAll()
                 )
-                .cors(Customizer.withDefaults()); // Kích hoạt CORS với cấu hình bên dưới
+                .cors(Customizer.withDefaults());
 
         return http.build();
     }
@@ -54,9 +58,9 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:3000")); // URL của frontend
-        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(List.of("Origin", "Content-Type", "Accept", "Authorization"));
+        configuration.setAllowedOrigins(List.of(FRONTEND_URL));
+        configuration.setAllowedMethods(ALLOWED_METHODS);
+        configuration.setAllowedHeaders(ALLOWED_HEADERS);
         configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

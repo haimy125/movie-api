@@ -45,7 +45,7 @@ public class UserManagerController {
     }
 
     @GetMapping("/getbyrole")
-    public UserResponse getbyrole(@RequestParam("roleid") Long roleid, @RequestParam("page") int page, @RequestParam("limit") int limit) {
+    public UserResponse getByRole(@RequestParam("roleid") Long roleid, @RequestParam("page") int page, @RequestParam("limit") int limit) {
         UserResponse result = new UserResponse();
         result.setPage(page);
         Pageable pageable = PageRequest.of(page - 1, limit);

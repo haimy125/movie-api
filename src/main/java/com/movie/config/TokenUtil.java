@@ -8,6 +8,7 @@ import io.jsonwebtoken.security.Keys;
 
 import java.security.Key;
 import java.util.Date;
+
 /**
  * Lớp tiện ích dùng để xử lý các token JWT.
  * Cung cấp các phương thức để tạo, phân tích và xác thực token.
@@ -35,6 +36,16 @@ public class TokenUtil {
                 .setIssuedAt(now)
                 .setExpiration(expirationDate)
                 .signWith(SECRET_KEY, SignatureAlgorithm.HS256)
+                .compact();
+    }
+
+    public static String generateRefreshToken(String subject, long refreshExpirationMillis) {
+        return Jwts.builder()
+                .setSubject(subject)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + refreshExpirationMillis))
+                .claim("type", "refresh") // Đánh dấu loại token
+                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
                 .compact();
     }
 
@@ -69,5 +80,12 @@ public class TokenUtil {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    public static Claims validateTokenClaims(String token) {
+        return Jwts.parser()
+                .setSigningKey(SECRET_KEY)
+                .parseClaimsJws(token)
+                .getBody();
     }
 }
