@@ -3,9 +3,11 @@ package com.movie.controller.api.login;
 import com.movie.config.TokenUtil;
 import com.movie.dto.RoleDTO;
 import com.movie.dto.UserDTO;
+import com.movie.entity.RefreshTokens;
 import com.movie.exceptions.InvalidCredentialsException;
 import com.movie.request.LoginRequest;
 import com.movie.response.NotificationResponse;
+import com.movie.service.admin.RefreshTokensService;
 import com.movie.service.login.LoginService;
 import com.movie.service.user.NotificationService;
 import jakarta.validation.Valid;
@@ -27,7 +29,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
-@RequestMapping("/api/login")
 public class LoginController {
 
     @Autowired
@@ -36,35 +37,50 @@ public class LoginController {
     @Autowired
     private NotificationService notificationService;
 
-    @PostMapping("/login")
+    @Autowired
+    private RefreshTokensService refreshTokensService;
+
+    @PostMapping("/api/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
         try {
+            // Xác thực thông tin đăng nhập
             UserDTO user = loginService.login(loginRequest.getUsername(), loginRequest.getPassword());
-            user.setPassword(null);
+            user.setPassword(null); // Không trả mật khẩu trong phản hồi
 
-            long expirationMillis = 30L * 24 * 60 * 60 * 1000;
-            String mainToken = TokenUtil.generateToken(String.valueOf(user.getId()), expirationMillis);
-            String refreshToken = TokenUtil.generateRefreshToken(String.valueOf(user.getId()), expirationMillis * 2);
+            // Thời gian sống của các token
+            long accessTokenExpirationMillis = 1L * 24 * 60 * 60 * 1000; // 1 ngày
+            long refreshTokenExpirationMillis = 30L * 24 * 60 * 60 * 1000; // 30 ngày
 
-            ResponseCookie cookie = createCookie(mainToken, expirationMillis);
+            // Tạo AccessToken và RefreshToken
+            String accessToken = TokenUtil.generateAccessToken(String.valueOf(user.getId()), accessTokenExpirationMillis);
+            String refreshToken = TokenUtil.generateRefreshToken(String.valueOf(user.getId()), refreshTokenExpirationMillis);
+
+            // Lưu RefreshToken vào cơ sở dữ liệu
+            refreshTokensService.create(user.getId(), refreshToken, refreshTokenExpirationMillis);
+
+            // Tạo cookie chứa AccessToken
+            ResponseCookie cookie = createCookie(accessToken, accessTokenExpirationMillis);
             HttpHeaders headers = new HttpHeaders();
             headers.add(HttpHeaders.SET_COOKIE, cookie.toString());
 
+            // Chuẩn bị phản hồi
             Map<String, Object> response = new HashMap<>();
-            response.put("token", mainToken);
-            response.put("refreshToken", refreshToken);
+            response.put("token", accessToken);
             response.put("user", user);
 
+            // Trả về phản hồi thành công
             return ResponseEntity.ok().headers(headers).body(response);
 
         } catch (InvalidCredentialsException e) {
+            // Xử lý lỗi thông tin đăng nhập
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password.");
         } catch (Exception e) {
+            // Xử lý các lỗi khác
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred during login.");
         }
     }
 
-    @PostMapping("/register")
+    @PostMapping("/api/register")
     public ResponseEntity<?> register(@Valid @RequestBody UserDTO user, BindingResult result) {
         try {
             if (result.hasErrors()) {
@@ -77,23 +93,8 @@ public class LoginController {
             user.setRole(getDefaultRole());
             user.setAvatar(loadDefaultAvatar());
 
-            UserDTO registeredUser = loginService.registerUser(user);
-            registeredUser.setPassword(null);
-
-            long expirationMillis =  3600000; // 1 hour
-            String token = generateToken(registeredUser.getId(), expirationMillis);
-            ResponseCookie cookie = createCookie(token, expirationMillis);
-
-            HttpHeaders headers = new HttpHeaders();
-            headers.add(HttpHeaders.SET_COOKIE, cookie.toString());
-
-
-            Map<String, Object> response = new HashMap<>();
-            response.put("token", token);
-            response.put("user", registeredUser);
-
-            return ResponseEntity.ok().headers(headers).body(response);
-
+            loginService.registerUser(user);
+            return ResponseEntity.ok().body("Registration successful. Please verify your email to activate the account.");
 
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -106,7 +107,8 @@ public class LoginController {
         }
     }
 
-    @GetMapping("/checktoken")
+
+    @GetMapping("/api/checktoken")
     public ResponseEntity<?> checkToken(@RequestParam("token") String token) {
         try {
             UserDTO user = loginService.checkUserByToken(token);
@@ -119,7 +121,7 @@ public class LoginController {
         }
     }
 
-    @PostMapping("/avatar/{id}")
+    @PostMapping("/api/avatar/{id}")
     public ResponseEntity<?> avatar(@PathVariable Long id, @RequestParam("avatar") MultipartFile avatar) {
         try {
             loginService.uploadAvatar(id, avatar);
@@ -129,7 +131,7 @@ public class LoginController {
         }
     }
 
-    @PostMapping("/changepassword/{id}")
+    @PostMapping("/api/changepassword/{id}")
     public ResponseEntity<?> changePassword(
             @PathVariable Long id,
             @RequestParam("password") String currentPassword,
@@ -152,7 +154,7 @@ public class LoginController {
     }
 
 
-    @PostMapping("/updateinfo/{id}")
+    @PostMapping("/api/updateinfo/{id}")
     public ResponseEntity<?> updateinfo(@PathVariable String id, @RequestParam("fullname") String fullname, @RequestParam("email") String email) {
         try {
             loginService.updateInfo(Long.valueOf(id), fullname, email);
@@ -162,7 +164,7 @@ public class LoginController {
         }
     }
 
-    @GetMapping("/user/profile")
+    @GetMapping("/api/user/profile")
     public ResponseEntity<?> userProfile(@RequestParam("id") String id) {
         try {
             UserDTO user = loginService.userProfile(Long.valueOf(id));
@@ -173,7 +175,7 @@ public class LoginController {
         }
     }
 
-    @GetMapping("/view/{id}")
+    @GetMapping("/api/view/{id}")
     public ResponseEntity<byte[]> viewFile(@PathVariable Long id) {
         UserDTO fileDTO = loginService.userByid(id);
         if (fileDTO != null && fileDTO.getAvatar() != null) {
@@ -189,7 +191,7 @@ public class LoginController {
     }
 
 
-    @GetMapping("/notificaion/user/{id}")
+    @GetMapping("/api/notificaion/user/{id}")
     public NotificationResponse getAll(@PathVariable Long id, @RequestParam("page") int page, @RequestParam("limit") int limit) {
         NotificationResponse result = new NotificationResponse();
         result.setPage(page);
@@ -198,7 +200,7 @@ public class LoginController {
         result.setTotalPage((int) Math.ceil((double) (notificationService.totalItems()) / limit));
         return result;
     }
-    @PostMapping("/changepassword/user")
+    @PostMapping("/api/changepassword/user")
     public ResponseEntity<?> changepassword(@RequestParam("id") Long id, @RequestParam("newPassword") String newPassword
             , @RequestParam("confirmPassword") String confirmPassword) {
         try {
@@ -209,7 +211,7 @@ public class LoginController {
         }
     }
 
-    @GetMapping("/find/user")
+    @GetMapping("/api/find/user")
     public ResponseEntity<?> findUser(@RequestParam("username") String username, @RequestParam("email") String email) {
         try {
             UserDTO user = loginService.checkUser(username, email);
@@ -234,9 +236,6 @@ public class LoginController {
         }
     }
 
-    private String generateToken(Long userId, long expirationMillis) {
-        return TokenUtil.generateToken(String.valueOf(userId), expirationMillis);
-    }
     private ResponseCookie createCookie(String token, long expirationMillis) {
         return ResponseCookie.from("token", token)
                 .httpOnly(true)
@@ -245,5 +244,38 @@ public class LoginController {
                 .secure(true)
                 .path("/")
                 .build();
+    }
+
+    @PostMapping("/api/token/refresh")
+    public ResponseEntity<?> refreshToken(@RequestBody Map<String, String> tokenRequest) {
+        try {
+            String refreshToken = tokenRequest.get("refreshToken");
+            if (refreshToken == null || refreshToken.isEmpty()) {
+                return ResponseEntity.badRequest().body("Refresh token is required.");
+            }
+
+            // Gọi validateRefreshToken
+            RefreshTokens storedToken = refreshTokensService.validateRefreshToken(refreshToken);
+            if (storedToken == null) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid or expired refresh token.");
+            }
+
+            // Tạo AccessToken mới
+            long accessTokenExpirationMillis = 1L * 24 * 60 * 60 * 1000; // 1 ngày
+            String newAccessToken = TokenUtil.generateAccessToken(String.valueOf(storedToken.getUserId()), accessTokenExpirationMillis);
+
+            // Tạo cookie chứa AccessToken
+            ResponseCookie cookie = createCookie(newAccessToken, accessTokenExpirationMillis);
+            HttpHeaders headers = new HttpHeaders();
+            headers.add(HttpHeaders.SET_COOKIE, cookie.toString());
+
+            // Trả về AccessToken mới
+            Map<String, String> response = new HashMap<>();
+            response.put("token", newAccessToken);
+            return ResponseEntity.ok().headers(headers).body(response);
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred during token refresh.");
+        }
     }
 }

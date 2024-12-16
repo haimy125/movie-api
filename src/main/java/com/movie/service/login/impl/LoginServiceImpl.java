@@ -29,25 +29,27 @@ public class LoginServiceImpl implements LoginService {
     @Override
     public UserDTO login(String username, String password) {
         try {
-            //tìm kiếm tài khoản theo username
+            // Tìm kiếm tài khoản theo username
             User user = userRepository.findByUsername(username);
-            // kiểm tra nếu không có tai khoản nào
-            if (user == null)
+            if (user == null) {
                 throw new RuntimeException("Tài khoản không tồn tại!");
-            //kiểm tra nếu có tài khoản nhưng mật khẩu không chính xác
-            Boolean isMatch = BCrypt.checkpw(password, user.getPassword());
-            if (!isMatch)
-                throw new RuntimeException("Tài khoản hoặc mật không chính xác!");
-            // kiểm tra tài khoản có phải là admin hay không
-            if (user.getRole().getName().equals("ROLE_ADMIN"))
+            }
+
+            // Kiểm tra mật khẩu
+            boolean isMatch = BCrypt.checkpw(password, user.getPassword());
+            if (!isMatch) {
+                throw new RuntimeException("Tài khoản hoặc mật khẩu không chính xác!");
+            }
+
+            // Kiểm tra vai trò của tài khoản
+            String roleName = user.getRole().getName();
+            if ("ROLE_ADMIN".equals(roleName) || "ROLE_USER".equals(roleName)) {
                 return modelMapper.map(user, UserDTO.class);
-            // kiểm tra tài khoản có phải là user hay không
-            if (user.getRole().getName().equals("ROLE_USER"))
-                return modelMapper.map(user, UserDTO.class);
-            // nếu không phải admin hoặc user thì lỗi
-            throw new RuntimeException("Tài khoản không tồn tại!");
+            } else {
+                throw new RuntimeException("Tài khoản không tồn tại!");
+            }
         } catch (Exception e) {
-            throw new RuntimeException("Có lỗi không xác định khi đăng nhập");
+            throw new RuntimeException("Có lỗi không xác định khi đăng nhập", e);
         }
     }
 
@@ -163,7 +165,6 @@ public class LoginServiceImpl implements LoginService {
         } catch (Exception e) {
             throw new RuntimeException("Có lỗi không xác định khi đăng ký");
         }
-
     }
 
     @Override
