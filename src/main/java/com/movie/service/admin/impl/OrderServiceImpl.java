@@ -157,4 +157,31 @@ public class OrderServiceImpl implements OrderService {
         }
         return result;
     }
+
+    /**
+     * @param idMovie
+     * @param token
+     */
+    @Override
+    public String checkOrder(Long idMovie, String token) {
+        Movie movie = movieRepository.findById(Long.valueOf(idMovie)).orElseThrow(() -> new RuntimeException("Không tìm thấy phim"));
+        String userId = com.movie.config.TokenUtil.getUserIdFromToken(token);
+        User user = userRepository.findById(Long.valueOf(userId)).orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng"));
+        List<Order> orderscheck = order_Repository.findByUserAndMovie(user, movie);
+        if (orderscheck.size() > 0) throw new RuntimeException("Bạn đã mua phim này rồi!");
+
+        Order newOrder = new Order();
+        Date currentDate = Date.valueOf(LocalDate.now());
+        newOrder.setUser(user);
+        newOrder.setMovie(movie);
+        newOrder.setPoint(movie.getPrice().longValueExact()); // Giả định điểm mặc định khi mua
+        newOrder.setDate(currentDate); // Ngày mua hiện tại
+        newOrder.setStatus("COMPLETED"); // Trạng thái hoàn thành
+
+        // Lưu Order vào cơ sở dữ liệu
+        order_Repository.save(newOrder);
+
+        // Trả về thông báo thành công
+        return "Bạn đã mua phim thành công!";
+    }
 }

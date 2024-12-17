@@ -23,4 +23,6 @@ public interface OrderService {
     List<OrderDTO> getOrderByUserId(Long userId, Pageable pageable);
 
     List<OrderDTO> getOrderByMovieId(Long movieId, Pageable pageable);
+
+    String checkOrder(Long idMovie, String token);
 }

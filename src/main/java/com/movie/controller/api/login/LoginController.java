@@ -153,7 +153,6 @@ public class LoginController {
         }
     }
 
-
     @PostMapping("/api/updateinfo/{id}")
     public ResponseEntity<?> updateinfo(@PathVariable String id, @RequestParam("fullname") String fullname, @RequestParam("email") String email) {
         try {
