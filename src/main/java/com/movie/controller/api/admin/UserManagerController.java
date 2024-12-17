@@ -1,20 +1,20 @@
 package com.movie.controller.api.admin;
 
+import com.movie.config.TokenUtil;
 import com.movie.response.UserResponse;
 import com.movie.dto.UserDTO;
 import com.movie.service.admin.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -67,9 +67,25 @@ public class UserManagerController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<?> create(@Valid @RequestBody UserDTO userDTO, BindingResult result) {
+    public ResponseEntity<?> create(@Valid @RequestBody UserDTO userDTO, BindingResult result, HttpServletRequest request) {
 
         try {
+            // Lấy token từ header
+            String token = request.getHeader("Authorization");
+
+            // Kiểm tra token
+            if (token == null || !token.startsWith("Bearer ")) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token is missing or invalid");
+            }
+
+            // Loại bỏ prefix "Bearer "
+            token = token.substring(7);
+
+            // Xác thực token (giả sử bạn có lớp TokenUtils để xử lý)
+            if (!TokenUtil.validateToken(token)) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid token");
+            }
+
             // Xử lý lỗi validation từ DTO
             if (result.hasErrors()) {
                 Map<String, String> errors = result.getFieldErrors().stream()
@@ -87,13 +103,6 @@ public class UserManagerController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
-
-//    @PostMapping(value = "/api/admin/user/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-//    public ResponseEntity<?> createUser(@RequestPart("user") UserDTO userDTO, @RequestPart(value = "avatar", required = false) MultipartFile avatar) {
-//        // Gọi service để xử lý logic
-//        UserDTO createdUser = userService.create(userDTO);
-//        return ResponseEntity.ok(createdUser);
-//    }
 
     @PutMapping("/update/role")
     public ResponseEntity<?> update(@RequestParam("userid") Long userid, @RequestParam("roleid") Long roleid) {

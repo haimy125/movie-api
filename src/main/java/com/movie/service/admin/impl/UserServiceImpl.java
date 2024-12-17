@@ -8,6 +8,7 @@ import com.movie.repository.admin.NotificationRepository;
 import com.movie.repository.admin.RoleRepository;
 import com.movie.repository.admin.UserRepository;
 import com.movie.service.admin.UserService;
+import com.movie.utils.PasswordUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -109,6 +110,7 @@ public class UserServiceImpl implements UserService {
             // Map UserDTO sang User entity
             User user = modelMapper.map(userDTO, User.class);
             user.setAvatar(loadDefaultAvatar());
+            user.setPassword(PasswordUtils.hashPassword(userDTO.getPassword()));
 
             // Lấy Role từ database
             Role role = roleRepository.findById(userDTO.getRole().getId())
