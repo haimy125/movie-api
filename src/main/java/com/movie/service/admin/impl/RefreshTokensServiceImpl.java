@@ -62,4 +62,13 @@ public class RefreshTokensServiceImpl implements RefreshTokensService {
         // Token hợp lệ
         return storedToken;
     }
+
+    /**
+     * @param userId
+     * @return
+     */
+    @Override
+    public boolean existsByUserId(Long userId) {
+        return refreshTokensRepository.existsByUserId(userId);
+    }
 }

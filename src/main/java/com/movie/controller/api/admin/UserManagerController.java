@@ -8,11 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -85,6 +87,13 @@ public class UserManagerController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
+
+//    @PostMapping(value = "/api/admin/user/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+//    public ResponseEntity<?> createUser(@RequestPart("user") UserDTO userDTO, @RequestPart(value = "avatar", required = false) MultipartFile avatar) {
+//        // Gọi service để xử lý logic
+//        UserDTO createdUser = userService.create(userDTO);
+//        return ResponseEntity.ok(createdUser);
+//    }
 
     @PutMapping("/update/role")
     public ResponseEntity<?> update(@RequestParam("userid") Long userid, @RequestParam("roleid") Long roleid) {

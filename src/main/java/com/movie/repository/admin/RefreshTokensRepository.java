@@ -5,4 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface RefreshTokensRepository extends JpaRepository<RefreshTokens, Long> {
     RefreshTokens findByRefreshToken(String refreshToken);
+    boolean existsByUserId(Long userId);
 }

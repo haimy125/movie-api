@@ -11,6 +11,7 @@ import com.movie.service.admin.RefreshTokensService;
 import com.movie.service.login.LoginService;
 import com.movie.service.user.NotificationService;
 import jakarta.validation.Valid;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -19,6 +20,7 @@ import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -55,8 +57,11 @@ public class LoginController {
             String accessToken = TokenUtil.generateAccessToken(String.valueOf(user.getId()), accessTokenExpirationMillis);
             String refreshToken = TokenUtil.generateRefreshToken(String.valueOf(user.getId()), refreshTokenExpirationMillis);
 
-            // Lưu RefreshToken vào cơ sở dữ liệu
-            refreshTokensService.create(user.getId(), refreshToken, refreshTokenExpirationMillis);
+            // Kiểm tra nếu userId đã tồn tại trong cơ sở dữ liệu
+            if (!refreshTokensService.existsByUserId(user.getId())) {
+                // Lưu RefreshToken vào cơ sở dữ liệu
+                refreshTokensService.create(user.getId(), refreshToken, refreshTokenExpirationMillis);
+            }
 
             // Tạo cookie chứa AccessToken
             ResponseCookie cookie = createCookie(accessToken, accessTokenExpirationMillis);
@@ -199,6 +204,7 @@ public class LoginController {
         result.setTotalPage((int) Math.ceil((double) (notificationService.totalItems()) / limit));
         return result;
     }
+
     @PostMapping("/api/changepassword/user")
     public ResponseEntity<?> changepassword(@RequestParam("id") Long id, @RequestParam("newPassword") String newPassword
             , @RequestParam("confirmPassword") String confirmPassword) {
@@ -228,10 +234,10 @@ public class LoginController {
 
     private byte[] loadDefaultAvatar() throws IOException {
         Path defaultAvatarPath = Paths.get("src/main/resources/static/images/Default_Avatar.png");
-        try{
+        try {
             return Files.readAllBytes(defaultAvatarPath);
-        }catch (IOException e){
-            throw new IOException("Cannot read default avatar file",e);
+        } catch (IOException e) {
+            throw new IOException("Cannot read default avatar file", e);
         }
     }
 

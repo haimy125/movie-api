@@ -13,6 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -90,17 +94,42 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO create(UserDTO userDTO) {
+        if (userDTO == null) {
+            throw new IllegalArgumentException("Bạn chưa nhập dữ liệu!");
+        }
+
+        // Kiểm tra role trước khi xử lý
+        if (userDTO.getRole() == null || userDTO.getRole().getId() == null) {
+            throw new IllegalArgumentException("Role không được để trống và phải có id!");
+        }
+
         try {
-            if (userDTO == null)
-                throw new RuntimeException("Bạn chưa nhập dữ liệu!");
+            System.out.println("role id: " + userDTO.getRole().getId());
+
+            // Map UserDTO sang User entity
             User user = modelMapper.map(userDTO, User.class);
-            Role role = roleRepository.findById(Long.valueOf(userDTO.getRole().getId())).orElseThrow(() -> new RuntimeException("Không có quyền này!"));
+            user.setAvatar(loadDefaultAvatar());
+
+            // Lấy Role từ database
+            Role role = roleRepository.findById(userDTO.getRole().getId())
+                    .orElseThrow(() -> new RuntimeException("Không có quyền này!"));
+            role.setId(userDTO.getRole().getId());
+
             user.setRole(role);
+
+            // Lưu user vào database
             userRepository.save(user);
-            UserDTO userDTO1 = modelMapper.map(user, UserDTO.class);
-            return userDTO1;
+
+            // Map ngược lại sang UserDTO để trả về
+            UserDTO savedUserDTO = modelMapper.map(user, UserDTO.class);
+            return savedUserDTO;
+
+        } catch (IllegalArgumentException e) {
+            throw e; // Bảo toàn lỗi cụ thể
+        } catch (RuntimeException e) {
+            throw new RuntimeException("Lỗi xử lý dữ liệu: " + e.getMessage(), e);
         } catch (Exception e) {
-            throw new RuntimeException("Có lỗi xảy ra");
+            throw new RuntimeException("Có lỗi không xác định xảy ra: " + e.getMessage(), e);
         }
     }
 
@@ -174,5 +203,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public int totalItem() {
         return (int) userRepository.count();
+    }
+
+    private byte[] loadDefaultAvatar() throws IOException {
+        Path defaultAvatarPath = Paths.get("src/main/resources/static/images/Default_Avatar.png");
+        try {
+            return Files.readAllBytes(defaultAvatarPath);
+        } catch (IOException e) {
+            throw new IOException("Cannot read default avatar file", e);
+        }
     }
 }
