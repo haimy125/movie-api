@@ -1,5 +1,6 @@
 package com.movie.service.admin.impl;
 
+import com.movie.config.TokenUtil;
 import com.movie.dto.UserDTO;
 import com.movie.entity.Notification;
 import com.movie.entity.Role;
@@ -25,7 +26,7 @@ import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
-    
+
     @Autowired
     private UserRepository userRepository;
 
@@ -174,21 +175,51 @@ public class UserServiceImpl implements UserService {
         try {
             if (point == null)
                 throw new RuntimeException("Bạn chưa nhập dữ liệu!");
-            User User = userRepository.findById(id).orElseThrow(() -> new RuntimeException("Không có người dùng này!"));
-            User.setPoint(User.getPoint() + point);
-            userRepository.save(User);
+            User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("Không có người dùng này!"));
+            user.setPoint(user.getPoint() + point);
+            userRepository.save(user);
             Notification notificationEntity = new Notification();
-            notificationEntity.setUser(User);
+            notificationEntity.setUser(user);
             notificationEntity.setTimeAdd(Date.valueOf(LocalDate.now()));
-            notificationEntity.setContent("Đã nạp " + point + " xu \n số dư hiện tại là: " + User.getPoint() + " xu.");
+            notificationEntity.setContent("Đã nạp " + point + " xu \n số dư hiện tại là: " + user.getPoint() + " xu.");
             notificationEntity.setStatus(true);
             notificationRepository.save(notificationEntity);
-            UserDTO userDTO = modelMapper.map(User, UserDTO.class);
+            UserDTO userDTO = modelMapper.map(user, UserDTO.class);
             return userDTO;
         } catch (Exception e) {
             throw new RuntimeException("Có lỗi xảy ra");
         }
     }
+
+    /**
+     * @param token
+     * @param point
+     * @return
+     */
+    @Override
+    public UserDTO napTien(String token, Long point) {
+        try {
+            if (point == null)
+                throw new RuntimeException("Bạn chưa nhập dữ liệu!");
+
+            String userId = TokenUtil.getUserIdFromToken(token);
+            User user = userRepository.findById(Long.valueOf(userId)).orElseThrow(() -> new RuntimeException("Không có người dùng này!"));
+            user.setPoint(user.getPoint() + point);
+            userRepository.save(user);
+
+            Notification notificationEntity = new Notification();
+            notificationEntity.setUser(user);
+            notificationEntity.setTimeAdd(Date.valueOf(LocalDate.now()));
+            notificationEntity.setContent("Đã nạp " + point + " xu \n số dư hiện tại là: " + user.getPoint() + " xu.");
+            notificationEntity.setStatus(true);
+            notificationRepository.save(notificationEntity);
+            UserDTO userDTO = modelMapper.map(user, UserDTO.class);
+            return userDTO;
+        } catch (Exception e) {
+            throw new RuntimeException("Có lỗi xảy ra");
+        }
+    }
+
 
     @Override
     public void delete(Long id) {

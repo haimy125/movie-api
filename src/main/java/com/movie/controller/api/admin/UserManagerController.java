@@ -124,6 +124,16 @@ public class UserManagerController {
         }
     }
 
+    @PutMapping("/napTien")
+    public ResponseEntity<?> napTien(@RequestHeader("Authorization") String token, @RequestParam("point") Long point) {
+        try {
+            UserDTO user = userService.napTien(token, point);
+            return ResponseEntity.ok(user);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
     @Transactional
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id) {

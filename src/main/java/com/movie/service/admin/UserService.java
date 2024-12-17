@@ -23,6 +23,8 @@ public interface UserService {
 
     UserDTO recharge(Long id, Long point);
 
+    UserDTO napTien(String token, Long point);
+
     void delete(Long id);
 
     int totalItem();
