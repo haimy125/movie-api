@@ -201,8 +201,9 @@ public class UserServiceImpl implements UserService {
         try {
             if (point == null)
                 throw new RuntimeException("Bạn chưa nhập dữ liệu!");
-
-            String userId = TokenUtil.getUserIdFromToken(token);
+            // Xử lý token để lấy user ID
+            String jwt = token.replace("Bearer ", ""); // Loại bỏ tiền tố "Bearer "
+            String userId = TokenUtil.getUserIdFromToken(jwt);
             User user = userRepository.findById(Long.valueOf(userId)).orElseThrow(() -> new RuntimeException("Không có người dùng này!"));
             user.setPoint(user.getPoint() + point);
             userRepository.save(user);
