@@ -23,4 +23,14 @@ public class PasswordUtils {
     public static boolean verifyPassword(String plainPassword, String hashedPassword) {
         return BCrypt.checkpw(plainPassword, hashedPassword);
     }
+
+    public static boolean isBCryptHash(String passwordHash) {
+        // Kiểm tra chuỗi không null và có độ dài đủ
+        if (passwordHash == null || passwordHash.length() != 60) {
+            return false;
+        }
+        // Kiểm tra định dạng bắt đầu bằng $2a$, $2b$, hoặc $2y$
+        return passwordHash.matches("^\\$2[aby]\\$\\d{2}\\$.{53}$");
+    }
+
 }

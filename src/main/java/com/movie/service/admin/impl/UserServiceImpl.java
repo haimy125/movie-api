@@ -144,7 +144,11 @@ public class UserServiceImpl implements UserService {
 
             user.setRole(role);
             user.setUsername(userDTO.getUsername());
-            user.setPassword(PasswordUtils.hashPassword(userDTO.getPassword()));
+
+            if (!PasswordUtils.isBCryptHash(userDTO.getPassword())) {
+                user.setPassword(PasswordUtils.hashPassword(userDTO.getPassword()));
+            }
+
             user.setEmail(userDTO.getEmail());
             user.setFullname(userDTO.getFullname());
 
