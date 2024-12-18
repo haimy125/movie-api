@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.sql.Date;
 import java.time.LocalDateTime;
 
 @Entity
@@ -26,14 +27,7 @@ public class CommentMovie {
     private String content;
 
     @Column(name = "time_add", nullable = false, updatable = false)
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Ho_Chi_Minh")
-    private LocalDateTime timeAdd;
-
-    // Phương thức tự động gán thời gian trước khi lưu
-    @PrePersist
-    protected void onCreate() {
-        this.timeAdd = LocalDateTime.now();
-    }
+    private Date timeAdd;
 
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
