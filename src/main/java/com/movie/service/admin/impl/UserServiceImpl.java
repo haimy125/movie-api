@@ -213,6 +213,7 @@ public class UserServiceImpl implements UserService {
             Notification notificationEntity = new Notification();
             notificationEntity.setUser(user);
             notificationEntity.setTimeAdd(Date.valueOf(LocalDate.now()));
+            notificationEntity.setTimeUpdate(Date.valueOf(LocalDate.now()));
             notificationEntity.setContent("Đã nạp " + point + " xu \n số dư hiện tại là: " + user.getPoint() + " xu.");
             notificationEntity.setStatus(true);
             notificationRepository.save(notificationEntity);

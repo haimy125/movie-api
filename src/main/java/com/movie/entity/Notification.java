@@ -29,13 +29,7 @@ public class Notification {
     private Date timeAdd;
 
     @Column(name = "time_update")
-    @Temporal(TemporalType.TIMESTAMP)
-    private LocalDateTime timeUpdate;
-
-    @PreUpdate
-    private void updateTimeUpdate() {
-        this.timeUpdate = LocalDateTime.now();
-    }
+    private Date timeUpdate;
 
     @Column(name = "status")
     private Boolean status;
