@@ -202,10 +202,11 @@ public class UserServiceImpl implements UserService {
             if (point == null)
                 throw new RuntimeException("Bạn chưa nhập dữ liệu!");
             // Xử lý token để lấy user ID
-            String jwt = token.replace("Bearer ", ""); // Loại bỏ tiền tố "Bearer "
+            String jwt = token.replace("Bearer ", "");
             String userId = TokenUtil.getUserIdFromToken(jwt);
             User user = userRepository.findById(Long.valueOf(userId)).orElseThrow(() -> new RuntimeException("Không có người dùng này!"));
             user.setPoint(user.getPoint() + point);
+            user.setPassword(null);
             userRepository.save(user);
 
             Notification notificationEntity = new Notification();
