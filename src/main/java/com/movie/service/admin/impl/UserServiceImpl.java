@@ -177,6 +177,7 @@ public class UserServiceImpl implements UserService {
                 throw new RuntimeException("Bạn chưa nhập dữ liệu!");
             User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("Không có người dùng này!"));
             user.setPoint(user.getPoint() + point);
+
             userRepository.save(user);
             Notification notificationEntity = new Notification();
             notificationEntity.setUser(user);

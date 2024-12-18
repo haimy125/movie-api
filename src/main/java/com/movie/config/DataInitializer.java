@@ -43,27 +43,28 @@ public class DataInitializer {
                 roleRepository.save(userRole);
             }
 
-//             Kiểm tra và tạo người dùng nếu chưa có
-            User user = userRepository.findById(1L)
-                    .orElseGet(() -> {
-                        User newUser = new User();
-                        newUser.setUsername("admin");
-                        String hashPassword = BCrypt.hashpw("123456", BCrypt.gensalt());
-                        newUser.setPassword(hashPassword); // Thêm mật khẩu mặc định
-                        newUser.setEmail("admin@gmail.com");
-                        // Tìm Role "ROLE_ADMIN"
-                        Role adminRole = roleRepository.findByName("ROLE_ADMIN").stream()
-                                .findFirst()
-                                .orElseThrow(() -> new IllegalStateException("ROLE_ADMIN không tồn tại"));
-                        newUser.setRole(adminRole);
-                        try {
-                            newUser.setAvatar(loadDefaultAvatar());
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
-                        userRepository.save(newUser);
-                        return newUser;
-                    });
+            User user = userRepository.findById(1L).orElseGet(() -> {
+                Role adminRole = roleRepository.findByName("ROLE_ADMIN")
+                        .stream()
+                        .findFirst()
+                        .orElseThrow(() -> new IllegalStateException("ROLE_ADMIN không tồn tại"));
+
+                User newUser = new User();
+                newUser.setUsername("admin");
+                newUser.setPassword(BCrypt.hashpw("123456", BCrypt.gensalt()));
+                newUser.setPoint(0L);
+                newUser.setEmail("admin@gmail.com");
+                newUser.setActive(true);
+                newUser.setRole(adminRole);
+
+                try {
+                    newUser.setAvatar(loadDefaultAvatar());
+                } catch (IOException e) {
+                    throw new RuntimeException("Failed to load default avatar", e);
+                }
+
+                return userRepository.save(newUser);
+            });
 
 //             Kiểm tra và tạo các Schedule nếu chưa có
             if (scheduleRepository.count() == 0) {
