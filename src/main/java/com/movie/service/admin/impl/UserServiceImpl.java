@@ -106,8 +106,6 @@ public class UserServiceImpl implements UserService {
         }
 
         try {
-            System.out.println("role id: " + userDTO.getRole().getId());
-
             // Map UserDTO sang User entity
             User user = modelMapper.map(userDTO, User.class);
             user.setAvatar(loadDefaultAvatar());
@@ -146,7 +144,9 @@ public class UserServiceImpl implements UserService {
 
             user.setRole(role);
             user.setUsername(userDTO.getUsername());
-            user.setPassword(userDTO.getPassword());
+            user.setPassword(PasswordUtils.hashPassword(userDTO.getPassword()));
+            user.setEmail(userDTO.getEmail());
+            user.setFullname(userDTO.getFullname());
 
             userRepository.save(user);
             UserDTO UserDTO = modelMapper.map(user, UserDTO.class);
