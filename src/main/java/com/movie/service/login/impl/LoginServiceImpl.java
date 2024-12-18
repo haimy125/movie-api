@@ -43,6 +43,7 @@ public class LoginServiceImpl implements LoginService {
 
             // Kiểm tra vai trò của tài khoản
             String roleName = user.getRole().getName();
+
             if ("ROLE_ADMIN".equals(roleName) || "ROLE_USER".equals(roleName)) {
                 return modelMapper.map(user, UserDTO.class);
             } else {
