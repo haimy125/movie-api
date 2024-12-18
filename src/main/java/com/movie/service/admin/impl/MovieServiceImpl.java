@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
@@ -273,6 +274,11 @@ public class MovieServiceImpl implements MovieService {
             movieEntity.setUserAdd(userEntity);
             movieEntity.setUserUpdate(userEntity);
             movieEntity.setImageUrl(file.getBytes());
+
+            // Đặt thời gian thêm mới và cập nhật (trong trường hợp cần)
+            movieEntity.setTimeAdd(LocalDateTime.now());
+            movieEntity.setTimeUpdate(LocalDateTime.now());
+
             movieEntity = movieRepository.save(movieEntity);
 
             // Xử lý các thể loại liên quan

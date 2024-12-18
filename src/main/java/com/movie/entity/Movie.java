@@ -46,18 +46,19 @@ public class Movie {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Ho_Chi_Minh")
     private LocalDateTime timeAdd;
 
-    // Phương thức tự động gán thời gian trước khi lưu
+    @Column(name = "time_update")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Ho_Chi_Minh")
+    private LocalDateTime timeUpdate;
+
+    // Tự động gán thời gian thêm
     @PrePersist
     protected void onCreate() {
         this.timeAdd = LocalDateTime.now();
     }
 
-    @Column(name = "time_update")
-    @Temporal(TemporalType.TIMESTAMP)
-    private LocalDateTime timeUpdate;
-
+    // Tự động cập nhật thời gian
     @PreUpdate
-    private void updateTimeUpdate() {
+    protected void onUpdate() {
         this.timeUpdate = LocalDateTime.now();
     }
 
