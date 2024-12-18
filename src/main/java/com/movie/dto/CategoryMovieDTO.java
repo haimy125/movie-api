@@ -13,7 +13,7 @@ public class CategoryMovieDTO {
 
     @NotNull(message = "Danh mục không được để trống")
     @Valid
-    private CategoryDTO categoryDTO;
+    private CategoryDTO category;
 
     @NotNull(message = "Phim không được để trống")
     @Valid
