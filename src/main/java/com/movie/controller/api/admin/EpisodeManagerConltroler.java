@@ -28,7 +28,7 @@ public class EpisodeManagerConltroler {
         EpisodeResponse result = new EpisodeResponse();
         result.setPage(page);
         Pageable pageable = PageRequest.of(page - 1, limit);
-        result.setListResult(episodeService.getByMovie(id, pageable));
+        result.setListResult(episodeService.getByMovie(Long.valueOf(id), pageable));
         result.setTotalPage((int) Math.ceil((double) (episodeService.totalItem()) / limit));
         return result;
     }
@@ -37,7 +37,7 @@ public class EpisodeManagerConltroler {
     public EpisodeResponse getbymovie(@PathVariable Long id) {
         EpisodeResponse result = new EpisodeResponse();
         result.setPage(1);
-        result.setListResult(episodeService.getByMovie(id));
+        result.setListResult(episodeService.getByMovie(Long.valueOf(id)));
         result.setTotalPage((int) Math.ceil((double) (episodeService.totalItem()) / 10));
         return result;
     }

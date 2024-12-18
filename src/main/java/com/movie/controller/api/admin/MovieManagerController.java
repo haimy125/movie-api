@@ -5,6 +5,7 @@ import com.movie.response.MovieResponse;
 import com.movie.dto.MovieDTO;
 import com.movie.dto.UserDTO;
 import com.movie.service.admin.MovieService;
+import com.movie.utils.MimeTypeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -12,8 +13,12 @@ import org.springframework.http.*;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
+import javax.imageio.ImageIO;
+import java.io.ByteArrayInputStream;
 import java.math.BigDecimal;
+import java.util.Arrays;
+
+import org.apache.tika.Tika;
 
 @RestController
 @RequestMapping("/api/admin/movies")
@@ -95,7 +100,7 @@ public class MovieManagerController {
         }
     }
 
-//    @PostMapping("/create")
+    //    @PostMapping("/create")
 //    public ResponseEntity<String> create(@RequestParam("vn_name") String vn_name, @RequestParam("cn_name") String cn_name, @RequestParam("description") String description, @RequestParam("user_add") Long user_add, @RequestParam("author") String author, @RequestParam("categorylist") String categorylist, @RequestParam("episode_number") Long episode_number, @RequestParam("status") String status, @RequestParam("new_movie") Boolean new_movie, @RequestParam("hot_movie") Boolean hot_movie, @RequestParam("vip_movie") Boolean vip_movie, @RequestParam("price") BigDecimal price, @RequestParam("image") MultipartFile file, @RequestParam("year") Long year, @RequestParam("schedulelist") String schedulelist) {
 //        try {
 //
@@ -151,7 +156,7 @@ public class MovieManagerController {
 
             // Tạo movie
             MovieDTO movieDto = new MovieDTO();
-            movieDto.setId(id);
+            movieDto.setId(Long.valueOf(id));
             movieDto.setNewMovie(newMovie);
             movieDto.setHotMovie(hotMovie);
             movieDto.setVipMovie(vipMovie);
@@ -199,13 +204,62 @@ public class MovieManagerController {
         }
     }
 
+    //    @GetMapping("/view/{id}")
+//    public ResponseEntity<byte[]> viewFile(@PathVariable Long id) {
+//        MovieDTO fileDTO = movieService.getById(id);
+//        if (fileDTO != null) {
+//            return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + fileDTO.getId() + "\"").contentType(MediaType.IMAGE_PNG).contentType(MediaType.IMAGE_JPEG).contentType(MediaType.IMAGE_GIF).body(fileDTO.getImageUrl());
+//        } else {
+//            return ResponseEntity.notFound().build();
+//        }
+//    }
     @GetMapping("/view/{id}")
-    public ResponseEntity<byte[]> viewFile(@PathVariable Long id) {
-        MovieDTO fileDTO = movieService.getById(id);
-        if (fileDTO != null && fileDTO.getImageUrl() != null) {
-            return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + fileDTO.getId() + "\"").contentType(MediaType.IMAGE_PNG).contentType(MediaType.IMAGE_JPEG).contentType(MediaType.IMAGE_GIF).body(fileDTO.getImageUrl());
-        } else {
-            return ResponseEntity.notFound().build();
+    public ResponseEntity<byte[]> getFile(@PathVariable Long id) {
+        try {
+            // Lấy MovieDTO từ service
+            MovieDTO movie = movieService.getById(id);
+            System.out.println(Arrays.toString(movie.getImageUrl()));
+
+            if (movie == null || movie.getImageUrl() == null || movie.getImageUrl().length == 0) {
+                return ResponseEntity.notFound().build(); // Không tìm thấy movie hoặc không có file
+            }
+
+            // Xác định MIME type từ dữ liệu file
+            String mimeType = MimeTypeUtil.detectMimeType(movie.getImageUrl());
+
+            // Trả về ResponseEntity với dữ liệu file
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"movie_" + id + getFileExtension(mimeType) + "\"")
+                    .contentType(MediaType.parseMediaType(mimeType))
+                    .body(movie.getImageUrl());
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(null); // Dữ liệu không hợp lệ
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    /**
+     * Lấy phần mở rộng file từ MIME type.
+     *
+     * @param mimeType MIME type (ví dụ: "image/png")
+     * @return phần mở rộng file (ví dụ: ".png")
+     */
+    private String getFileExtension(String mimeType) {
+        switch (mimeType) {
+            case "image/png":
+                return ".png";
+            case "image/jpeg":
+                return ".jpg";
+            case "image/gif":
+                return ".gif";
+            case "video/mp4":
+                return ".mp4";
+            case "video/mpeg":
+                return ".mpeg";
+            default:
+                return ""; // Không rõ định dạng
         }
     }
 }

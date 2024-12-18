@@ -18,7 +18,7 @@ public class MovieDTO {
     @Size(max = 255, message = "Tên tiếng Việt không được vượt quá 255 ký tự")
     private String vnName;
 
-    @Size(max = 255, message = "Tên tiếng Trung không được vượt quá 255 ký tự")
+    @Size(max = 255, message = "Tên tiếng nước ngoài không được vượt quá 255 ký tự")
     private String cnName;
 
     @Size(max = 1000, message = "Mô tả không được vượt quá 1000 ký tự")

@@ -66,7 +66,7 @@ public class MovieServiceImpl implements MovieService {
         for (Movie movie : Movie) {
             MovieDTO dto = modelMapper.map(movie, MovieDTO.class);
 //            dto.setImageUrl(Base64.getEncoder().encodeToString(movie.getImageUrl()).getBytes());
-            dto.setImageUrl(Base64.getEncoder().encode(movie.getImageUrl().getBytes()));
+            dto.setImageUrl(Base64.getEncoder().encode(movie.getImageUrl()));
             result.add(dto);
         }
         return result;
@@ -79,7 +79,7 @@ public class MovieServiceImpl implements MovieService {
         if (Movie == null) throw new RuntimeException("Không có bộ phim hot nào");
         for (Movie movie : Movie) {
             MovieDTO dto = modelMapper.map(movie, MovieDTO.class);
-            dto.setImageUrl(Base64.getEncoder().encode(movie.getImageUrl().getBytes()));
+            dto.setImageUrl(Base64.getEncoder().encode(movie.getImageUrl()));
             result.add(dto);
         }
         return result;
@@ -92,7 +92,7 @@ public class MovieServiceImpl implements MovieService {
         if (movies == null) throw new RuntimeException("Không có bộ phim trả phí nào");
         for (Movie movie : movies) {
             MovieDTO dto = modelMapper.map(movie, MovieDTO.class);
-            dto.setImageUrl(Base64.getEncoder().encode(movie.getImageUrl().getBytes()));
+            dto.setImageUrl(Base64.getEncoder().encode(movie.getImageUrl()));
             result.add(dto);
         }
         return result;
@@ -105,7 +105,7 @@ public class MovieServiceImpl implements MovieService {
         if (movies == null) throw new RuntimeException("Không có bộ phim trả phí nào");
         for (Movie movie : movies) {
             MovieDTO dto = modelMapper.map(movie, MovieDTO.class);
-            dto.setImageUrl(Base64.getEncoder().encode(movie.getImageUrl().getBytes()));
+            dto.setImageUrl(Base64.getEncoder().encode(movie.getImageUrl()));
             result.add(dto);
         }
         return result;
@@ -272,7 +272,7 @@ public class MovieServiceImpl implements MovieService {
 
             movieEntity.setUserAdd(userEntity);
             movieEntity.setUserUpdate(userEntity);
-            movieEntity.setImageUrl(Arrays.toString(file.getBytes()));
+            movieEntity.setImageUrl(file.getBytes());
             movieEntity = movieRepository.save(movieEntity);
 
             // Xử lý các thể loại liên quan
@@ -305,7 +305,7 @@ public class MovieServiceImpl implements MovieService {
             if (movieDTO == null) throw new RuntimeException("Bạn chưa nhập dữ liệu!");
             Movie movie = movieRepository.findById(Long.valueOf(movieDTO.getId())).orElseThrow(() -> new RuntimeException("Không tìm thấy bộ phim"));
             User User = userRepository.findById(Long.valueOf(movieDTO.getUserUpdate().getId())).orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng"));
-            if (file == null) movieDTO.setImageUrl(movie.getImageUrl().getBytes());
+            if (file == null) movieDTO.setImageUrl(movie.getImageUrl());
 
             else movieDTO.setImageUrl(file.getBytes());
             if (categorylist == null) throw new RuntimeException("Vui là chọn thể loại của bộ phim!");
@@ -331,7 +331,7 @@ public class MovieServiceImpl implements MovieService {
             movie.setId(movieDTO.getId());
             movie.setVnName(movieDTO.getVnName());
             movie.setCnName(movieDTO.getCnName());
-            movie.setImageUrl(Arrays.toString(movieDTO.getImageUrl()));
+            movie.setImageUrl(movieDTO.getImageUrl());
             movie.setTimeAdd(movie.getTimeAdd());
             movie.setUserAdd(movie.getUserAdd());
             movie.setUserUpdate(User);
