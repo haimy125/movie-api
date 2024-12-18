@@ -143,6 +143,7 @@ public class UserServiceImpl implements UserService {
                 throw new RuntimeException("Bạn chưa nhập dữ liệu!");
             User user = userRepository.findById(Long.valueOf(userDTO.getId())).orElseThrow(() -> new RuntimeException("Không có người dùng này!"));
             Role role = roleRepository.findById(Long.valueOf(userDTO.getRole().getId())).orElseThrow(() -> new RuntimeException("Không có quyền này!"));
+
             user.setRole(role);
             user.setUsername(userDTO.getUsername());
             user.setPassword(userDTO.getPassword());

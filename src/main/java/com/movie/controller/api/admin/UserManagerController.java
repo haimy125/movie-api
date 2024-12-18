@@ -104,6 +104,45 @@ public class UserManagerController {
         }
     }
 
+    @PostMapping("/update")
+    public ResponseEntity<?> update(@Valid @RequestBody UserDTO userDTO, BindingResult result, HttpServletRequest request) {
+        try {
+            // Lấy token từ header
+            String token = request.getHeader("Authorization");
+
+            // Kiểm tra token
+            if (token == null || !token.startsWith("Bearer ")) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token is missing or invalid");
+            }
+
+            // Loại bỏ prefix "Bearer "
+            token = token.substring(7);
+
+            // Xác thực token (giả sử bạn có lớp TokenUtils để xử lý)
+            if (!TokenUtil.validateToken(token)) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid token");
+            }
+
+            // Xử lý lỗi validation từ DTO
+            if (result.hasErrors()) {
+                Map<String, String> errors = result.getFieldErrors().stream()
+                        .collect(Collectors.toMap(
+                                FieldError::getField,
+                                FieldError::getDefaultMessage
+                        ));
+                return ResponseEntity.badRequest().body(errors);
+            }
+
+            // Gọi service để cập nhật user
+            UserDTO updatedUser = userService.update(userDTO);
+
+            return new ResponseEntity<>(updatedUser, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+
     @PutMapping("/update/role")
     public ResponseEntity<?> update(@RequestParam("userid") Long userid, @RequestParam("roleid") Long roleid) {
         try {
