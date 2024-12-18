@@ -24,9 +24,6 @@ public class UserDTO {
     @Pattern(regexp = "^[^\\d]+$", message = "Fullname không được chứa số")
     private String fullname;
 
-    @NotBlank(message = "Password không được để trống")
-    @Size(min = 6, max = 25, message = "Password phải từ 6 đến 25 ký tự")
-    @Pattern(regexp = "^[^\\s]+$", message = "Password không được chứa khoảng trắng")
     private String password;
 
     @NotBlank(message = "Email không được để trống")
