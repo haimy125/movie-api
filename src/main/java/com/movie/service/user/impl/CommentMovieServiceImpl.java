@@ -35,16 +35,16 @@ public class CommentMovieServiceImpl implements CommentMovieService {
 
     @Override
     public List<CommentMovieDTO> getByMovie(Long movieid, Pageable pageable) {
-        List<CommentMovieDTO> UserDTOS = new ArrayList<>();
+        List<CommentMovieDTO> commentMovieDTOS = new ArrayList<>();
         // tìm kiếm tất cả người dùng
         Movie movie = movieRepository.findById(movieid).orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng"));
         List<CommentMovie> list = comment_MovieRepository.findByMovie(movie, pageable);
         // chuyển đổi sang DTO
         for (CommentMovie item : list) {
             CommentMovieDTO commentMovieDto = modelMapper.map(item, CommentMovieDTO.class);
-            UserDTOS.add(commentMovieDto);
+            commentMovieDTOS.add(commentMovieDto);
         }
-        return UserDTOS;
+        return commentMovieDTOS;
     }
 
     @Override
