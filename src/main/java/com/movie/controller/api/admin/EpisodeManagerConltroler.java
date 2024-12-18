@@ -35,6 +35,7 @@ public class EpisodeManagerConltroler {
 
     @GetMapping("/getBymovie/all/{id}")
     public EpisodeResponse getbymovie(@PathVariable Long id) {
+        System.out.println(id);
         EpisodeResponse result = new EpisodeResponse();
         result.setPage(1);
         result.setListResult(episodeService.getByMovie(Long.valueOf(id)));

@@ -1,5 +1,6 @@
 package com.movie.controller.api.user;
 
+import com.movie.config.TokenUtil;
 import com.movie.response.MovieResponse;
 import com.movie.dto.MovieDTO;
 import com.movie.dto.OrderDTO;
@@ -17,13 +18,13 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/user/movie")
 public class MovieController {
-    
+
     @Autowired
     private MovieUserService movie_UserService;
-    
+
     @Autowired
     private MovieService movieService;
-    
+
     @Autowired
     private OrderService orderService;
 
@@ -86,7 +87,21 @@ public class MovieController {
     public ResponseEntity<?> buymovie(@RequestParam("userid") Long userid, @RequestParam("movieid") Long movieid) {
         try {
             UserDTO user = new UserDTO();
-            user.setId(userid);
+//            // Log token để kiểm tra
+//            System.out.println("Authorization Token: " + token);
+//
+//            // Xử lý token
+//            if (token == null || !token.startsWith("Bearer ")) {
+//                return new ResponseEntity<>("Invalid or missing token!", HttpStatus.UNAUTHORIZED);
+//            }
+//
+//            // Loại bỏ tiền tố "Bearer " để lấy token JWT
+//            String jwt = token.substring(7); // Lấy phần sau "Bearer "
+//
+//            // Giải mã JWT (tùy thuộc vào logic xử lý của bạn)
+//            String userId = TokenUtil.getUserIdFromToken(jwt);
+
+            user.setId(Long.valueOf(userid));
             MovieDTO movie = new MovieDTO();
             movie.setId(movieid);
             OrderDTO dto = new OrderDTO();

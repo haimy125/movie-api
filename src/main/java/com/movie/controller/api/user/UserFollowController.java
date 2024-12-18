@@ -21,7 +21,7 @@ public class UserFollowController {
     private UserFollowService userFollowService;
 
     @GetMapping("/getbyuser/{id}")
-    public UserFollowResponse getAll(@PathVariable Long id, @RequestParam("page") int page, @RequestParam("limit") int limit) {
+    public UserFollowResponse getAll(@PathVariable("id") Long id, @RequestParam("page") int page, @RequestParam("limit") int limit) {
         UserFollowResponse result = new UserFollowResponse();
         result.setPage(page);
         Pageable pageable = PageRequest.of(page - 1, limit);
