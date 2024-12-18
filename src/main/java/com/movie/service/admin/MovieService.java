@@ -1,6 +1,7 @@
 package com.movie.service.admin;
 
 import com.movie.dto.MovieDTO;
+import com.movie.dto.UserMovieDetail;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -40,6 +41,7 @@ public interface MovieService {
 
     MovieDTO update(MovieDTO MovieDTO, MultipartFile file, String categorylist, String scheduleList) throws IOException;
 
+    UserMovieDetail getDetail(Long userId, Long movieId);
     void delete(Long id);
 
     int totalItem();

@@ -1,6 +1,7 @@
 package com.movie.controller.api.admin;
 
 import com.movie.config.TokenUtil;
+import com.movie.dto.UserMovieDetail;
 import com.movie.response.MovieResponse;
 import com.movie.dto.MovieDTO;
 import com.movie.dto.UserDTO;
@@ -13,8 +14,6 @@ import org.springframework.http.*;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import javax.imageio.ImageIO;
-import java.io.ByteArrayInputStream;
 import java.math.BigDecimal;
 import java.util.Arrays;
 
@@ -213,6 +212,7 @@ public class MovieManagerController {
 //            return ResponseEntity.notFound().build();
 //        }
 //    }
+
     @GetMapping("/view/{id}")
     public ResponseEntity<byte[]> getFile(@PathVariable Long id) {
         try {
@@ -237,6 +237,16 @@ public class MovieManagerController {
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @GetMapping("/userMovieDetail")
+    public ResponseEntity<?> userMovieDetail(@RequestParam("userId") Long userId, @RequestParam("movieId") Long movieId) {
+        try {
+            UserMovieDetail userMovieDetail = movieService.getDetail(userId, movieId);
+            return new ResponseEntity<>(userMovieDetail, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 

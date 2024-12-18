@@ -1,8 +1,12 @@
 package com.movie.service.admin.impl;
 
 import com.movie.dto.MovieDTO;
+import com.movie.dto.OrderDTO;
+import com.movie.dto.UserFollowDTO;
+import com.movie.dto.UserMovieDetail;
 import com.movie.entity.*;
 import com.movie.repository.admin.*;
+import com.movie.repository.user.UserFollowRepository;
 import com.movie.service.admin.MovieService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +16,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.sql.Date;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -45,6 +48,12 @@ public class MovieServiceImpl implements MovieService {
 
     @Autowired
     private ScheduleRepository scheduleRepository;
+
+    @Autowired
+    private UserFollowRepository userFollowRepository;
+
+    @Autowired
+    private OrderRepository orderRepository;
 
     @Override
     public List<MovieDTO> getAll(Pageable pageable) {
@@ -377,6 +386,30 @@ public class MovieServiceImpl implements MovieService {
         } catch (Exception e) {
             throw new RuntimeException("Có lỗi khi chỉnh sửa bộ phim!");
         }
+    }
+
+    /**
+     * @param userId
+     * @param movieId
+     * @return
+     */
+    @Override
+    public UserMovieDetail getDetail(Long userId, Long movieId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng"));
+
+        Movie movie = movieRepository.findById(movieId).orElseThrow(() -> new RuntimeException("Không tìm thấy bộ phim"));
+        UserMovieDetail userMovieDetail = new UserMovieDetail();
+
+        UserFollowDTO userFollowDTO = (UserFollowDTO) userFollowRepository.findByUserAndMovie(user, movie);
+
+        OrderDTO orderDTO = (OrderDTO) orderRepository.findByUserAndMovie(user, movie);
+
+        MovieDTO movieDTO = modelMapper.map(movie, MovieDTO.class);
+        userMovieDetail.setMovie(movieDTO);
+        userMovieDetail.setFollowed(userFollowDTO != null);
+        userMovieDetail.setBuy(orderDTO != null);
+
+        return userMovieDetail;
     }
 
     @Override
