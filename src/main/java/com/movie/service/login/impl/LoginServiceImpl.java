@@ -71,9 +71,7 @@ public class LoginServiceImpl implements LoginService {
             // mã hóa mật khẩu
             String hashPassword = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt());
             user.setPassword(hashPassword);
-
-            if (user.getFullname() == null || user.getFullname().isEmpty())
-                user.setFullname(user.getFullname());
+            user.setFullname(user.getFullname());
 
             // kiểm tra quyền theo id
             Role role = roleRepository.findById(Long.valueOf(user.getRole().getId())).orElseThrow(() -> new RuntimeException("Không có quyền này!"));

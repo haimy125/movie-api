@@ -105,6 +105,7 @@ public class LoginController {
             user.setPoint(0L);
             user.setRole(getDefaultRole());
             user.setAvatar(loadDefaultAvatar());
+            user.setFullname(user.getFullname());
 
             loginService.registerUser(user);
             return ResponseEntity.ok().body("Registration successful. Please verify your email to activate the account.");
