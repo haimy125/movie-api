@@ -22,8 +22,6 @@ public class TokenUtil {
      * Khóa bí mật được sử dụng để ký các token JWT.
      */
      private static final Key SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
-//    private static final String SECRET_KEY_STRING = System.getenv("JWT_SECRET");
-//    private static final Key SECRET_KEY = Keys.hmacShaKeyFor(SECRET_KEY_STRING.getBytes(StandardCharsets.UTF_8));
 
     /**
      * Tạo một token JWT với ID người dùng và thời gian hết hạn.
