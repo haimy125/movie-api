@@ -74,4 +74,5 @@ public class MovieDTO {
     @Min(value = 1900, message = "Năm phát hành phải lớn hơn hoặc bằng 1900")
     @Max(value = 2100, message = "Năm phát hành phải nhỏ hơn hoặc bằng 2100")
     private Long year;
+
 }

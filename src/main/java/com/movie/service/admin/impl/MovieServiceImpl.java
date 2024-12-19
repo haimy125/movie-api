@@ -396,19 +396,38 @@ public class MovieServiceImpl implements MovieService {
      */
     @Override
     public UserMovieDetail getDetail(Long userId, Long movieId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng"));
 
-        Movie movie = movieRepository.findById(movieId).orElseThrow(() -> new RuntimeException("Không tìm thấy bộ phim"));
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng"));
+
+        Movie movie = movieRepository.findById(movieId)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy bộ phim"));
+
         UserMovieDetail userMovieDetail = new UserMovieDetail();
 
-        UserFollowDTO userFollowDTO = (UserFollowDTO) userFollowRepository.findByUserAndMovie(user, movie);
+        List<UserFollow> userFollows = userFollowRepository.findAll();
 
-        OrderDTO orderDTO = (OrderDTO) orderRepository.findByUserAndMovie(user, movie);
+        for (UserFollow userFollow : userFollows) {
+            if (userFollow.getUser().getId() == userId && userFollow.getMovie().getId() == movieId) {
+                userMovieDetail.setFollowed(true);
+                break;
+            }
+        }
 
+        List<Order> orders = orderRepository.findAll();
+
+        for (Order order : orders) {
+            if (order.getUser().getId() == userId && order.getMovie().getId() == movieId) {
+                userMovieDetail.setBuy(true);
+                break;
+            }
+        }
+
+        // Map movie entity sang DTO
         MovieDTO movieDTO = modelMapper.map(movie, MovieDTO.class);
+
+        // Thiết lập thông tin chi tiết
         userMovieDetail.setMovie(movieDTO);
-        userMovieDetail.setFollowed(userFollowDTO != null);
-        userMovieDetail.setBuy(orderDTO != null);
 
         return userMovieDetail;
     }

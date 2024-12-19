@@ -42,6 +42,7 @@ public interface MovieService {
     MovieDTO update(MovieDTO MovieDTO, MultipartFile file, String categorylist, String scheduleList) throws IOException;
 
     UserMovieDetail getDetail(Long userId, Long movieId);
+
     void delete(Long id);
 
     int totalItem();
