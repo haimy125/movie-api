@@ -248,6 +248,25 @@ public class UserServiceImpl implements UserService {
         return (int) userRepository.count();
     }
 
+    /**
+     * @param email
+     * @return
+     */
+    @Override
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
+    /**
+     * @param user
+     * @param newPassword
+     */
+    @Override
+    public void updatePassword(User user, String newPassword) {
+        user.setPassword(PasswordUtils.hashPassword(newPassword));
+        userRepository.save(user);
+    }
+
     private byte[] loadDefaultAvatar() throws IOException {
         Path defaultAvatarPath = Paths.get("src/main/resources/static/images/Default_Avatar.png");
         try {

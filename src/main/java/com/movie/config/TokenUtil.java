@@ -1,5 +1,6 @@
 package com.movie.config;
 
+import com.movie.entity.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -9,7 +10,9 @@ import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
+import java.security.SignatureException;
 import java.util.Date;
+import java.util.UUID;
 
 /**
  * Lớp tiện ích dùng để xử lý các token JWT.
@@ -41,6 +44,38 @@ public class TokenUtil {
                 .signWith(SECRET_KEY, SignatureAlgorithm.HS256)
                 .compact();
     }
+
+    public static String generateResetToken(User user) {
+        Date now = new Date();
+        Date expirationDate = new Date(now.getTime() + 3600000); // 1 hour
+        return Jwts.builder()
+                .setSubject(user.getEmail())
+                .setIssuedAt(now)
+                .setExpiration(expirationDate)
+                .signWith(SECRET_KEY, SignatureAlgorithm.HS256)
+                .compact();
+    }
+
+    public static String validateResetToken(String token) {
+        try {
+            // Giải mã và xác thực token
+            Jws<Claims> claims = Jwts.parserBuilder()
+                    .setSigningKey(SECRET_KEY) // Khóa bí mật đã dùng để ký token
+                    .build()
+                    .parseClaimsJws(token);
+
+            // Kiểm tra thời gian hết hạn
+            if (claims.getBody().getExpiration().before(new Date())) {
+                throw new IllegalArgumentException("Token đã hết hạn.");
+            }
+
+            // Trả về email từ trường 'subject' trong token
+            return claims.getBody().getSubject();
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Token không hợp lệ.");
+        }
+    }
+
 
     public static String generateRefreshToken1(String subject, long refreshExpirationMillis) {
         return Jwts.builder()

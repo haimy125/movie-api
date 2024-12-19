@@ -1,6 +1,7 @@
 package com.movie.service.admin;
 
 import com.movie.dto.UserDTO;
+import com.movie.entity.User;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
@@ -28,4 +29,8 @@ public interface UserService {
     void delete(Long id);
 
     int totalItem();
+
+    User findByEmail(String email);
+
+    void updatePassword(User user, String newPassword);
 }
