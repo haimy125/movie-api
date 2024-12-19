@@ -71,6 +71,8 @@ public class EpisodeServiceImpl implements EpisodeService {
             dto.setDescription(episode.getDescription());
             dto.setFileEpisodes(null);
             dto.setSubtitles(null);
+            dto.setTimeAdd(episode.getTimeAdd());
+            dto.setTimeUpdate(episode.getTimeUpdate());
             result.add(dto);
         }
         return result;
