@@ -12,6 +12,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Date;
+import java.time.LocalDate;
+
 @RestController
 @RequestMapping("/api/user/comment/episode")
 public class CommentEpisodeController {
@@ -40,6 +43,7 @@ public class CommentEpisodeController {
             commentMovieDto.setEpisode(episodeDto);
             commentMovieDto.setUserAdd(user);
             commentMovieDto.setContent(content);
+            commentMovieDto.setTimeAdd(Date.valueOf(LocalDate.now()));
             comment_Episode_Service.save(commentMovieDto);
             return ResponseEntity.status(HttpStatus.OK).body("success");
         } catch (Exception e) {

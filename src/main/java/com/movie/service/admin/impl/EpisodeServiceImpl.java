@@ -18,6 +18,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -181,6 +183,8 @@ public class EpisodeServiceImpl implements EpisodeService {
             episode.setMovie(movie);
             episode.setUserAdd(useradd);
             episode.setUserUpdate(userupdate);
+            episode.setTimeAdd(Date.valueOf(LocalDate.now()));
+            episode.setTimeUpdate(Date.valueOf(LocalDate.now()));
             episode.setFileEpisodes(file.getBytes());
             if (subtitles != null)
                 episode.setSubtitles(subtitles.getBytes());
@@ -215,7 +219,8 @@ public class EpisodeServiceImpl implements EpisodeService {
             episode.setMovie(episode.getMovie());
             episode.setUserAdd(episode.getUserAdd());
             episode.setUserUpdate(userupdate);
-            episode.setTimeAdd(episode.getTimeAdd());
+            episode.setTimeUpdate(Date.valueOf(LocalDate.now()));
+
             if (file == null)
                 episode.setFileEpisodes(episode.getFileEpisodes());
             else
