@@ -21,7 +21,6 @@ public class UserDTO {
     private String username;
 
     @Size(min = 3, max = 50, message = "Fullname phải từ 3 đến 50 ký tự")
-    @Pattern(regexp = "^[^\\d]+$", message = "Fullname không được chứa số")
     private String fullname;
 
     private String password;
