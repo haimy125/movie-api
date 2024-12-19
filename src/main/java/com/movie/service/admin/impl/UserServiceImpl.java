@@ -110,6 +110,7 @@ public class UserServiceImpl implements UserService {
             User user = modelMapper.map(userDTO, User.class);
             user.setAvatar(loadDefaultAvatar());
             user.setPassword(PasswordUtils.hashPassword(userDTO.getPassword()));
+            user.setTimeAdd(Date.valueOf(LocalDate.now()));
 
             // Lấy Role từ database
             Role role = roleRepository.findById(userDTO.getRole().getId())

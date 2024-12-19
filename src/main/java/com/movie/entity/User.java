@@ -9,6 +9,7 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -34,8 +35,7 @@ public class User {
     private String email;
 
     @Column(name = "time_add", nullable = false, updatable = false)
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Ho_Chi_Minh")
-    private LocalDateTime timeAdd;
+    private Date timeAdd;
 
     @Column(name = "point")
     private Long point;
@@ -61,9 +61,4 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Order> orders;
-
-    @PrePersist
-    protected void onCreate() {
-        this.timeAdd = LocalDateTime.now();
-    }
 }

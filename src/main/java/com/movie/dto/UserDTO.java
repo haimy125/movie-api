@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -30,7 +31,7 @@ public class UserDTO {
     @Email(message = "Email không hợp lệ")
     private String email;
 
-    private LocalDateTime timeAdd;
+    private Date timeAdd;
 
     @Min(value = 0, message = "Điểm phải lớn hơn hoặc bằng 0")
     private Long point;

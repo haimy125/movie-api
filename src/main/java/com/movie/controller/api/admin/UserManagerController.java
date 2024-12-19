@@ -73,6 +73,8 @@ public class UserManagerController {
             // Lấy token từ header
             String token = request.getHeader("Authorization");
 
+            System.out.println(token);
+
             // Kiểm tra token
             if (token == null || !token.startsWith("Bearer ")) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token is missing or invalid");

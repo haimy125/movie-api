@@ -17,7 +17,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.Date;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -98,6 +100,8 @@ public class LoginController {
                 return ResponseEntity.badRequest().body(errors);
             }
 
+            Date currentDate = Date.valueOf(LocalDate.now());
+            user.setTimeAdd(currentDate);
             user.setPoint(0L);
             user.setRole(getDefaultRole());
             user.setAvatar(loadDefaultAvatar());
@@ -115,7 +119,6 @@ public class LoginController {
                     .body("An unknown error occurred during registration. Please try again later.");
         }
     }
-
 
     @GetMapping("/api/checktoken")
     public ResponseEntity<?> checkToken(@RequestParam("token") String token) {
