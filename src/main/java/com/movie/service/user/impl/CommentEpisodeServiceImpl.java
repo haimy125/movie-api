@@ -15,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,6 +66,7 @@ public class CommentEpisodeServiceImpl implements CommentEpisodeService {
             comment_Movie.setUserAdd(user);
             comment_Movie.setEpisode(episodeEnitty);
             comment_Movie.setContent(comment.getContent());
+            comment_Movie.setTimeAdd(Date.valueOf(LocalDate.now()));
             comment_EpisodeRepository.save(comment_Movie);
             return comment;
         } catch (Exception e) {

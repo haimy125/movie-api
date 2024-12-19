@@ -107,7 +107,7 @@ public class UserManagerController {
     }
 
     @PostMapping("/update")
-    public ResponseEntity<?> update(@Valid @RequestBody UserDTO userDTO, BindingResult result, HttpServletRequest request) {
+    public ResponseEntity<?> update(@RequestBody UserDTO userDTO, HttpServletRequest request) {
         try {
             // Lấy token từ header
             String token = request.getHeader("Authorization");
@@ -125,15 +125,15 @@ public class UserManagerController {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid token");
             }
 
-            // Xử lý lỗi validation từ DTO
-            if (result.hasErrors()) {
-                Map<String, String> errors = result.getFieldErrors().stream()
-                        .collect(Collectors.toMap(
-                                FieldError::getField,
-                                FieldError::getDefaultMessage
-                        ));
-                return ResponseEntity.badRequest().body(errors);
-            }
+//            // Xử lý lỗi validation từ DTO
+//            if (result.hasErrors()) {
+//                Map<String, String> errors = result.getFieldErrors().stream()
+//                        .collect(Collectors.toMap(
+//                                FieldError::getField,
+//                                FieldError::getDefaultMessage
+//                        ));
+//                return ResponseEntity.badRequest().body(errors);
+//            }
 
             // Gọi service để cập nhật user
             UserDTO updatedUser = userService.update(userDTO);

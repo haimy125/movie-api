@@ -16,6 +16,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.sql.Date;
+import java.time.LocalDate;
+
 @RestController
 @RequestMapping("/api/admin/episode")
 public class EpisodeManagerConltroler {
@@ -59,7 +62,6 @@ public class EpisodeManagerConltroler {
                                          @RequestParam("likes") Long likes, @RequestParam("movie") Long movie,
                                          @RequestParam(value = "videofile", required = false) MultipartFile videofile, @RequestParam(value = "subfile", required = false) MultipartFile subfile) {
         try {
-
             //Tạo user
             UserDTO user_dto = new UserDTO();
             user_dto.setId(useradd);
@@ -74,6 +76,8 @@ public class EpisodeManagerConltroler {
             episodeDTO.setUserAdd(user_dto);
             episodeDTO.setUserUpdate(user_dto);
             episodeDTO.setMovie(movie_dto);
+            episodeDTO.setTimeAdd(Date.valueOf(LocalDate.now()));
+            episodeDTO.setTimeUpdate(Date.valueOf(LocalDate.now()));
             episodeService.create(episodeDTO, videofile, subfile);
             return new ResponseEntity<>("Thêm mới thành công!", HttpStatus.OK);
         } catch (Exception e) {
@@ -102,6 +106,7 @@ public class EpisodeManagerConltroler {
             episodeDTO.setLikes(likes);
             episodeDTO.setUserAdd(user_dto);
             episodeDTO.setUserUpdate(user_dto);
+            episodeDTO.setTimeUpdate(Date.valueOf(LocalDate.now()));
             episodeDTO.setMovie(movie_dto);
             episodeService.update(episodeDTO, videofile, subfile);
             return new ResponseEntity<>("Thêm mới thành công!", HttpStatus.OK);
