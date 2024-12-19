@@ -58,6 +58,7 @@ public class CommentMovieServiceImpl implements CommentMovieService {
             comment_Movie.setUserAdd(user);
             comment_Movie.setMovie(movie);
             comment_Movie.setContent(comment.getContent());
+            comment_Movie.setTimeAdd(Date.valueOf(LocalDate.now()));
             comment_MovieRepository.save(comment_Movie);
             return comment;
         } catch (Exception e) {

@@ -66,7 +66,7 @@ public class CommentEpisodeServiceImpl implements CommentEpisodeService {
             comment_Movie.setUserAdd(user);
             comment_Movie.setEpisode(episodeEnitty);
             comment_Movie.setContent(comment.getContent());
-            comment_Movie.setTimeAdd(Date.valueOf(LocalDate.now()));
+            comment_Movie.setTimeAdd(comment.getTimeAdd());
             comment_EpisodeRepository.save(comment_Movie);
             return comment;
         } catch (Exception e) {
