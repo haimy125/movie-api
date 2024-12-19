@@ -7,8 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -31,21 +31,10 @@ public class Episode {
     private String description;
 
     @Column(name = "time_add", nullable = false, updatable = false)
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Ho_Chi_Minh")
-    private LocalDateTime timeAdd;
-
-    @PrePersist
-    protected void onCreate() {
-        this.timeAdd = LocalDateTime.now();
-    }
+    private Date timeAdd;
 
     @Column(name = "time_update")
-    private LocalDateTime timeUpdate;
-
-    @PreUpdate
-    private void updateTimeUpdate() {
-        this.timeUpdate = LocalDateTime.now();
-    }
+    private Date timeUpdate;
 
     @Column(name = "file_episodes", length = 10485760) // Tối đa 10MB
     private byte[] fileEpisodes;

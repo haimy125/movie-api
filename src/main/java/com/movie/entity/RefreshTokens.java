@@ -6,8 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.sql.Date;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
 @Table(name = "refresh_tokens")
@@ -29,8 +28,8 @@ public class RefreshTokens {
     private String refreshToken;
 
     @Column(name = "expiration_date", nullable = false)
-    private LocalDateTime expirationDate;
+    private Date expirationDate;
 
     @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
+    private Date createdAt;
 }

@@ -6,11 +6,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.aspectj.weaver.ast.Or;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -43,24 +42,10 @@ public class Movie {
     private String imageBase64;
 
     @Column(name = "time_add", nullable = false, updatable = false)
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Ho_Chi_Minh")
-    private LocalDateTime timeAdd;
+    private Date timeAdd;
 
     @Column(name = "time_update")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Ho_Chi_Minh")
-    private LocalDateTime timeUpdate;
-
-    // Tự động gán thời gian thêm
-    @PrePersist
-    protected void onCreate() {
-        this.timeAdd = LocalDateTime.now();
-    }
-
-    // Tự động cập nhật thời gian
-    @PreUpdate
-    protected void onUpdate() {
-        this.timeUpdate = LocalDateTime.now();
-    }
+    private Date timeUpdate;
 
     @Column(name = "author")
     private String author;

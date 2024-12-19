@@ -7,7 +7,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -31,23 +30,10 @@ public class Schedule {
     private String description;
 
     @Column(name = "time_add", nullable = false, updatable = false)
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Ho_Chi_Minh")
-    private LocalDateTime timeAdd;
-
-    // Phương thức tự động gán thời gian trước khi lưu
-    @PrePersist
-    protected void onCreate() {
-        this.timeAdd = LocalDateTime.now();
-    }
+    private Date timeAdd;
 
     @Column(name = "time_update")
-    @Temporal(TemporalType.TIMESTAMP)
-    private LocalDateTime timeUpdate;
-
-    @PreUpdate
-    private void updateTimeUpdate() {
-        this.timeUpdate = LocalDateTime.now();
-    }
+    private Date timeUpdate;
 
     @ManyToOne
     @JoinColumn(name = "user_add_id")

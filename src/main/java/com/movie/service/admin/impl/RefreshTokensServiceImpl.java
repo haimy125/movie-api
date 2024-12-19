@@ -6,6 +6,8 @@ import com.movie.service.admin.RefreshTokensService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
@@ -24,42 +26,44 @@ public class RefreshTokensServiceImpl implements RefreshTokensService {
      */
     @Override
     public void create(Long userId, String refreshToken, long expirationMillis) {
-        // Chuyển thời gian hết hạn từ mili giây sang LocalDateTime
-        LocalDateTime expirationDate = LocalDateTime.now().plus(expirationMillis, ChronoUnit.MILLIS);
 
         // Tạo mới đối tượng RefreshTokens
         RefreshTokens refreshTokenEntity = new RefreshTokens();
         refreshTokenEntity.setUserId(userId);
         refreshTokenEntity.setRefreshToken(refreshToken);
-        refreshTokenEntity.setExpirationDate(expirationDate);
-        refreshTokenEntity.setCreatedAt(LocalDateTime.now());
+        refreshTokenEntity.setExpirationDate(Date.valueOf(LocalDate.now()));
+        refreshTokenEntity.setCreatedAt(Date.valueOf(LocalDate.now()));
 
         // Lưu RefreshTokenEntity vào cơ sở dữ liệu
         refreshTokensRepository.save(refreshTokenEntity);
     }
 
     /**
-     * @param refreshToken
-     * @return
+     * Xác thực refresh token.
+     *
+     * @param refreshToken Chuỗi refresh token cần xác thực.
+     * @return RefreshTokens nếu token hợp lệ, null nếu không hợp lệ hoặc đã hết hạn.
      */
     @Override
     public RefreshTokens validateRefreshToken(String refreshToken) {
-        // Tìm refresh token trong cơ sở dữ liệu
+        // Tìm kiếm token trong cơ sở dữ liệu
         RefreshTokens storedToken = refreshTokensRepository.findByRefreshToken(refreshToken);
 
+        // Nếu token không tồn tại
         if (storedToken == null) {
-            // Không tìm thấy token
             return null;
         }
 
-        // Kiểm tra xem token đã hết hạn hay chưa
-        if (storedToken.getExpirationDate().isBefore(LocalDateTime.now())) {
-            // Token đã hết hạn, có thể xóa khỏi DB nếu cần
+        // Kiểm tra hạn sử dụng của token
+        boolean isTokenExpired = storedToken.getExpirationDate().before(Date.valueOf(LocalDate.now()));
+
+        if (isTokenExpired) {
+            // Xóa token đã hết hạn khỏi cơ sở dữ liệu
             refreshTokensRepository.delete(storedToken);
             return null;
         }
 
-        // Token hợp lệ
+        // Trả về token hợp lệ
         return storedToken;
     }
 
