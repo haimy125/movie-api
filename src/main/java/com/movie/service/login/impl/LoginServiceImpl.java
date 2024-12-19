@@ -73,7 +73,7 @@ public class LoginServiceImpl implements LoginService {
             user.setPassword(hashPassword);
 
             if (user.getFullname() == null || user.getFullname().isEmpty())
-                user.setFullname(user.getUsername());
+                user.setFullname(user.getFullname());
 
             // kiểm tra quyền theo id
             Role role = roleRepository.findById(Long.valueOf(user.getRole().getId())).orElseThrow(() -> new RuntimeException("Không có quyền này!"));
