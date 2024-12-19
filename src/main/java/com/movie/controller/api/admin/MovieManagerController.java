@@ -17,8 +17,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.math.BigDecimal;
 import java.util.Arrays;
 
-import org.apache.tika.Tika;
-
 @RestController
 @RequestMapping("/api/admin/movies")
 public class MovieManagerController {
@@ -134,7 +132,6 @@ public class MovieManagerController {
             @RequestParam("new_movie") Boolean newMovie, // Kiểu Boolean
             @RequestParam("hot_movie") Boolean hotMovie, // Kiểu Boolean
             @RequestParam("vip_movie") Boolean vipMovie, // Kiểu Boolean
-            // Các tham số khác giữ nguyên
             @RequestParam("vn_name") String vnName,
             @RequestParam("cn_name") String cnName,
             @RequestParam("description") String description,

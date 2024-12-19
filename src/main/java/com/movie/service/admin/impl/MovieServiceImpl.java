@@ -357,6 +357,7 @@ public class MovieServiceImpl implements MovieService {
             movie.setVipMovie(movieDTO.getVipMovie());
             movie.setYear(movieDTO.getYear());
             movie.setEpisodeNumber(movieDTO.getEpisodeNumber());
+            movie.setStatus(movieDTO.getStatus());
             Movie movie_update = movieRepository.save(movie);
             List<CategoryMovie> CategoryMovie = categoryMovieRepository.findByMovie(movie);
             for (CategoryMovie CategoryMovie1 : CategoryMovie) {
