@@ -45,9 +45,6 @@ public class LoginController {
     @Autowired
     private RefreshTokensService refreshTokensService;
 
-    @Autowired
-    private FileStorageService fileStorageService;
-
     @PostMapping("/api/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
         try {
@@ -56,7 +53,7 @@ public class LoginController {
             user.setPassword(null); // Không trả mật khẩu trong phản hồi
 
             // Thời gian sống của các token
-            long accessTokenExpirationMillis = 1L * 24 * 60 * 60 * 1000; // 1 ngày
+            long accessTokenExpirationMillis = 10L * 24 * 60 * 60 * 1000; // 1 ngày
             long refreshTokenExpirationMillis = 30L * 24 * 60 * 60 * 1000; // 30 ngày
 
             // Tạo AccessToken và RefreshToken
@@ -84,10 +81,10 @@ public class LoginController {
 
         } catch (InvalidCredentialsException e) {
             // Xử lý lỗi thông tin đăng nhập
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Tên đăng nhập hoặc mật khẩu không hợp lệ.");
         } catch (Exception e) {
             // Xử lý các lỗi khác
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred during login.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Đã xảy ra lỗi trong quá trình đăng nhập.");
         }
     }
 
@@ -108,16 +105,16 @@ public class LoginController {
             user.setFullname(user.getFullname());
 
             loginService.registerUser(user);
-            return ResponseEntity.ok().body("Registration successful. Please verify your email to activate the account.");
+            return ResponseEntity.ok().body("Đăng ký thành công. Vui lòng xác minh email để kích hoạt tài khoản.");
 
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Cannot read default avatar file. Please check server configuration.");
+                    .body("Không thể đọc tệp avatar mặc định. Vui lòng kiểm tra cấu hình máy chủ.");
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("An unknown error occurred during registration. Please try again later.");
+                    .body("Đã xảy ra lỗi không xác định trong quá trình đăng ký. Vui lòng thử lại sau.");
         }
     }
 

@@ -114,7 +114,7 @@ public class UserManagerController {
 
             // Kiểm tra token
             if (token == null || !token.startsWith("Bearer ")) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token is missing or invalid");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token bị thiếu hoặc không hợp lệ");
             }
 
             // Loại bỏ prefix "Bearer "
@@ -122,7 +122,7 @@ public class UserManagerController {
 
             // Xác thực token (giả sử bạn có lớp TokenUtils để xử lý)
             if (!TokenUtil.validateToken(token)) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid token");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token không hợp lệ");
             }
 
 //            // Xử lý lỗi validation từ DTO
@@ -180,7 +180,7 @@ public class UserManagerController {
     public ResponseEntity<String> delete(@PathVariable Long id) {
         try {
             userService.delete(id);
-            return ResponseEntity.ok("Xoa thanh cong");
+            return ResponseEntity.ok("Xoá thành công");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

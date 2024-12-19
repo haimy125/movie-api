@@ -97,35 +97,6 @@ public class MovieManagerController {
         }
     }
 
-    //    @PostMapping("/create")
-//    public ResponseEntity<String> create(@RequestParam("vn_name") String vn_name, @RequestParam("cn_name") String cn_name, @RequestParam("description") String description, @RequestParam("user_add") Long user_add, @RequestParam("author") String author, @RequestParam("categorylist") String categorylist, @RequestParam("episode_number") Long episode_number, @RequestParam("status") String status, @RequestParam("new_movie") Boolean new_movie, @RequestParam("hot_movie") Boolean hot_movie, @RequestParam("vip_movie") Boolean vip_movie, @RequestParam("price") BigDecimal price, @RequestParam("image") MultipartFile file, @RequestParam("year") Long year, @RequestParam("schedulelist") String schedulelist) {
-//        try {
-//
-//            //Tạo user
-//            UserDTO user_dto = new UserDTO();
-//            user_dto.setId(user_add);
-//            //Tạo movie
-//            MovieDTO movie_dto = new MovieDTO();
-//            movie_dto.setCnName(cn_name);
-//            movie_dto.setVnName(vn_name);
-//            movie_dto.setDescription(description);
-//            movie_dto.setUserAdd(user_dto);
-//            movie_dto.setUserUpdate(user_dto);
-//            movie_dto.setAuthor(author);
-//            movie_dto.setEpisodeNumber(episode_number);
-//            movie_dto.setStatus(status);
-//            movie_dto.setNewMovie(new_movie);
-//            movie_dto.setHotMovie(hot_movie);
-//            movie_dto.setVipMovie(vip_movie);
-//            movie_dto.setPrice(price);
-//            movie_dto.setTotalViews(0L);
-//            movie_dto.setYear(year);
-//            movieService.create(movie_dto, file, categorylist, schedulelist);
-//            return new ResponseEntity<>("Thêm mới thành công!", HttpStatus.OK);
-//        } catch (Exception e) {
-//            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-//        }
-    //    }
     @PutMapping("/update/{id}")
     public ResponseEntity<String> update(
             @PathVariable("id") Long id,

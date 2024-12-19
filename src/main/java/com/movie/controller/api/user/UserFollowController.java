@@ -52,7 +52,7 @@ public class UserFollowController {
     public ResponseEntity<?> deleteFollow(@PathVariable Long id) {
         try {
             userFollowService.delete(id);
-            return new ResponseEntity<>("Xoa thanh cong", HttpStatus.OK);
+            return new ResponseEntity<>("Xoá thành công", HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
