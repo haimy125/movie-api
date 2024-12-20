@@ -3,7 +3,6 @@ package com.movie.controller.api.login;
 import com.movie.config.TokenUtil;
 import com.movie.entity.User;
 import com.movie.service.EmailService;
-import com.movie.service.TokenService;
 import com.movie.service.admin.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

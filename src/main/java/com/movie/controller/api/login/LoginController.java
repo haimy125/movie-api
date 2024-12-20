@@ -7,7 +7,6 @@ import com.movie.entity.RefreshTokens;
 import com.movie.exceptions.InvalidCredentialsException;
 import com.movie.request.LoginRequest;
 import com.movie.response.NotificationResponse;
-import com.movie.service.FileStorageService;
 import com.movie.service.admin.RefreshTokensService;
 import com.movie.service.login.LoginService;
 import com.movie.service.user.NotificationService;
