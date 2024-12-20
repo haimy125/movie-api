@@ -57,4 +57,14 @@ public class UserFollowController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<?> deleteFollowByUserIdAndMovieId(@RequestParam("userid") Long userid, @RequestParam("movieid") Long movieid) {
+        try {
+            userFollowService.deleteByUserIdAndMovieId(userid, movieid);
+            return new ResponseEntity<>("Xoá thành công", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
 }

@@ -74,4 +74,30 @@ public class UserFollowServiceImpl implements UserFollowService {
     public int totalItem() {
         return (int) userFollowRepository.count();
     }
+
+    /**
+     * @param userId
+     * @param movieId
+     */
+    @Override
+    public void deleteByUserIdAndMovieId(Long userId, Long movieId) {
+        // Tìm User, nếu không tìm thấy, ném ngoại lệ
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng"));
+
+        // Tìm Movie, nếu không tìm thấy, ném ngoại lệ
+        Movie movie = movieRepository.findById(movieId)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy phim"));
+
+        // Lấy danh sách UserFollow theo User và Movie
+        List<UserFollow> userFollows = userFollowRepository.findByUserAndMovie(user, movie);
+
+        // Nếu không tồn tại UserFollow nào, ném ngoại lệ
+        if (userFollows.isEmpty()) {
+            throw new RuntimeException("Không tìm thấy dữ liệu liên kết giữa người dùng và phim");
+        }
+
+        // Xóa UserFollow đầu tiên trong danh sách
+        userFollowRepository.delete(userFollows.get(0));
+    }
 }

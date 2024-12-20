@@ -14,4 +14,6 @@ public interface UserFollowService {
     void delete(Long id);
 
     int totalItem();
+
+    void deleteByUserIdAndMovieId(Long userid, Long movieid);
 }
