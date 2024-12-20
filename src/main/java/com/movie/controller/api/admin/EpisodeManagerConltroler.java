@@ -109,7 +109,7 @@ public class EpisodeManagerConltroler {
             episodeDTO.setTimeUpdate(Date.valueOf(LocalDate.now()));
             episodeDTO.setMovie(movie_dto);
             episodeService.update(episodeDTO, videofile, subfile);
-            return new ResponseEntity<>("Thêm mới thành công!", HttpStatus.OK);
+            return new ResponseEntity<>("Update thành công!", HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }

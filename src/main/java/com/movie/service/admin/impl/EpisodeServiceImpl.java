@@ -215,6 +215,7 @@ public class EpisodeServiceImpl implements EpisodeService {
             Episode episode = episodeRepository.findById(Long.valueOf(episodeDTO.getId())).orElseThrow(() -> new RuntimeException("Không tìm thấy tập phim nào có id là " + episodeDTO.getId()));
 
             User userupdate = userRepository.findById(Long.valueOf(episodeDTO.getUserUpdate().getId())).orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng nào có id là " + episodeDTO.getUserUpdate().getId()));
+
             episode.setName(episodeDTO.getName());
             episode.setViews(episodeDTO.getViews());
             episode.setLikes(episodeDTO.getLikes());
@@ -222,6 +223,7 @@ public class EpisodeServiceImpl implements EpisodeService {
             episode.setUserAdd(episode.getUserAdd());
             episode.setUserUpdate(userupdate);
             episode.setTimeUpdate(Date.valueOf(LocalDate.now()));
+            episode.setDescription(episodeDTO.getDescription());
 
             if (file == null)
                 episode.setFileEpisodes(episode.getFileEpisodes());
@@ -231,6 +233,7 @@ public class EpisodeServiceImpl implements EpisodeService {
                 episode.setSubtitles(episode.getSubtitles());
             else
                 episode.setSubtitles(subtitles.getBytes());
+
             episodeRepository.save(episode);
             EpisodeDTO result = modelMapper.map(episode, EpisodeDTO.class);
             return result;
