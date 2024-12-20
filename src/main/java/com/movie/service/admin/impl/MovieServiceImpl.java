@@ -344,6 +344,7 @@ public class MovieServiceImpl implements MovieService {
                 schedule.setId(id);
                 scheduleEntities.add(schedule);
             }
+
             movie.setId(movieDTO.getId());
             movie.setVnName(movieDTO.getVnName());
             movie.setCnName(movieDTO.getCnName());
@@ -360,6 +361,7 @@ public class MovieServiceImpl implements MovieService {
             movie.setDescription(movieDTO.getDescription());
             movie.setEpisodeNumber(movieDTO.getEpisodeNumber());
             movie.setStatus(movieDTO.getStatus());
+
             Movie movie_update = movieRepository.save(movie);
             List<CategoryMovie> CategoryMovie = categoryMovieRepository.findByMovie(movie);
             for (CategoryMovie CategoryMovie1 : CategoryMovie) {
@@ -372,6 +374,7 @@ public class MovieServiceImpl implements MovieService {
                 CategoryMovieupdate.setMovie(movie_update);
                 categoryMovieRepository.save(CategoryMovieupdate);
             }
+
             List<ScheduleMovie> ScheduleMovie = scheduleMovieRepository.findByMovie(movie);
             for (ScheduleMovie item : ScheduleMovie) {
                 scheduleMovieRepository.delete(item);
