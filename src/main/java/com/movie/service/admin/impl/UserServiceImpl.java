@@ -8,6 +8,7 @@ import com.movie.entity.User;
 import com.movie.repository.admin.NotificationRepository;
 import com.movie.repository.admin.RoleRepository;
 import com.movie.repository.admin.UserRepository;
+import com.movie.service.FileStorageService;
 import com.movie.service.admin.UserService;
 import com.movie.utils.PasswordUtils;
 import org.modelmapper.ModelMapper;
@@ -38,6 +39,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private NotificationRepository notificationRepository;
+
+    @Autowired
+    private FileStorageService fileStorageService;
 
     // hiển thị tất cả người dùng
     @Override
@@ -108,7 +112,7 @@ public class UserServiceImpl implements UserService {
         try {
             // Map UserDTO sang User entity
             User user = modelMapper.map(userDTO, User.class);
-            user.setAvatar(loadDefaultAvatar());
+            user.setAvatar(fileStorageService.loadFile("Default_Avatar.png").getURL().toString());
             user.setPassword(PasswordUtils.hashPassword(userDTO.getPassword()));
             user.setTimeAdd(Date.valueOf(LocalDate.now()));
 

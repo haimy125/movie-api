@@ -7,6 +7,7 @@ import com.movie.dto.UserMovieDetail;
 import com.movie.entity.*;
 import com.movie.repository.admin.*;
 import com.movie.repository.user.UserFollowRepository;
+import com.movie.service.FileStorageService;
 import com.movie.service.admin.MovieService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,6 +56,9 @@ public class MovieServiceImpl implements MovieService {
     @Autowired
     private OrderRepository orderRepository;
 
+    @Autowired
+    private FileStorageService fileStorageService;
+
     @Override
     public List<MovieDTO> getAll(Pageable pageable) {
         List<MovieDTO> result = new ArrayList<>();
@@ -76,7 +80,8 @@ public class MovieServiceImpl implements MovieService {
         for (Movie movie : Movie) {
             MovieDTO dto = modelMapper.map(movie, MovieDTO.class);
 //            dto.setImageUrl(Base64.getEncoder().encodeToString(movie.getImageUrl()).getBytes());
-            dto.setImageUrl(Base64.getEncoder().encode(movie.getImageUrl()));
+//            dto.setImageUrl(Base64.getEncoder().encode(movie.getImageUrl()));
+            dto.setImageUrl(fileStorageService.loadFile(movie.getImageUrl()).getFilename());
             result.add(dto);
         }
         return result;
@@ -89,7 +94,7 @@ public class MovieServiceImpl implements MovieService {
         if (Movie == null) throw new RuntimeException("Không có bộ phim hot nào");
         for (Movie movie : Movie) {
             MovieDTO dto = modelMapper.map(movie, MovieDTO.class);
-            dto.setImageUrl(Base64.getEncoder().encode(movie.getImageUrl()));
+//            dto.setImageUrl(Base64.getEncoder().encode(movie.getImageUrl()));
             result.add(dto);
         }
         return result;
@@ -102,7 +107,7 @@ public class MovieServiceImpl implements MovieService {
         if (movies == null) throw new RuntimeException("Không có bộ phim trả phí nào");
         for (Movie movie : movies) {
             MovieDTO dto = modelMapper.map(movie, MovieDTO.class);
-            dto.setImageUrl(Base64.getEncoder().encode(movie.getImageUrl()));
+//            dto.setImageUrl(Base64.getEncoder().encode(movie.getImageUrl()));
             result.add(dto);
         }
         return result;
@@ -115,7 +120,7 @@ public class MovieServiceImpl implements MovieService {
         if (movies == null) throw new RuntimeException("Không có bộ phim trả phí nào");
         for (Movie movie : movies) {
             MovieDTO dto = modelMapper.map(movie, MovieDTO.class);
-            dto.setImageUrl(Base64.getEncoder().encode(movie.getImageUrl()));
+//            dto.setImageUrl(Base64.getEncoder().encode(movie.getImageUrl()));
             result.add(dto);
         }
         return result;
@@ -282,7 +287,7 @@ public class MovieServiceImpl implements MovieService {
 
             movieEntity.setUserAdd(userEntity);
             movieEntity.setUserUpdate(userEntity);
-            movieEntity.setImageUrl(file.getBytes());
+            movieEntity.setImageUrl(fileStorageService.saveFile(file));
 
             // Đặt thời gian thêm mới và cập nhật (trong trường hợp cần)
             movieEntity.setTimeAdd(Date.valueOf(LocalDate.now()));
@@ -321,9 +326,11 @@ public class MovieServiceImpl implements MovieService {
             if (movieDTO == null) throw new RuntimeException("Bạn chưa nhập dữ liệu!");
             Movie movie = movieRepository.findById(Long.valueOf(movieDTO.getId())).orElseThrow(() -> new RuntimeException("Không tìm thấy bộ phim"));
             User User = userRepository.findById(Long.valueOf(movieDTO.getUserUpdate().getId())).orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng"));
-            if (file == null) movieDTO.setImageUrl(movie.getImageUrl());
+//            String filePath = fileStorageService.saveFile(file);
 
-            else movieDTO.setImageUrl(file.getBytes());
+            if (file == null) movieDTO.setImageUrl(movie.getImageUrl());
+            else movieDTO.setImageUrl(file.getOriginalFilename());
+
             if (categorylist == null) throw new RuntimeException("Vui là chọn thể loại của bộ phim!");
             List<String> categoryIds = Arrays.asList(categorylist.split(","));
             List<Category> list = new ArrayList<>();

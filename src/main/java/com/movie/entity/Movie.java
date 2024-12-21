@@ -34,9 +34,10 @@ public class Movie {
     @Column(name = "description")
     private String description;
 
-    @Lob // Đảm bảo sử dụng annotation @Lob cho dữ liệu lớn như byte[]
+//    @Lob // Đảm bảo sử dụng annotation @Lob cho dữ liệu lớn như byte[]
     @Column(name = "image_url")
-    private byte[] imageUrl;
+    private String imageUrl;
+//    private byte[] imageUrl;
 
     @Column(name = "image_base64", length = Integer.MAX_VALUE)
     private String imageBase64;

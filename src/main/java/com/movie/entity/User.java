@@ -40,7 +40,8 @@ public class User {
     private Long point;
 
     @Column(name = "avatar")
-    private byte[] avatar;
+    private String avatar;
+//    private byte[] avatar;
 
     @Column(name = "status")
     private Boolean status;

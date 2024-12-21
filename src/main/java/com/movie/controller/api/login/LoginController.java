@@ -7,12 +7,14 @@ import com.movie.entity.RefreshTokens;
 import com.movie.exceptions.InvalidCredentialsException;
 import com.movie.request.LoginRequest;
 import com.movie.response.NotificationResponse;
+import com.movie.service.FileStorageService;
 import com.movie.service.admin.RefreshTokensService;
 import com.movie.service.login.LoginService;
 import com.movie.service.user.NotificationService;
 import jakarta.validation.Valid;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -24,6 +26,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.*;
@@ -43,6 +46,9 @@ public class LoginController {
 
     @Autowired
     private RefreshTokensService refreshTokensService;
+
+    @Autowired
+    private FileStorageService fileStorageService;
 
     @PostMapping("/api/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
@@ -100,21 +106,41 @@ public class LoginController {
             user.setTimeAdd(currentDate);
             user.setPoint(0L);
             user.setRole(getDefaultRole());
-            user.setAvatar(loadDefaultAvatar());
+
+            // Lấy file avatar mặc định từ thư mục ngoài
+            String defaultAvatarFileName = "Default_Avatar.png";
+
+            try {
+                // Lấy tên file đã lưu từ hệ thống
+                String savedAvatarFileName = getFileFromExternalPathAndSave(defaultAvatarFileName);
+
+                // Lưu tên file vào cơ sở dữ liệu
+                user.setAvatar(savedAvatarFileName);
+            } catch (Exception e) {
+                throw new RuntimeException("Failed to set default avatar", e);
+            }
+
             user.setFullname(user.getFullname());
 
             loginService.registerUser(user);
             return ResponseEntity.ok().body("Đăng ký thành công. Vui lòng xác minh email để kích hoạt tài khoản.");
 
-        } catch (IOException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Không thể đọc tệp avatar mặc định. Vui lòng kiểm tra cấu hình máy chủ.");
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Đã xảy ra lỗi không xác định trong quá trình đăng ký. Vui lòng thử lại sau.");
         }
+    }
+
+    public String getFileFromExternalPathAndSave(String fileName) throws IOException {
+        Path path = Paths.get(System.getProperty("user.home"), "Documents", "uploads", fileName);
+        String contentType = Files.probeContentType(path);
+        byte[] content = Files.readAllBytes(path);
+
+        // Tạo tên file mới hoặc sử dụng file cũ
+        String savedFileName = fileStorageService.saveFile(content, fileName);
+        return savedFileName;
     }
 
     @GetMapping("/api/checktoken")
@@ -183,21 +209,62 @@ public class LoginController {
         }
     }
 
+//    @GetMapping("/api/view/{id}")
+//    public ResponseEntity<byte[]> viewFile(@PathVariable Long id) {
+//        UserDTO fileDTO = loginService.userByid(id);
+//        if (fileDTO != null && fileDTO.getAvatar() != null) {
+//            return ResponseEntity.ok()
+//                    .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + fileDTO.getId() + "\"")
+//                    .contentType(MediaType.IMAGE_PNG)
+//                    .contentType(MediaType.IMAGE_JPEG)
+//                    .contentType(MediaType.IMAGE_GIF)
+//                    .body(fileDTO.getAvatar());
+//        } else {
+//            return ResponseEntity.notFound().build();
+//        }
+//    }
+
     @GetMapping("/api/view/{id}")
-    public ResponseEntity<byte[]> viewFile(@PathVariable Long id) {
-        UserDTO fileDTO = loginService.userByid(id);
-        if (fileDTO != null && fileDTO.getAvatar() != null) {
+    public ResponseEntity<?> viewFile(@PathVariable Long id) {
+        try {
+            // Lấy thông tin user từ service
+            UserDTO userDTO = loginService.userByid(id);
+
+            // Kiểm tra nếu không tìm thấy user hoặc không có avatar
+            if (userDTO == null || userDTO.getAvatar() == null || userDTO.getAvatar().isEmpty()) {
+                return ResponseEntity.notFound().build();
+            }
+
+            // Tải file từ đường dẫn lưu trong cơ sở dữ liệu sử dụng loadFile
+            Resource fileResource = fileStorageService.loadFile(userDTO.getAvatar());
+
+            // Kiểm tra nếu file không tồn tại hoặc không đọc được
+            if (fileResource == null || !fileResource.exists() || !fileResource.isReadable()) {
+                return ResponseEntity.notFound().build();
+            }
+
+            // Xác định MIME type của file
+            Path filePath = Paths.get(userDTO.getAvatar()).normalize();
+            String mimeType = Files.probeContentType(filePath);
+            if (mimeType == null) {
+                mimeType = "application/octet-stream"; // MIME mặc định nếu không xác định được
+            }
+
+            // Trả về ResponseEntity với dữ liệu file
             return ResponseEntity.ok()
-                    .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + fileDTO.getId() + "\"")
-                    .contentType(MediaType.IMAGE_PNG)
-                    .contentType(MediaType.IMAGE_JPEG)
-                    .contentType(MediaType.IMAGE_GIF)
-                    .body(fileDTO.getAvatar());
-        } else {
-            return ResponseEntity.notFound().build();
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + filePath.getFileName().toString() + "\"")
+                    .contentType(MediaType.parseMediaType(mimeType))
+                    .body(fileResource);
+
+        } catch (MalformedURLException e) {
+            return ResponseEntity.badRequest().body("URL không hợp lệ.");
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Lỗi khi tải file.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
-
 
     @GetMapping("/api/notificaion/user/{id}")
     public NotificationResponse getAll(@PathVariable Long id, @RequestParam("page") int page, @RequestParam("limit") int limit) {

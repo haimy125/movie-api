@@ -36,7 +36,8 @@ public class UserDTO {
 
     private RoleDTO role;
 
-    private byte[] avatar;
+//    private byte[] avatar;
+    private String avatar;
 
     private Boolean status;
 

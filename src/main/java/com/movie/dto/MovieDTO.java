@@ -24,7 +24,8 @@ public class MovieDTO {
     @Size(max = 1000, message = "Mô tả không được vượt quá 1000 ký tự")
     private String description;
 
-    private byte[] imageUrl; // Có thể không bắt buộc, tuỳ nhu cầu hệ thống
+//    private byte[] imageUrl; // Có thể không bắt buộc, tuỳ nhu cầu hệ thống
+    private String imageUrl;
 
     @NotNull(message = "Thời gian thêm không được để trống")
     @PastOrPresent(message = "Thời gian thêm phải là thời điểm hiện tại hoặc trước đó")

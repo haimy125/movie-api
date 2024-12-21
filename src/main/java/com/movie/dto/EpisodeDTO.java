@@ -47,7 +47,9 @@ public class EpisodeDTO {
     private MovieDTO movie;
 
     @NotNull(message = "File tập phim không được để trống")
-    private byte[] fileEpisodes;
+//    private byte[] fileEpisodes;
+    private String fileEpisodes;
 
-    private byte[] subtitles; // Không bắt buộc, có thể để null
+    private String subtitles;
+//    private byte[] subtitles; // Không bắt buộc, có thể để null
 }

@@ -5,17 +5,23 @@ import com.movie.dto.UserMovieDetail;
 import com.movie.response.MovieResponse;
 import com.movie.dto.MovieDTO;
 import com.movie.dto.UserDTO;
+import com.movie.service.FileStorageService;
 import com.movie.service.admin.MovieService;
-import com.movie.utils.MimeTypeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.*;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.Arrays;
+import java.net.MalformedURLException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @RestController
 @RequestMapping("/api/admin/movies")
@@ -23,6 +29,9 @@ public class MovieManagerController {
 
     @Autowired
     private MovieService movieService;
+
+    @Autowired
+    private FileStorageService fileStorageService;
 
     @GetMapping("/all")
     public MovieResponse getAll(@RequestParam("page") int page, @RequestParam("limit") int limit) {
@@ -181,32 +190,73 @@ public class MovieManagerController {
 //        }
 //    }
 
+//    @GetMapping("/view/{id}")
+//    public ResponseEntity<byte[]> getFile(@PathVariable Long id) {
+//        try {
+//            // Lấy MovieDTO từ service
+//            MovieDTO movie = movieService.getById(id);
+//
+//            if (movie == null || movie.getImageUrl() == null || movie.getImageUrl().length == 0) {
+//                return ResponseEntity.notFound().build(); // Không tìm thấy movie hoặc không có file
+//            }
+//
+//            // Xác định MIME type từ dữ liệu file
+//            String mimeType = MimeTypeUtil.detectMimeType(movie.getImageUrl());
+//
+//            // Trả về ResponseEntity với dữ liệu file
+//            return ResponseEntity.ok()
+//                    .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"movie_" + id + getFileExtension(mimeType) + "\"")
+//                    .contentType(MediaType.parseMediaType(mimeType))
+//                    .body(movie.getImageUrl());
+//        } catch (IllegalArgumentException e) {
+//            return ResponseEntity.badRequest().body(null); // Dữ liệu không hợp lệ
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+//        }
+//    }
+
     @GetMapping("/view/{id}")
-    public ResponseEntity<byte[]> getFile(@PathVariable Long id) {
+    public ResponseEntity<?> getFile(@PathVariable Long id) {
         try {
             // Lấy MovieDTO từ service
             MovieDTO movie = movieService.getById(id);
-            System.out.println(Arrays.toString(movie.getImageUrl()));
 
-            if (movie == null || movie.getImageUrl() == null || movie.getImageUrl().length == 0) {
-                return ResponseEntity.notFound().build(); // Không tìm thấy movie hoặc không có file
+            // Kiểm tra nếu không tìm thấy movie hoặc không có đường dẫn file
+            if (movie == null || movie.getImageUrl() == null || movie.getImageUrl().isEmpty()) {
+                return ResponseEntity.notFound().build();
             }
 
-            // Xác định MIME type từ dữ liệu file
-            String mimeType = MimeTypeUtil.detectMimeType(movie.getImageUrl());
+            // Tải file từ đường dẫn lưu trong cơ sở dữ liệu sử dụng loadFile
+            Resource fileResource = fileStorageService.loadFile(movie.getImageUrl());
+
+            // Kiểm tra nếu file không tồn tại hoặc không đọc được
+            if (fileResource == null || !fileResource.exists() || !fileResource.isReadable()) {
+                return ResponseEntity.notFound().build();
+            }
+
+            // Xác định MIME type của file
+            Path filePath = Paths.get(movie.getImageUrl()).normalize();
+            String mimeType = Files.probeContentType(filePath);
+            if (mimeType == null) {
+                mimeType = "application/octet-stream"; // MIME mặc định nếu không xác định được
+            }
 
             // Trả về ResponseEntity với dữ liệu file
             return ResponseEntity.ok()
-                    .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"movie_" + id + getFileExtension(mimeType) + "\"")
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + filePath.getFileName().toString() + "\"")
                     .contentType(MediaType.parseMediaType(mimeType))
-                    .body(movie.getImageUrl());
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(null); // Dữ liệu không hợp lệ
+                    .body(fileResource);
+        } catch (MalformedURLException e) {
+            return ResponseEntity.badRequest().body("Lỗi khi tải file: URL không hợp lệ.");
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Lỗi khi đọc file.");
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
 
     @GetMapping("/userMovieDetail")
     public ResponseEntity<?> userMovieDetail(@RequestParam("userId") Long userId, @RequestParam("movieId") Long movieId) {

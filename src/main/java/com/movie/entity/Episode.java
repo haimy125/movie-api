@@ -35,11 +35,13 @@ public class Episode {
     @Column(name = "time_update")
     private Date timeUpdate;
 
-    @Column(name = "file_episodes", length = 10485760) // Tối đa 10MB
-    private byte[] fileEpisodes;
+    @Column(name = "file_episodes") // Tối đa 10MB
+    private String fileEpisodes;
+//    private byte[] fileEpisodes;
 
-    @Column(name = "subtitles", length = 10485760) // Tối đa 10MB
-    private byte[] subtitles;
+    @Column(name = "subtitles") // Tối đa 10MB
+    private String subtitles;
+//    private byte[] subtitles;
 
     @Column(name = "views", nullable = false)
     private Long views = 0L;

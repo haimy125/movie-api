@@ -9,12 +9,12 @@ import com.movie.entity.User;
 import com.movie.repository.admin.EpisodeRepository;
 import com.movie.repository.admin.MovieRepository;
 import com.movie.repository.admin.UserRepository;
+import com.movie.service.FileStorageService;
 import com.movie.service.admin.EpisodeService;
 import io.jsonwebtoken.io.IOException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -37,6 +37,9 @@ public class EpisodeServiceImpl implements EpisodeService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private FileStorageService fileStorageService;
 
     @Override
     public List<EpisodeDTO> getAll(Pageable pageable) {
@@ -187,11 +190,11 @@ public class EpisodeServiceImpl implements EpisodeService {
             episode.setUserUpdate(userupdate);
             episode.setTimeAdd(Date.valueOf(LocalDate.now()));
             episode.setTimeUpdate(Date.valueOf(LocalDate.now()));
-            episode.setFileEpisodes(file.getBytes());
-            if (subtitles != null)
-                episode.setSubtitles(subtitles.getBytes());
-            else
-                episode.setSubtitles(null);
+            String filePath = fileStorageService.saveFile(file);
+            episode.setFileEpisodes(filePath);
+
+            episode.setSubtitles(null);
+
             episodeRepository.save(episode);
             EpisodeDTO result = modelMapper.map(episode, EpisodeDTO.class);
             return result;
@@ -225,14 +228,17 @@ public class EpisodeServiceImpl implements EpisodeService {
             episode.setTimeUpdate(Date.valueOf(LocalDate.now()));
             episode.setDescription(episodeDTO.getDescription());
 
+            String filePath = fileStorageService.saveFile(file);
+            String filePathSub = fileStorageService.saveFile(subtitles);
+
             if (file == null)
                 episode.setFileEpisodes(episode.getFileEpisodes());
             else
-                episode.setFileEpisodes(file.getBytes());
+                episode.setFileEpisodes(filePath);
             if (subtitles == null)
                 episode.setSubtitles(episode.getSubtitles());
             else
-                episode.setSubtitles(subtitles.getBytes());
+                episode.setSubtitles(filePathSub);
 
             episodeRepository.save(episode);
             EpisodeDTO result = modelMapper.map(episode, EpisodeDTO.class);

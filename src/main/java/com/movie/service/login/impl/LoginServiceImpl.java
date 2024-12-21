@@ -6,12 +6,14 @@ import com.movie.entity.Role;
 import com.movie.entity.User;
 import com.movie.repository.admin.RoleRepository;
 import com.movie.repository.admin.UserRepository;
+import com.movie.service.FileStorageService;
 import com.movie.service.login.LoginService;
 import org.mindrot.jbcrypt.BCrypt;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
 
 @Service
 public class LoginServiceImpl implements LoginService {
@@ -24,6 +26,9 @@ public class LoginServiceImpl implements LoginService {
 
     @Autowired
     private RoleRepository roleRepository;
+
+    @Autowired
+    private FileStorageService fileStorageService;
 
     // chức năng đăng nhập
     @Override
@@ -227,21 +232,42 @@ public class LoginServiceImpl implements LoginService {
         }
     }
 
+//    @Override
+//    public void uploadAvatar(Long id, MultipartFile file) {
+//        try {
+//            User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("Không có người dùng này!"));
+//            if (user == null)
+//                throw new RuntimeException("Không có người dùng này!");
+//            if (file == null)
+//                user.setAvatar(user.getAvatar());
+//            else
+//                user.setAvatar(file.getBytes());
+//            userRepository.save(user);
+//        } catch (Exception e) {
+//            throw new RuntimeException("Có lỗi không xác định");
+//        }
+//    }
+
     @Override
     public void uploadAvatar(Long id, MultipartFile file) {
         try {
+            // Lấy thông tin người dùng từ cơ sở dữ liệu
             User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("Không có người dùng này!"));
-            if (user == null)
-                throw new RuntimeException("Không có người dùng này!");
-            if (file == null)
-                user.setAvatar(user.getAvatar());
-            else
-                user.setAvatar(file.getBytes());
+
+            // Kiểm tra file đầu vào
+            if (file == null || file.isEmpty()) {
+                throw new RuntimeException("File không hợp lệ");
+            }
+
+            // Lưu file vào hệ thống
+            String fileName = fileStorageService.saveFile(file);
+
+            // Cập nhật đường dẫn avatar trong cơ sở dữ liệu
+            user.setAvatar(fileName);
             userRepository.save(user);
         } catch (Exception e) {
-            throw new RuntimeException("Có lỗi không xác định");
+            throw new RuntimeException("Có lỗi xảy ra khi upload avatar", e);
         }
-
     }
 
     @Override
